@@ -3,9 +3,23 @@ import 'package:rxdart/rxdart.dart';
 
 abstract class Action {}
 
-class IncrementAction implements Action {}
+class IncrementAction implements Action {
+  final int p;
 
-class IncrementLoadedAction implements Action {}
+  IncrementAction(this.p);
+
+  @override
+  String toString() => 'IncrementAction{p=$p}';
+}
+
+class IncrementLoadedAction implements Action {
+  final int p;
+
+  IncrementLoadedAction(this.p);
+
+  @override
+  String toString() => 'IncrementLoadedAction{p=$p}';
+}
 
 class DecrementAction implements Action {}
 
@@ -19,14 +33,17 @@ class State {
 }
 
 main() async {
-  final actions = PublishSubject<Action>();
+  final actions = PublishSubject<Action>(
+    onCancel: () => print('[action onCancel]'),
+    onListen: () => print('[action onListen]'),
+  );
 
   final state$ = reduxStore<State, Action>(
-    actions: actions,
+    actions: actions.doOnData((action) => print('[dispatch] action=$action')),
     initialStateSupplier: () => const State(0),
     reducer: (State state, Action action) {
       if (action is IncrementAction) {
-        return state;
+        return State(action.p ~/ 0);
       }
       if (action is IncrementLoadedAction) {
         return State(state.count + 10);
@@ -39,21 +56,42 @@ main() async {
     sideEffects: <SideEffect<State, Action>>[
       (actions, state) {
         return actions.ofType(TypeToken<IncrementAction>()).concatMap(
-          (_) async* {
-            await Future.delayed(const Duration(milliseconds: 500));
-            yield IncrementLoadedAction();
+          (incrementAction) async* {
+            await Future.delayed(const Duration(milliseconds: 1000));
+            yield IncrementLoadedAction(incrementAction.p);
           },
-        );
+        ).doOnData((action) => print('[side effect] action=$action'));
       }
     ],
   );
 
-  state$.listen(print);
+  final sub = state$.doOnCancel(() => print('[state onCancel]')).listen(
+        print,
+        onError: print,
+        onDone: () => print('[state onDone]'),
+      );
 
   () async {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 5; i++) {
+      //  sub.pause();
+
       if (i.isEven) {
-        actions.add(IncrementAction());
+        actions.add(IncrementAction(i));
+      } else {
+        actions.add(DecrementAction());
+      }
+
+      await Future.delayed(const Duration(milliseconds: 300));
+      // sub.resume();
+    }
+
+    await sub.cancel();
+    print('continue');
+
+    for (int i = 0; i < 5; i++) {
+      print('continue $i');
+      if (i.isEven) {
+        actions.add(IncrementAction(i));
       } else {
         actions.add(DecrementAction());
       }
