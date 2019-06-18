@@ -1,5 +1,9 @@
 # rx_redux
 
+[![Build Status](https://travis-ci.org/hoc081098/rx_redux.svg?branch=master)](https://travis-ci.org/hoc081098/rx_redux)
+[![Pub](https://img.shields.io/pub/v/rx_redux.svg)](https://pub.dartlang.org/packages/rx_redux)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Port from [RxRedux-freeletics](https://github.com/freeletics/RxRedux)
 
 A Redux store implementation entirely based on RxDart (inspired by [redux-observable](https://redux-observable.js.org)) 
