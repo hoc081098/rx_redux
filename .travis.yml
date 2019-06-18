@@ -1,20 +1,16 @@
-os:
-  - linux
+language: dart
 sudo: false
-addons:
-  apt:
-    # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
-    sources:
-      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
-    packages:
-      - libstdc++6
-      - fonts-droid
-before_script:
-  - git clone https://github.com/flutter/flutter.git -b beta
-  - ./flutter/bin/flutter doctor
+dart:
+  - 2.1.0
 script:
+  - set -e
+  - dartanalyzer --fatal-infos --fatal-warnings ./
+  - dartanalyzer --fatal-infos --fatal-warnings ./example
   - pub get
+  - pub upgrade
   - pub run test test/rx_redux_test.dart
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 cache:
   directories:
     - $HOME/.pub-cache
