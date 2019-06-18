@@ -86,5 +86,35 @@ void main() {
         );
       },
     );
+
+    test(
+      'SideEffect that returns no Action is supported',
+      () async {
+        Stream<String> returnNoActionEffect(
+          Observable<String> actions,
+          StateAccessor<String> accessor,
+        ) => actions.flatMap((_) => Observable<String>.empty());
+
+        final upstream = Observable<String>.error('FakeError');
+        await expectLater(
+          upstream.transform(
+            ReduxStoreStreamTransformer<String, String>(
+              initialStateSupplier: () => 'InitialState',
+              sideEffects: [],
+              reducer: (currentState, action) => currentState,
+            ),
+          ),
+          emitsInOrder(
+            [
+              'InitialState',
+              emitsError(
+                const TypeMatcher<String>()
+                    .having((e) => e, 'Error', 'FakeError'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   });
 }
