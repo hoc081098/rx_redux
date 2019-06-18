@@ -93,26 +93,28 @@ void main() {
         Stream<String> returnNoActionEffect(
           Observable<String> actions,
           StateAccessor<String> accessor,
-        ) => actions.flatMap((_) => Observable<String>.empty());
+        ) =>
+            actions.flatMap((_) => Observable<String>.empty());
 
-        final upstream = Observable<String>.error('FakeError');
+        final upstream = Observable.fromIterable([
+          'Action1',
+          'Action2',
+          'Action3',
+        ]);
         await expectLater(
           upstream.transform(
             ReduxStoreStreamTransformer<String, String>(
-              initialStateSupplier: () => 'InitialState',
-              sideEffects: [],
-              reducer: (currentState, action) => currentState,
+              initialStateSupplier: () => 'Initial',
+              sideEffects: [returnNoActionEffect],
+              reducer: (currentState, action) => currentState + action,
             ),
           ),
-          emitsInOrder(
-            [
-              'InitialState',
-              emitsError(
-                const TypeMatcher<String>()
-                    .having((e) => e, 'Error', 'FakeError'),
-              ),
-            ],
-          ),
+          emitsInOrder([
+            'Initial',
+            'Initial' + 'Action1',
+            'Initial' + 'Action1' + 'Action2',
+            'Initial' + 'Action1' + 'Action2' + 'Action3',
+          ]),
         );
       },
     );

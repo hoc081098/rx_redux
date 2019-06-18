@@ -92,6 +92,7 @@ main() async {
         // sub.resume();
       }
 
+      await sub.cancel();
       print('continue');
 
       for (int i = 0; i < 5; i++) {

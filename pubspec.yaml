@@ -1,7 +1,8 @@
 name: rx_redux
 description: A starting point for Dart libraries or applications.
-version: 0.0.9
-homepage: https://github.com/hoc081098/RxRedux.git
+version: 1.0.0
+homepage: https://github.com/hoc081098/rx_redux.git
+issue_tracker: https://github.com/hoc081098/rx_redux/issues
 author: Petrus Nguyễn Thái Học <hoc081098@gmail.com>
 
 environment:
