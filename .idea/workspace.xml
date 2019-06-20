@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f16490be-0275-4932-b35a-ad2b03e3791d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Admin.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/rx_redux_example.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/observable_redux_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/observable_redux_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/reducer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/reducer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/side_affect.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/side_affect.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/rx_redux_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/rx_redux_test.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,80 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/src/side_affect.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" column="2" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/src/reducer.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lib/src/observable_redux_store.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="746">
-              <caret line="112" selection-start-line="112" selection-end-line="112" />
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://C:/Program Files/Dart/dart-sdk/lib/async/stream.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="1795" column="9" selection-start-line="1795" selection-start-column="9" selection-end-line="1795" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://C:/Program Files/Dart/dart-sdk/lib/async/stream_controller.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="275" column="9" selection-start-line="275" selection-start-column="9" selection-end-line="275" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/rxdart-0.22.0/lib/src/subjects/subject.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="98" column="27" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/rx_redux_test.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="101">
-              <caret line="23" column="28" lean-forward="true" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-              <folding>
-                <element signature="e#0#40#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/example/rx_redux_example.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-120">
-              <caret line="60" column="26" lean-forward="true" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
+            <state relative-caret-position="371">
+              <caret line="218" lean-forward="true" selection-start-line="218" selection-end-line="218" />
             </state>
           </provider>
         </entry>
@@ -107,6 +32,7 @@
       <find>sync: true</find>
       <find>comple</find>
       <find>onDone</find>
+      <find>onCancelLocal</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\Admin\AppData\Roaming\Pub\Cache\hosted\pub.dartlang.org\rxdart-0.22.0\lib\src</dir>
@@ -122,20 +48,19 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/lib/src/side_affect.dart" />
         <option value="$PROJECT_DIR$/lib/src/reducer.dart" />
-        <option value="$PROJECT_DIR$/test/rx_redux_test.dart" />
         <option value="$PROJECT_DIR$/lib/src/observable_redux_store.dart" />
+        <option value="$PROJECT_DIR$/test/rx_redux_test.dart" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="77" />
-    <option name="y" value="66" />
+    <option name="x" value="676" />
     <option name="width" value="697" />
     <option name="height" value="735" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -561,6 +486,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1561044605533" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
@@ -578,7 +504,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Dart Test.SideEffects react on upstream Actions but Reducer Reacts first in rx_redux_test.dart">
+  <component name="RunManager" selected="Dart Test.tests in rx_redux_test.dart">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" editBeforeRun="true" singleton="false">
       <option name="filePath" value="$PROJECT_DIR$/example/rx_redux_example.dart" />
       <option name="workingDirectory" value="$PROJECT_DIR$" />
@@ -601,8 +527,14 @@
       <option name="testName" value="Test rx_redux" />
       <method v="2" />
     </configuration>
+    <configuration name="tests in rx_redux_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/rx_redux_test.dart" />
+      <option name="testName" value="rx_redux_test.dart" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Dart Test.tests in rx_redux_test.dart" />
         <item itemvalue="Dart Test.SideEffects react on upstream Actions but Reducer Reacts first in rx_redux_test.dart" />
         <item itemvalue="Dart Test.Test rx_redux in rx_redux_test.dart" />
         <item itemvalue="Dart Command Line App.rx_redux_example.dart" />
@@ -631,24 +563,42 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Test_rx_redux_in_rx_redux_test_dart - 2019.06.04 at 00h 07m 33s.xml">
-      <configuration name="Test rx_redux in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 08m 10s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="SideEffects_react_on_upstream_Actions_but_Reducer_Reacts_first_in_rx_redux_test_dart - 2019.06.04 at 00h 08m 00s.xml">
-      <configuration name="SideEffects react on upstream Actions but Reducer Reacts first in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 08m 21s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="SideEffects_react_on_upstream_Actions_but_Reducer_Reacts_first_in_rx_redux_test_dart - 2019.06.04 at 00h 14m 07s.xml">
-      <configuration name="SideEffects react on upstream Actions but Reducer Reacts first in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 08m 34s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="SideEffects_react_on_upstream_Actions_but_Reducer_Reacts_first_in_rx_redux_test_dart - 2019.06.04 at 00h 14m 32s.xml">
-      <configuration name="SideEffects react on upstream Actions but Reducer Reacts first in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 09m 05s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 14m 06s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 18m 05s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 18m 14s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 18m 28s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 18m 46s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_rx_redux_test_dart - 2019.06.20 at 22h 19m 08s.xml">
+      <configuration name="tests in rx_redux_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="676" y="0" width="697" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18532526" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.39717427" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -658,7 +608,7 @@
       <window_info id="Resources Explorer" order="7" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.16202946" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.09548611" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -666,7 +616,7 @@
       <window_info anchor="bottom" id="Dart Analysis" order="7" weight="0.32991454" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.6" />
       <window_info anchor="bottom" id="Flutter Performance" order="11" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="12" weight="0.45335516" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -680,6 +630,32 @@
       <window_info anchor="right" id="Theme Preview" order="8" />
       <window_info anchor="right" id="Capture Analysis" order="9" />
     </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
@@ -703,16 +679,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/reducer_exception.dart">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/rxdart-0.22.0/lib/src/observables/observable.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4687">
-          <caret line="761" column="18" selection-start-line="761" selection-start-column="16" selection-end-line="761" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/rxdart-0.22.0/lib/futures.dart">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -733,37 +699,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/rx_redux_example.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-120">
-          <caret line="60" column="26" lean-forward="true" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/reducer.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/side_affect.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="2" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/rx_redux_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="23" column="28" lean-forward="true" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/reducer.dart" />
+    <entry file="file://$PROJECT_DIR$/lib/src/side_affect.dart" />
+    <entry file="file://$PROJECT_DIR$/lib/src/observable_redux_store.dart" />
     <entry file="file://C:/Program Files/Dart/dart-sdk/lib/async/stream.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
@@ -773,25 +711,64 @@
     </entry>
     <entry file="file://C:/Program Files/Dart/dart-sdk/lib/async/stream_controller.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
+        <state relative-caret-position="5733">
           <caret line="275" column="9" selection-start-line="275" selection-start-column="9" selection-end-line="275" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/rxdart-0.22.0/lib/src/subjects/subject.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
+        <state relative-caret-position="2016">
           <caret line="98" column="27" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/observable_redux_store.dart">
+    <entry file="file://$PROJECT_DIR$/example/rx_redux_example.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="746">
-          <caret line="112" selection-start-line="112" selection-end-line="112" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="2247">
+          <caret line="111" selection-start-line="111" selection-end-line="111" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Dart/dart-sdk/lib/core/errors.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="531" column="2" selection-start-line="531" selection-start-column="2" selection-end-line="531" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/reducer_exception.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="6" column="17" lean-forward="true" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/redux_store_stream_transformer.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="110" column="33" selection-start-line="110" selection-start-column="21" selection-end-line="110" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/rxdart-0.22.0/lib/src/transformers/do.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/rxdart-0.22.0/lib/src/observables/observable.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="1674" column="20" selection-start-line="1674" selection-start-column="20" selection-end-line="1674" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/rx_redux_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="218" lean-forward="true" selection-start-line="218" selection-end-line="218" />
         </state>
       </provider>
     </entry>

@@ -63,7 +63,7 @@ void main() {
     });
 
     test(
-      '`Error upstream just emits initial state and run in onError',
+      'Error upstream just emits initial state and run in onError',
       () async {
         final upstream = Observable<String>.error('FakeError');
         await expectLater(
@@ -116,6 +116,125 @@ void main() {
             'Initial' + 'Action1' + 'Action2' + 'Action3',
           ]),
         );
+      },
+    );
+
+    test(
+      'Error in reducer enhanced with state and action',
+      () async {
+        final upstream = Observable<String>.just('Action1');
+        final error = StateError('FakeError');
+
+        await expectLater(
+          upstream.transform(
+            ReduxStoreStreamTransformer<String, String>(
+              initialStateSupplier: () => 'Initial',
+              sideEffects: [],
+              reducer: (_, __) => throw error,
+            ),
+          ),
+          emitsInOrder(
+            [
+              'Initial',
+              emitsError(
+                const TypeMatcher<ReducerException>()
+                    .having(
+                      (e) => e.action,
+                      'ReducerException.action',
+                      const TypeMatcher<String>()
+                          .having((a) => a, 'Action', 'Action1'),
+                    )
+                    .having(
+                      (e) => e.state,
+                      'ReducerException.state',
+                      const TypeMatcher<String>().having(
+                        (s) => s,
+                        'Current state',
+                        'Initial',
+                      ),
+                    )
+                    .having(
+                      (e) => e.error,
+                      'ReducerException.error',
+                      const TypeMatcher<StateError>().having(
+                        (s) => s.message,
+                        'Caused error message',
+                        'FakeError',
+                      ),
+                    ),
+              ),
+              emitsDone,
+            ],
+          ),
+        );
+      },
+    );
+
+    test(
+      'Disposing reduxStore disposes all side effects and upstream',
+      () async {
+        var disposedSideffectsCount = 0;
+        var outputedError = null;
+        var outputCompleted = false;
+
+        final dummyAction = 'SomeAction';
+        final upstream = PublishSubject<String>();
+        final outputedStates = <String>[];
+
+        SideEffect<String, String> sideEffect1 = (actions, state) {
+          return actions
+              .where((a) => a == dummyAction)
+              .mapTo('SideEffectAction1')
+              .doOnCancel(() => disposedSideffectsCount++);
+        };
+
+        SideEffect<String, String> sideEffect2 = (actions, state) {
+          return actions
+              .where((a) => a == dummyAction)
+              .mapTo('SideEffectAction2')
+              .doOnCancel(() => disposedSideffectsCount++);
+        };
+
+        final subscription = upstream
+            .transform(
+              ReduxStoreStreamTransformer<String, String>(
+                initialStateSupplier: () => 'InitialState',
+                sideEffects: [sideEffect1, sideEffect2],
+                reducer: (state, action) => action,
+              ),
+            )
+            .listen(
+              outputedStates.add,
+              onError: (e, s) => outputedError = e,
+              onDone: () => outputCompleted = true,
+            );
+
+        // I know it's bad, but it does the job
+        await Future.delayed(const Duration(milliseconds: 100));
+
+        // Trigger some action
+        upstream.add(dummyAction);
+
+        // I know it's bad, but it does the job
+        await Future.delayed(const Duration(milliseconds: 100));
+
+        // Dispose the whole cain
+        await subscription.cancel();
+
+        // Verify everything is fine
+        expect(disposedSideffectsCount, 2);
+        expect(upstream.hasListener, false);
+        expect(
+          outputedStates,
+          [
+            'InitialState',
+            dummyAction,
+            'SideEffectAction1',
+            'SideEffectAction2',
+          ],
+        );
+        expect(outputedError, isNull);
+        expect(outputCompleted, false);
       },
     );
   });

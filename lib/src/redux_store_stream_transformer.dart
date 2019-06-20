@@ -178,7 +178,6 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
                 .where((cancelFuture) => cancelFuture != null),
           );
           await actionSubject.close();
-          print('[onCancel]');
         },
       );
 
