@@ -227,7 +227,7 @@ Also `SideEffects` can be invoked by `Actions` from other `SideEffects`.
 
 # FAQ
 
-## I get a `StackoverflowException`
+## I get a `StackOverflowError`
 This is a common pitfall and is most of the time caused by the fact that a `SideEffect` emits an `Action` as output that it also consumes from upstream leading to an infinite loop.
 
 ```dart

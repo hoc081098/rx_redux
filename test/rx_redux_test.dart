@@ -174,7 +174,7 @@ void main() {
       'Disposing reduxStore disposes all side effects and upstream',
       () async {
         var disposedSideffectsCount = 0;
-        var outputedError = null;
+        var outputedError;
         var outputCompleted = false;
 
         final dummyAction = 'SomeAction';
