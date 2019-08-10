@@ -221,6 +221,9 @@ void main() {
         // Dispose the whole cain
         await subscription.cancel();
 
+        // I know it's bad, but it does the job
+        await Future.delayed(const Duration(milliseconds: 500));
+
         // Verify everything is fine
         expect(disposedSideffectsCount, 2);
         expect(upstream.hasListener, false);
@@ -237,5 +240,24 @@ void main() {
         expect(outputCompleted, false);
       },
     );
+
+    test('Broadcast stream', () async {
+      final state = Stream.fromIterable([1, 2, 3, 4])
+          .transform(
+            ReduxStoreStreamTransformer<int, String>(
+              initialStateSupplier: () => '[]',
+              reducer: (String currentState, int newAction) {
+                return currentState * newAction;
+              },
+              sideEffects: [],
+            ),
+          )
+          .asBroadcastStream();
+
+      state.listen(null);
+      state.listen(null);
+
+      expect(true, true);
+    });
   });
 }

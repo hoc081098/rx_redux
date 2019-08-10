@@ -117,53 +117,68 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
       };
       final onErrorActually = (e, StackTrace s) => controller.addError(e, s);
 
+      onDone() {
+        if (!controller.isClosed) {
+          controller.close();
+        }
+        if (!actionSubject.isClosed) {
+          actionSubject.close();
+        }
+      }
+
       controller = StreamController<S>(
         sync: true,
         onListen: () {
-          // add initial state
-          state = initialStateSupplier();
-          controller.add(state);
+          try {
+            // add initial state
+            state = initialStateSupplier();
+            controller.add(state);
 
-          // This will make the reducer run on each action
-          subscriptionActionSubject = actionSubject.listen(
-            onDataActually,
-            onError: onErrorActually,
-          );
+            // This will make the reducer run on each action
+            subscriptionActionSubject = actionSubject.listen(
+              onDataActually,
+              onError: onErrorActually,
+            );
 
-          //listen upstream actions
-          subscriptionUpstream = upstreamActionsStream.listen(
-            addActionToSubject,
-            onError: addErrorToSubject,
-            onDone: controller.close,
-            cancelOnError: cancelOnError,
-          );
-
-          for (int i = 0; i < len; i++) {
-            sideEffectSubscriptions[i] = sideEffects.elementAt(i)(
-              actionSubject,
-              stateAccessor,
-            ).listen(
+            //listen upstream actions
+            subscriptionUpstream = upstreamActionsStream.listen(
               addActionToSubject,
               onError: addErrorToSubject,
-              onDone: () {
-                // Swallow onDone because just if one SideEffect reaches onDone we don't want to make
-                // everything incl. ReduxStore and other SideEffects reach onDone
-              },
+              onDone: onDone,
               cancelOnError: cancelOnError,
             );
+
+            var i = 0;
+            for (final sideEffect in sideEffects) {
+              sideEffectSubscriptions[i] = sideEffect(
+                actionSubject,
+                stateAccessor,
+              ).listen(
+                addActionToSubject,
+                onError: addErrorToSubject,
+                onDone: () {
+                  // Swallow onDone because just if one SideEffect reaches onDone we don't want to make
+                  // everything incl. ReduxStore and other SideEffects reach onDone
+                },
+                cancelOnError: cancelOnError,
+              );
+              i++;
+            }
+          } catch (e, s) {
+            onErrorActually(e, s);
           }
         },
         onPause: ([Future<dynamic> resumeSignal]) {
           [
-            subscriptionUpstream,
             ...sideEffectSubscriptions,
+            subscriptionUpstream,
             subscriptionActionSubject
           ].forEach((subscription) => subscription.pause(resumeSignal));
         },
         onResume: () {
           [
-            subscriptionUpstream,
             ...sideEffectSubscriptions,
+            subscriptionUpstream,
             subscriptionActionSubject
           ].forEach((subscription) => subscription.resume());
         },
@@ -174,10 +189,9 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
               subscriptionUpstream,
               subscriptionActionSubject,
             ]
-                .map((subscription) => subscription.cancel())
+                .map((subscription) => subscription?.cancel())
                 .where((cancelFuture) => cancelFuture != null),
           );
-          await actionSubject.close();
         },
       );
 
