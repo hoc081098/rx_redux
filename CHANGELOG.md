@@ -1,3 +1,7 @@
+## 1.0.1
+- Update dependencies
+- Some minor changes
+
 ## 1.0.0+1
 - Only change description
 

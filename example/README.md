@@ -1,2 +1,2 @@
 # Example
-* [Pagination list (load more) (endless scrolling)](https://github.com/hoc081098/load_more_flutter_BLoC_pattern_RxDart_and_RxRedux/tree/master/lib/rx_redux) - an example of how to load more data when scroll to end of list view using [rx_redux](https://pub.dev/packages/rx_redux).
+* [Pagination list (load more) (endless scrolling)](https://github.com/hoc081098/load_more_flutter_BLoC_pattern_RxDart_and_RxRedux/tree/master/lib/pages/rx_redux) - an example of how to load more data when scroll to end of list view using [rx_redux](https://pub.dev/packages/rx_redux).

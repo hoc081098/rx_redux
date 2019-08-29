@@ -44,28 +44,35 @@ main() async {
   final state$ = reduxStore<State, Action>(
     actions: actions.doOnData((action) => print('[dispatch] action=$action')),
     initialStateSupplier: () => const State(0),
-    reducer: (State state, Action action) {
+    reducer: (state, action) {
       if (action is IncrementAction) {
         // return State(action.p ~/ 0);
         return state;
       }
       if (action is IncrementLoadedAction) {
-        return State(state.count + 10);
+        return State(state.count + action.p);
       }
       if (action is DecrementAction) {
         return State(state.count - 1);
       }
       return state;
     },
-    sideEffects: <SideEffect<State, Action>>[
+    sideEffects: [
       (actions, state) {
-        return actions.ofType(TypeToken<IncrementAction>()).concatMap(
+        return actions.whereType<IncrementAction>().concatMap(
           (incrementAction) async* {
             await Future.delayed(const Duration(milliseconds: 1000));
             print('[in side effect] access state=${state()}');
             yield IncrementLoadedAction(incrementAction.p);
           },
         ).doOnData((action) => print('[side effect] action=$action'));
+      },
+      (actions, state) {
+        return actions.whereType<DecrementAction>().flatMap((action) async* {
+          await Future.delayed(const Duration(milliseconds: 1000));
+          print('[in side effect] access state=${state()}');
+          yield IncrementLoadedAction(-1);
+        });
       }
     ],
   );
@@ -92,7 +99,7 @@ main() async {
         // sub.resume();
       }
 
-      await sub.cancel();
+      //await sub.cancel();
       print('continue');
 
       for (int i = 0; i < 5; i++) {

@@ -8,7 +8,7 @@ import 'package:rxdart/rxdart.dart';
 /// to handle a single Action (i.e using where or ofType operator)
 /// * Param [state] [StateAccessor<S>] to get the latest state of the state machine
 ///
-typedef Stream<A> SideEffect<S, A>(
+typedef SideEffect<S, A> = Stream<A> Function(
   Observable<A> actions,
   StateAccessor<S> state,
 );
@@ -18,4 +18,4 @@ typedef Stream<A> SideEffect<S, A>(
 /// of a ReduxStore observable at any given point in time.
 /// So you have to call this method to get the state.
 ///
-typedef S StateAccessor<S>();
+typedef StateAccessor<S> = S Function();
