@@ -1,3 +1,7 @@
+## 1.0.1+1
+- Update dependencies
+- Update example
+
 ## 1.0.1
 - Update dependencies
 - Some minor changes
