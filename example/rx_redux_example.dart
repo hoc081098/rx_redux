@@ -41,8 +41,9 @@ main() async {
     onListen: () => print('[action onListen]'),
   );
 
-  final state$ = reduxStore<State, Action>(
-    actions: actions.doOnData((action) => print('[dispatch] action=$action')),
+  final state$ = actions
+      .doOnData((action) => print('[dispatch] action=$action'))
+      .reduxStore<State>(
     initialStateSupplier: () => const State(0),
     reducer: (state, action) {
       if (action is IncrementAction) {
@@ -59,7 +60,7 @@ main() async {
     },
     sideEffects: [
       (actions, state) {
-        return actions.whereType<IncrementAction>().concatMap(
+        return actions.whereType<IncrementAction>().asyncExpand(
           (incrementAction) async* {
             await Future.delayed(const Duration(milliseconds: 1000));
             print('[in side effect] access state=${state()}');

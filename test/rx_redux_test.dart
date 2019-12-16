@@ -65,7 +65,7 @@ void main() {
     test(
       'Error upstream just emits initial state and run in onError',
       () async {
-        final upstream = Observable<String>.error('FakeError');
+        final upstream = Stream<String>.error('FakeError');
         await expectLater(
           upstream.transform(
             ReduxStoreStreamTransformer<String, String>(
@@ -91,12 +91,12 @@ void main() {
       'SideEffect that returns no Action is supported',
       () async {
         Stream<String> returnNoActionEffect(
-          Observable<String> actions,
+          Stream<String> actions,
           StateAccessor<String> accessor,
         ) =>
-            actions.flatMap((_) => Observable<String>.empty());
+            actions.flatMap((_) => Stream<String>.empty());
 
-        final upstream = Observable.fromIterable([
+        final upstream = Stream.fromIterable([
           'Action1',
           'Action2',
           'Action3',
@@ -122,7 +122,7 @@ void main() {
     test(
       'Error in reducer enhanced with state and action',
       () async {
-        final upstream = Observable<String>.just('Action1');
+        final upstream = Stream.value('Action1');
         final error = StateError('FakeError');
 
         await expectLater(
@@ -259,5 +259,50 @@ void main() {
 
       expect(true, true);
     });
+
+    test('a', () async {
+      final inputActions = PublishSubject<Action>(sync: true);
+
+      inputActions
+          .transform(
+            ReduxStoreStreamTransformer<Action, int>(
+              initialStateSupplier: () => 0,
+              sideEffects: [
+                (actions, state) {
+                  return actions.whereType<Action1>().flatMap((a) async* {
+                    print('1');
+                    yield Action3();
+                  });
+                },
+                (actions, state) {
+                  return actions.whereType<Action2>().flatMap((a) async* {
+                    print('2');
+                    yield Action4();
+                  });
+                },
+              ],
+              reducer: (currentState, action) {
+                return currentState + 1;
+              },
+            ),
+          )
+          .listen(null);
+
+      for (var i = 0; i < 100; i++) {
+        inputActions.add(Action1());
+      }
+
+      await Future.delayed(const Duration(seconds: 2));
+    });
   });
 }
+
+abstract class Action {}
+
+class Action1 implements Action {}
+
+class Action2 implements Action {}
+
+class Action3 implements Action {}
+
+class Action4 implements Action {}
