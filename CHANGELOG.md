@@ -1,4 +1,4 @@
-## 1.1.1
+## 1.1.0
 - Update rxdart
 - Now support extension methods
 

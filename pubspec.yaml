@@ -3,7 +3,6 @@ description: A library that manages state using RxDart. Redux implementation bas
 version: 1.1.0
 homepage: https://github.com/hoc081098/rx_redux.git
 issue_tracker: https://github.com/hoc081098/rx_redux/issues
-author: Petrus Nguyễn Thái Học <hoc081098@gmail.com>
 
 environment:
   sdk: '>=2.6.0 <3.0.0'
