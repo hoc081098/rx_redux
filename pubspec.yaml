@@ -1,6 +1,6 @@
 name: rx_redux
 description: A library that manages state using RxDart. Redux implementation based on RxDart
-version: 1.0.1+1
+version: 1.1.0
 homepage: https://github.com/hoc081098/rx_redux.git
 issue_tracker: https://github.com/hoc081098/rx_redux/issues
 author: Petrus Nguyễn Thái Học <hoc081098@gmail.com>

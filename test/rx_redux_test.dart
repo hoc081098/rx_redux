@@ -260,49 +260,22 @@ void main() {
       expect(true, true);
     });
 
-    test('a', () async {
-      final inputActions = PublishSubject<Action>(sync: true);
-
-      inputActions
-          .transform(
-            ReduxStoreStreamTransformer<Action, int>(
-              initialStateSupplier: () => 0,
-              sideEffects: [
-                (actions, state) {
-                  return actions.whereType<Action1>().flatMap((a) async* {
-                    print('1');
-                    yield Action3();
-                  });
-                },
-                (actions, state) {
-                  return actions.whereType<Action2>().flatMap((a) async* {
-                    print('2');
-                    yield Action4();
-                  });
-                },
-              ],
-              reducer: (currentState, action) {
-                return currentState + 1;
-              },
-            ),
-          )
-          .listen(null);
-
-      for (var i = 0; i < 100; i++) {
-        inputActions.add(Action1());
-      }
-
-      await Future.delayed(const Duration(seconds: 2));
+    test('extension method', () async {
+      final state = Stream.periodic(const Duration(seconds: 1), (i) => i)
+          .take(2)
+          .reduxStore<String>(
+            initialStateSupplier: () => 'State',
+            sideEffects: [],
+            reducer: (state, action) => '$state$action',
+          );
+      await expectLater(
+        state,
+        emitsInOrder([
+          'State',
+          'State0',
+          'State01',
+        ]),
+      );
     });
   });
 }
-
-abstract class Action {}
-
-class Action1 implements Action {}
-
-class Action2 implements Action {}
-
-class Action3 implements Action {}
-
-class Action4 implements Action {}

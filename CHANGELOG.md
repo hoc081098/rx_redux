@@ -1,3 +1,7 @@
+## 1.1.1
+- Update rxdart
+- Now support extension methods
+
 ## 1.0.1+1
 - Update dependencies
 - Update example

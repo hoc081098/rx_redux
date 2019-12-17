@@ -144,7 +144,7 @@ final SideEffect<ViewState, Action> _addTodoEffect = (action$, state) {
 };
 
 Stream<Action> _removeTodoEffect(
-  Observable<Action> action$,
+  Stream<Action> action$,
   StateAccessor state,
 ) {
   return action$.whereType<RemoveTodo>().map((action) => action.todo).flatMap(
@@ -172,7 +172,7 @@ final SideEffect<ViewState, Action> _toggleTodoEffect = (action$, state) {
 class _MyHomePageState extends State<MyHomePage> {
   static var _id = 0;
   final actionS = PublishSubject<Action>();
-  ValueObservable<ViewState> state$;
+  ValueStream<ViewState> state$;
 
   @override
   void initState() {
@@ -180,8 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     const initialVS = ViewState([]);
     state$ = actionS
-        .transform(
-          ReduxStoreStreamTransformer<Action, ViewState>(
+        .reduxStore<ViewState>(
             initialStateSupplier: () => initialVS,
             reducer: _reducer,
             sideEffects: [
