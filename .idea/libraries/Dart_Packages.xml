@@ -194,7 +194,7 @@
         <entry key="pedantic">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pedantic-1.7.0/lib" />
+              <option value="$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pedantic-1.9.0/lib" />
             </list>
           </value>
         </entry>
@@ -382,7 +382,7 @@
       <root url="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/package_config-1.0.5/lib" />
       <root url="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/package_resolver-1.0.10/lib" />
       <root url="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/path-1.6.2/lib" />
-      <root url="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pedantic-1.7.0/lib" />
+      <root url="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pedantic-1.9.0/lib" />
       <root url="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pool-1.4.0/lib" />
       <root url="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pub_semver-1.4.2/lib" />
       <root url="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/rxdart-0.24.0/lib" />

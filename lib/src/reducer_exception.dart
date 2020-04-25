@@ -1,10 +1,19 @@
-class ReducerException implements Exception {
-  final action;
-  final state;
-  final error;
+///
+class ReducerException<Action, State> implements Exception {
+  ///
+  final Action action;
+
+  ///
+  final State state;
+
+  ///
+  final dynamic error;
+
+  ///
   final StackTrace stackTrace;
 
-  const ReducerException({
+  ///
+  ReducerException({
     this.action,
     this.state,
     this.error,

@@ -10,7 +10,8 @@ void main() {
         () async {
       final inputs = ['InputAction1', 'InputAction2'];
       final inputActions = Stream.fromIterable(inputs)
-          .asyncMap((action) => Future.delayed(Duration.zero, () => action));
+          .asyncMap((action) => Future.delayed(Duration.zero, () => action))
+          .concatWith([Stream<String>.empty().delay(Duration.zero)]);
 
       final SideEffect<String, String> sideEffect1 = (actions, state) {
         return actions
@@ -38,6 +39,7 @@ void main() {
           'InputAction1SideEffect2',
           'InputAction2',
           'InputAction2SideEffect1',
+          'InputAction2SideEffect2',
           emitsDone,
         ]),
       );
@@ -137,7 +139,7 @@ void main() {
             [
               'Initial',
               emitsError(
-                const TypeMatcher<ReducerException>()
+                const TypeMatcher<ReducerException<String, String>>()
                     .having(
                       (e) => e.action,
                       'ReducerException.action',
@@ -181,14 +183,14 @@ void main() {
         final upstream = PublishSubject<String>();
         final outputedStates = <String>[];
 
-        SideEffect<String, String> sideEffect1 = (actions, state) {
+        final SideEffect<String, String> sideEffect1 = (actions, state) {
           return actions
               .where((a) => a == dummyAction)
               .mapTo('SideEffectAction1')
               .doOnCancel(() => disposedSideffectsCount++);
         };
 
-        SideEffect<String, String> sideEffect2 = (actions, state) {
+        final SideEffect<String, String> sideEffect2 = (actions, state) {
           return actions
               .where((a) => a == dummyAction)
               .mapTo('SideEffectAction2')

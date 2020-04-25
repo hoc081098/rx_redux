@@ -5,6 +5,7 @@ import 'package:rx_redux/src/reducer.dart';
 import 'package:rx_redux/src/reducer_exception.dart';
 import 'package:rx_redux/src/side_affect.dart';
 
+///
 extension ReduxStoreExt<Action> on Stream<Action> {
   /// A ReduxStore is a RxDart based implementation of Redux and redux-observable.js.org.
   ///
@@ -42,158 +43,135 @@ extension ReduxStoreExt<Action> on Stream<Action> {
   }
 }
 
-class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
-  final StreamTransformer<A, S> transformer;
+///
+class ReduxStoreStreamTransformer<Action, State>
+    extends StreamTransformerBase<Action, State> {
+  final State Function() _initialStateSupplier;
+  final Iterable<SideEffect<State, Action>> _sideEffects;
+  final Reducer<State, Action> _reducer;
 
   /// * Param [initialStateSupplier]  A function that computes the initial state. The computation is
   /// * done lazily once an observer subscribes. The computed initial state will be emitted directly
   /// in onListen()
   /// * Param [sideEffects] The sideEffects. See [SideEffect]
   /// * Param [reducer] The reducer.  See [Reducer].
-  /// * Param [S] The type of the State
-  /// * Param [A] The type of the Actions
+  /// * Param [State] The type of the State
+  /// * Param [Action] The type of the Actions
   ReduxStoreStreamTransformer({
-    @required S Function() initialStateSupplier,
-    @required Iterable<SideEffect<S, A>> sideEffects,
-    @required Reducer<S, A> reducer,
-  }) : transformer =
-            _buildTransformer<A, S>(initialStateSupplier, sideEffects, reducer);
+    @required State Function() initialStateSupplier,
+    @required Iterable<SideEffect<State, Action>> sideEffects,
+    @required Reducer<State, Action> reducer,
+  })  : assert(initialStateSupplier != null,
+            'initialStateSupplier cannot be null'),
+        assert(sideEffects != null, 'sideEffects cannot be null'),
+        assert(reducer != null, 'reducer cannot be null'),
+        _initialStateSupplier = initialStateSupplier,
+        _sideEffects = sideEffects,
+        _reducer = reducer;
 
   @override
-  Stream<S> bind(Stream<A> stream) => transformer.bind(stream);
+  Stream<State> bind(Stream<Action> stream) {
+    final actionController = StreamController<Action>.broadcast();
+    final addActionToController = actionController.add;
+    final addErrorToController = actionController.addError;
 
-  static StreamTransformer<A, S> _buildTransformer<A, S>(
-    S Function() initialStateSupplier,
-    Iterable<SideEffect<S, A>> sideEffects,
-    Reducer<S, A> reducer,
-  ) {
-    if (initialStateSupplier == null) {
-      throw ArgumentError('initialStateSupplier cannot be null');
-    }
-    if (sideEffects == null) {
-      throw ArgumentError('sideEffects cannot be null');
-    }
-    if (sideEffects.any((sideEffect) => sideEffect == null)) {
-      throw ArgumentError('All sideEffects must be not null');
-    }
-    if (reducer == null) {
-      throw ArgumentError('reducer cannot be null');
-    }
+    StreamController<State> controller;
+    final subscriptions = <StreamSubscription<dynamic>>[];
 
-    return StreamTransformer<A, S>((
-      Stream<A> upstreamActionsStream,
-      bool cancelOnError,
-    ) {
-      final len = sideEffects.length;
-      final sideEffectSubscriptions = List<StreamSubscription<A>>(len);
+    State state;
+    final stateAccessor = () => state;
 
-      final actionController = StreamController<A>.broadcast();
-      final addActionToSubject = actionController.add;
-      final addErrorToSubject = actionController.addError;
-
-      StreamController<S> controller;
-      StreamSubscription<A> subscriptionUpstream;
-      StreamSubscription<A> subscriptionActionSubject;
-
-      S state;
-      final StateAccessor<S> stateAccessor = () => state;
-      final onDataActually = (A action) {
-        final currentState = state;
-        try {
-          state = reducer(currentState, action);
-          controller.add(state);
-        } catch (e, s) {
-          controller.addError(
-            ReducerException(
-              action: action,
-              state: currentState,
-              error: e,
-              stackTrace: s,
-            ),
-          );
-        }
-      };
-      final onErrorActually = (e, StackTrace s) => controller.addError(e, s);
-
-      onDone() {
-        if (!controller.isClosed) {
-          controller.close();
-        }
-        if (!actionController.isClosed) {
-          actionController.close();
-        }
+    onActionData(Action action) {
+      final currentState = state;
+      try {
+        state = _reducer(currentState, action);
+        controller.add(state);
+      } catch (e, s) {
+        controller.addError(
+          ReducerException<Action, State>(
+            action: action,
+            state: currentState,
+            error: e,
+            stackTrace: s,
+          ),
+        );
       }
+    }
 
-      controller = StreamController<S>(
-        sync: true,
-        onListen: () {
-          try {
-            // add initial state
-            state = initialStateSupplier();
-            controller.add(state);
+    onActionError(e, StackTrace s) => controller.addError(e, s);
 
-            // This will make the reducer run on each action
-            subscriptionActionSubject = actionController.stream.listen(
-              onDataActually,
-              onError: onErrorActually,
-            );
+    onDone() {
+      if (!controller.isClosed) {
+        controller.close();
+      }
+      if (!actionController.isClosed) {
+        actionController.close();
+      }
+    }
 
-            //listen upstream actions
-            subscriptionUpstream = upstreamActionsStream.listen(
-              addActionToSubject,
-              onError: addErrorToSubject,
-              onDone: onDone,
-              cancelOnError: cancelOnError,
-            );
+    onListen() {
+      try {
+        // add initial state
+        state = _initialStateSupplier();
+        controller.add(state);
 
-            var i = 0;
-            for (final sideEffect in sideEffects) {
-              sideEffectSubscriptions[i] = sideEffect(
-                actionController.stream,
-                stateAccessor,
-              ).listen(
-                addActionToSubject,
-                onError: addErrorToSubject,
-                onDone: () {
-                  // Swallow onDone because just if one SideEffect reaches onDone we don't want to make
-                  // everything incl. ReduxStore and other SideEffects reach onDone
-                },
-                cancelOnError: cancelOnError,
-              );
-              i++;
-            }
-          } catch (e, s) {
-            onErrorActually(e, s);
+        // This will make the reducer run on each action
+        subscriptions.add(
+          actionController.stream.listen(
+            onActionData,
+            onError: onActionError,
+          ),
+        );
+
+        // Listen to upstream actions
+        subscriptions.add(
+          stream.listen(
+            addActionToController,
+            onError: addErrorToController,
+            onDone: onDone,
+          ),
+        );
+
+        // Listen to side effect streams
+        final sideEffectSubscriptions = _sideEffects.map((sideEffect) {
+          if (sideEffect == null) {
+            return null;
           }
-        },
-        onPause: ([Future<dynamic> resumeSignal]) {
-          [
-            ...sideEffectSubscriptions,
-            subscriptionUpstream,
-            subscriptionActionSubject
-          ].forEach((subscription) => subscription.pause(resumeSignal));
-        },
-        onResume: () {
-          [
-            ...sideEffectSubscriptions,
-            subscriptionUpstream,
-            subscriptionActionSubject
-          ].forEach((subscription) => subscription.resume());
-        },
-        onCancel: () async {
-          await Future.wait<dynamic>(
-            [
-              ...sideEffectSubscriptions,
-              subscriptionUpstream,
-              subscriptionActionSubject,
-            ]
-                .map((subscription) => subscription?.cancel())
-                .where((cancelFuture) => cancelFuture != null),
+          return sideEffect(
+            actionController.stream,
+            stateAccessor,
+          ).listen(
+            addActionToController,
+            onError: addErrorToController,
+            onDone: () {
+              // Swallow onDone because just if one SideEffect reaches onDone we don't want to make
+              // everything incl. ReduxStore and other SideEffects reach onDone
+            },
           );
-        },
-      );
+        }).where((subscription) => subscription != null);
+        subscriptions.addAll(sideEffectSubscriptions);
+      } catch (e, s) {
+        onActionError(e, s);
+      }
+    }
 
-      return controller.stream.listen(null);
-    });
+    onCancel() {
+      final futures = subscriptions
+          .map((subscription) => subscription.cancel())
+          .where((cancelFuture) => cancelFuture != null);
+      return futures.isEmpty ? null : Future.wait(futures);
+    }
+
+    controller = StreamController<State>(
+      sync: true,
+      onListen: onListen,
+      onPause: ([Future resumeSignal]) => subscriptions
+          .forEach((subscription) => subscription.pause(resumeSignal)),
+      onResume: () =>
+          subscriptions.forEach((subscription) => subscription.resume()),
+      onCancel: onCancel,
+    );
+
+    return controller.stream;
   }
 }
