@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:rx_redux/src/reducer.dart';
 import 'package:rx_redux/src/reducer_exception.dart';
 import 'package:rx_redux/src/side_affect.dart';
-import 'package:rxdart/rxdart.dart';
 
 extension ReduxStoreExt<Action> on Stream<Action> {
   /// A ReduxStore is a RxDart based implementation of Redux and redux-observable.js.org.
@@ -88,9 +87,9 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
       final len = sideEffects.length;
       final sideEffectSubscriptions = List<StreamSubscription<A>>(len);
 
-      final actionSubject = PublishSubject<A>();
-      final addActionToSubject = actionSubject.add;
-      final addErrorToSubject = actionSubject.addError;
+      final actionController = StreamController<A>.broadcast();
+      final addActionToSubject = actionController.add;
+      final addErrorToSubject = actionController.addError;
 
       StreamController<S> controller;
       StreamSubscription<A> subscriptionUpstream;
@@ -120,8 +119,8 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         if (!controller.isClosed) {
           controller.close();
         }
-        if (!actionSubject.isClosed) {
-          actionSubject.close();
+        if (!actionController.isClosed) {
+          actionController.close();
         }
       }
 
@@ -134,7 +133,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
             controller.add(state);
 
             // This will make the reducer run on each action
-            subscriptionActionSubject = actionSubject.listen(
+            subscriptionActionSubject = actionController.stream.listen(
               onDataActually,
               onError: onErrorActually,
             );
@@ -150,7 +149,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
             var i = 0;
             for (final sideEffect in sideEffects) {
               sideEffectSubscriptions[i] = sideEffect(
-                actionSubject,
+                actionController.stream,
                 stateAccessor,
               ).listen(
                 addActionToSubject,

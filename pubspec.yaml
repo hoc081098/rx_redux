@@ -1,6 +1,6 @@
 name: rx_redux
-description: A library that manages state using RxDart. Redux implementation based on RxDart
-version: 1.1.0
+description: A library that manages state using Dart Stream. Redux implementation based on Dart Stream, with the power of RxDart.
+version: 1.2.0
 homepage: https://github.com/hoc081098/rx_redux.git
 issue_tracker: https://github.com/hoc081098/rx_redux/issues
 
@@ -8,9 +8,9 @@ environment:
   sdk: '>=2.6.0 <3.0.0'
 
 dependencies:
-  rxdart: ^0.23.1
   meta: ^1.1.6
 
 dev_dependencies:
   pedantic: ^1.0.0
   test: ^1.0.0
+  rxdart: ^0.24.0

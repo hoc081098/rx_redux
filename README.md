@@ -5,8 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Port from [RxRedux-freeletics](https://github.com/freeletics/RxRedux)
-
-A Redux store implementation entirely based on RxDart (inspired by [redux-observable](https://redux-observable.js.org)) 
+A Redux store implementation entirely based on Dart `Stream`, with the power of RxDart (inspired by [redux-observable](https://redux-observable.js.org)) 
 that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDart's `.scan()` operator. 
 
 ![RxRedux In a Nutshell](https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png)
@@ -19,7 +18,7 @@ dependencies:
 ```
 
 ## How is this different from other Redux implementations
-In contrast to any other Redux inspired library out there, this library is really backed on top of RxDart.
+In contrast to any other Redux inspired library out there, this library is pure backed on top of Dart Stream.
 This library offers a custom stream transformer `ReduxStoreStreamTransformer` (or extension method `reduxStore`) and treats upstream events as `Actions`. 
 
 # Redux Store
