@@ -12,12 +12,12 @@ void main() {
       final inputActions = Stream.fromIterable(inputs)
           .asyncMap((action) => Future.delayed(Duration.zero, () => action));
 
-      final SideEffect<String, String> sideEffect1 = (actions, state) {
+      final sideEffect1 = (Stream<String> actions, GetState<String> state) {
         return actions
             .where((action) => inputs.contains(action))
             .map((action) => '${action}SideEffect1');
       };
-      final SideEffect<String, String> sideEffect2 = (actions, state) {
+      final sideEffect2 = (Stream<String> actions, GetState<String> state) {
         return actions
             .where((action) => inputs.contains(action))
             .map((action) => '${action}SideEffect2');
@@ -38,6 +38,7 @@ void main() {
           'InputAction1SideEffect2',
           'InputAction2',
           'InputAction2SideEffect1',
+          'InputAction2SideEffect2',
           emitsDone,
         ]),
       );
@@ -92,9 +93,9 @@ void main() {
       () async {
         Stream<String> returnNoActionEffect(
           Stream<String> actions,
-          StateAccessor<String> accessor,
+          GetState<String> accessor,
         ) =>
-            actions.flatMap((_) => Stream<String>.empty());
+            actions.asyncExpand((_) => Stream<String>.empty());
 
         final upstream = Stream.fromIterable([
           'Action1',
@@ -111,9 +112,9 @@ void main() {
           ),
           emitsInOrder([
             'Initial',
-            'Initial' + 'Action1',
-            'Initial' + 'Action1' + 'Action2',
-            'Initial' + 'Action1' + 'Action2' + 'Action3',
+            'Initial' 'Action1',
+            'Initial' 'Action1' 'Action2',
+            'Initial' 'Action1' 'Action2' 'Action3',
           ]),
         );
       },
@@ -131,6 +132,7 @@ void main() {
               initialStateSupplier: () => 'Initial',
               sideEffects: [],
               reducer: (_, __) => throw error,
+              logger: rxReduxDefaultLogger,
             ),
           ),
           emitsInOrder(
@@ -170,6 +172,33 @@ void main() {
       },
     );
 
+    test('Sync stream', () async {
+      final streamController = StreamController<int>.broadcast(sync: true);
+
+      final stateStream = streamController.stream.reduxStore<String>(
+        initialStateSupplier: () => '0',
+        sideEffects: [],
+        reducer: (state, action) => '$state-$action',
+        logger: rxReduxDefaultLogger,
+      );
+
+      expect(
+        stateStream,
+        emitsInOrder(
+          [
+            '0',
+            '0-1',
+            '0-1-2',
+            '0-1-2-3',
+          ],
+        ),
+      );
+
+      streamController.add(1);
+      streamController.add(2);
+      streamController.add(3);
+    });
+
     test(
       'Disposing reduxStore disposes all side effects and upstream',
       () async {
@@ -181,14 +210,14 @@ void main() {
         final upstream = PublishSubject<String>();
         final outputedStates = <String>[];
 
-        SideEffect<String, String> sideEffect1 = (actions, state) {
+        final sideEffect1 = (Stream<String> actions, GetState<String> state) {
           return actions
               .where((a) => a == dummyAction)
               .mapTo('SideEffectAction1')
               .doOnCancel(() => disposedSideffectsCount++);
         };
 
-        SideEffect<String, String> sideEffect2 = (actions, state) {
+        final sideEffect2 = (Stream<String> actions, GetState<String> state) {
           return actions
               .where((a) => a == dummyAction)
               .mapTo('SideEffectAction2')

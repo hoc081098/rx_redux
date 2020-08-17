@@ -35,7 +35,7 @@ class State {
   String toString() => 'State{count=$count}';
 }
 
-main() async {
+void main() async {
   final actions = PublishSubject<Action>(
     onCancel: () => print('[action onCancel]'),
     onListen: () => print('[action onListen]'),
@@ -87,7 +87,7 @@ main() async {
 
   unawaited(
     () async {
-      for (int i = 0; i < 5; i++) {
+      for (var i = 0; i < 5; i++) {
         //  sub.pause();
 
         if (i.isEven) {
@@ -103,7 +103,7 @@ main() async {
       //await sub.cancel();
       print('continue');
 
-      for (int i = 0; i < 5; i++) {
+      for (var i = 0; i < 5; i++) {
         print('continue $i');
         if (i.isEven) {
           actions.add(IncrementAction(i));

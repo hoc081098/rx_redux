@@ -145,7 +145,7 @@ final SideEffect<ViewState, Action> _addTodoEffect = (action$, state) {
 
 Stream<Action> _removeTodoEffect(
   Stream<Action> action$,
-  StateAccessor state,
+  GetState state,
 ) {
   return action$.whereType<RemoveTodo>().map((action) => action.todo).flatMap(
     (todo) async* {

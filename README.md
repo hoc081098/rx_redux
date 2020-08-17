@@ -4,8 +4,8 @@
 [![Pub](https://img.shields.io/pub/v/rx_redux.svg)](https://pub.dartlang.org/packages/rx_redux)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Port from [RxRedux-freeletics](https://github.com/freeletics/RxRedux)
-A Redux store implementation entirely based on Dart `Stream`, with the power of RxDart (inspired by [redux-observable](https://redux-observable.js.org)) 
+-   Port from [RxRedux-freeletics](https://github.com/freeletics/RxRedux)
+-   A Redux store implementation entirely based on Dart `Stream`, with the power of RxDart (inspired by [redux-observable](https://redux-observable.js.org)) 
 that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDart's `.scan()` operator. 
 
 ![RxRedux In a Nutshell](https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png)
@@ -39,15 +39,15 @@ Every `Action` goes through the state reducer.
 If an `Action` is not changing the state at all by the `Reducer` (because it's handled as a side effect), just return the previous state.
 
 # Side Effect
-A Side Effect is a function of type `(Stream<Action>, StateAccessor<State>) -> Stream<Action>`.
+A Side Effect is a function of type `(Stream<Action>, GetState<State>) -> Stream<Action>`.
 **So basically it's Actions in and Actions out.** 
 You can think of a `SideEffect` as a use case in clean architecture: It should do just one job.
 Every `SideEffect` can trigger multiple `Actions` (remember it returns `Stream<Action>`) which go through the `Reducer` but can also trigger other `SideEffects` registered for the corresponding `Action`.
 An `Action` can also have a `payload`. For example, if you load some data from backend, you emit the loaded data as an `Action` like `class DataLoadedAction { final Foo data; }`. 
 The mantra an Action is a command to do something is still true: in that case it means data is loaded, do with it "something".
 
-# StateAccessor
-Whenever a `SideEffect` needs to know the current State it can use `StateAccessor` to grab the latest state from Redux Store. `StateAccessor` is basically just a function `() -> State` to grab the latest State anytime you need it.
+# GetState
+Whenever a `SideEffect` needs to know the current State it can use `GetState` to grab the latest state from Redux Store. `GetState` is basically just a function `() -> State` to grab the latest State anytime you need it.
 
 # Usage
 Let's create a simple Redux Store for Pagination: Goal is to display a list of `Persons` on screen.
@@ -104,7 +104,7 @@ class ErrorLoadingNextPageAction implements Action {
 // SideEffect is just a type alias for such a function:
 Stream<State> loadNextPageSideEffect (
   Stream<Action> actions,
-  StateAccessor<State> state,
+  GetState<State> state,
 ) =>
   actions
     // This side effect only runs for actions of type LoadNextPageAction
@@ -113,7 +113,8 @@ Stream<State> loadNextPageSideEffect (
       // do network request
       final State currentState = state();
       final int nextPage = state.currentPage + 1;
-      backend
+      
+      return backend
         .getPersons(nextPage)
         .map<Action>((List<Person> person) {
           return PageLoadedAction(
@@ -122,12 +123,12 @@ Stream<State> loadNextPageSideEffect (
           );
         })
         .onErrorReturnWith((error) => ErrorLoadingNextPageAction(error))
-        .startWith(const LoadPageAction())
+        .startWith(const LoadPageAction());
     });
 ```
 
 ```dart
-// Reducer is just a typealias for a function
+// Reducer is just a type alias for a function
 State reducer(State state, Action action) {
   if (action is LoadPageAction) {
     return state.copyWith(loadingNextPage: true);
@@ -143,7 +144,7 @@ State reducer(State state, Action action) {
       loadingNextPage: false, 
       errorLoadingNextPage: null
       persons: [...state.persons, ...action.persons],
-      page: action.page
+      page: action.page,
     );
   }
 
@@ -162,7 +163,7 @@ actions.transform(
     sideEffects: sideEffects,
     reducer: reducer,
   ),
-).listen((state) => view.render(state));
+).listen(view.render);
 ```
 
 or using extension method `reduxStore`:
@@ -172,7 +173,7 @@ actions.reduxStore(
   initialStateSupplier: () => initialState,
   sideEffects: sideEffects,
   reducer: reducer,
-).listen((state) => view.render(state));
+).listen(view.render);
 ```
 
 The [following video](https://youtu.be/M7lx9Y9ANYo) (click on it) illustrates the workflow:
@@ -230,18 +231,15 @@ This is a common pitfall and is most of the time caused by the fact that a `Side
 
 ```dart
 
-final SideEffect<State, Int> sideEffect = (actions, state) =>
-actions.map((i) => i * 2);
+final SideEffect<State, Int> sideEffect = (actions, state) => actions.map((i) => i * 2);
 
 final inputActions = Stream.value(1);
 
 inputActions.reduxStore(
   initialStateSupplier: () => 'InitialState',
   sideEffects: [sideEffect],
-  reducer: (state, action) {
-    ...
-  }
-)
+  reducer: (state, action) => newState,
+);
 ```
 
 The problem is that from upstream we get `Int 1`.
@@ -267,10 +265,10 @@ SideEffect<State, Action> sideEffect1 = (actions, state) {
 SideEffect<State, Action> sideEffect2 = (actions, state) {
   // 5. Runs because of OtherAction
   return actions.filter((a) => a is OtherAction).mapTo(YetAnotherAction());
-}
+};
 
 upstreamActions.reduxStore(
-  initialStateSupplier: () => ...,
+  initialStateSupplier: () => initialState,
   sideEffects: [sideEffect1, sideEffect2],
   reducer: (state, action) {
     // 2. This runs first because of SomeAction
@@ -279,7 +277,7 @@ upstreamActions.reduxStore(
     ...
     // 6. This runs again because of YetAnotherAction emitted from SideEffect2)
   }
-).listen(...);
+).listen(print);
 ```
 
 So the workflow is as follows:
@@ -292,24 +290,27 @@ So the workflow is as follows:
 
 ## Can I use `variable` and `function` for `SideEffects` or `Reducer`?
 
-Absolutely. `SideEffect` is just a type alias for a function `typedef Stream<A> SideEffect<S, A>(Stream<A> actions, StateAccessor<S> state
-);`.
+Absolutely. `SideEffect` is just a type alias for a function `typedef Stream<A> SideEffect<S, A>(Stream<A> actions, GetState<S> state);`.
 
-In dart you can use a lambda for that like this:
+In `Dart` you can use a lambda for that like this:
 ```dart
 SideEffect<State, Action> sideEffect1 = (actions, state) {
-  return actions.filter((a) => a is SomeAction).mapTo(OtherAction());
-}
+  return actions
+      .filter((a) => a is SomeAction)
+      .mapTo(OtherAction());
+};
 ```
 
 of write a function (instead of a lambda):
 
 ```dart
-bservable<Action> sideEffect2(
+Stream<Action> sideEffect2(
   Stream<Action> actions,
-  StateAccessor<State> state,
+  GetState<State> state,
 ) {
-  return actions.filter((a) => a is SomeAction).mapTo(OtherAction());
+  return actions
+      .filter((a) => a is SomeAction)
+      .mapTo(OtherAction());
 }
 ```
 
@@ -317,11 +318,9 @@ Both are totally equal and can be used like that:
 
 ```dart
 upstreamActions.reduxStore(
-  initialStateSupplier: () => ...,
+  initialStateSupplier: () => initialState,
   sideEffects: [sideEffect1, sideEffect2],
-  reducer: (state, action) {
-    ...
-  }
+  reducer: (state, action) => newState,
 ).listen(...);
 ```
 
@@ -329,12 +328,12 @@ The same is valid for Reducer. Reducer is just a type alias for a function `type
 You can define your reducer as lambda or function:
 
 ```dart
-final reducer = (state, action) => ...;
+final reducer = (State state, Action action) => /*return new state*/;
 
 // or
 
 State reducer(State state, Action action) {
-  ...
+  // return new state
 }
 ```
 
@@ -346,7 +345,7 @@ Therefore, `.distinct()` is considered as best practice.
 actions
   .reduxStore( ... )
   .distinct()
-  .listen((state) => view.render(state));
+  .listen(view.render);
 ```
 
 ## What if I would like to have a SideEffect that returns no Action?
@@ -355,10 +354,10 @@ For example, let's say you just store something in a database but you don't need
 piped backed to your redux store. In that case you can simple use `Stream.empty()` like this:
 
 ```dart
-Stream<Action> saveToDatabaseSideEffect(Stream<Action> actions, StateAccessor<State> stateAccessor) {
-    return actions.flatMap((_) {
-      saveToDb(...);
-      return Stream<Action>.empty();  // just return this to not emit an Action
+Stream<Action> saveToDatabaseSideEffect(Stream<Action> actions, GetState<State> getState) {
+    return actions.flatMap((_) async* {
+      await saveToDb(something);
+      // not emit any Action
     });
 }
 ```
@@ -367,16 +366,13 @@ Stream<Action> saveToDatabaseSideEffect(Stream<Action> actions, StateAccessor<St
 
 Let's assume you have a simple `SideEffect` that is triggered by `Action1`. 
 Whenever `Action2` is emitted our `SideEffect` should stop. 
-In RxDart this is quite easy to do by using `.takeUntil()`
+In `RxDart` this is quite easy to do by using: `.takeUntil()`
 
 ```dart
-mySideEffect(Stream<Action> actions, StateAccessor<State> stateAccessor) => 
+mySideEffect(Stream<Action> actions, GetState<State> getState) => 
     actions
         .whereType<Action1>()
-        .flatMap((_) {
-          ...
-          return doSomething();
-        })
+        .flatMap((_) => doSomething())
         .takeUntil(actions.whereType<Action2>()); // Once Action2 triggers the whole SideEffect gets canceled.
 ```
 
@@ -385,8 +381,8 @@ Let's say you would like to start observing a database right from the start insi
 This sounds pretty much like as soon as you have subscribers to your Store and therefore you don't need a dedicated Action to start observing the database.
 
 ```dart
-observeDatabaseSideEffect(Stream<Action> _, StateAccessor<State> __) =>
-    database // please notice that we dont use Stream<Action> at all
+Stream<Action> observeDatabaseSideEffect(Stream<Action> _, GetState<State> __) =>
+    database // please notice that we don't use Stream<Action> at all
         .queryItems()
         .map((items) => DatabaseLoadedAction(items));
 ```
