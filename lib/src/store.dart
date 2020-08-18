@@ -50,7 +50,7 @@ class Store<A, S> {
     return stream.distinct(_equals);
   }
 
-  /// Synchronously get current state.
+  /// Get current state synchronously.
   S get state => _state;
 
   /// Dispatch action to store.
