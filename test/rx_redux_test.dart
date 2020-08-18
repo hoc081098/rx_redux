@@ -315,5 +315,38 @@ void main() {
       );
       expect(stream, emitsInOrder([emitsError(isException), emitsDone]));
     });
+
+    test('pause and resume', () {
+      final stream = Stream.fromIterable([1, 2, 3, 4])
+          .asyncMap((action) => Future(() => action))
+          .reduxStore<String>(
+            initialStateSupplier: () => 'State',
+            sideEffects: [],
+            reducer: (state, action) => '$state+$action',
+            logger: rxReduxDefaultLogger,
+          );
+
+      var i = 0;
+      final subscription = stream.listen(
+        expectAsync1(
+          (state) {
+            expect(
+              state,
+              const [
+                'State',
+                'State+1',
+                'State+1+2',
+                'State+1+2+3',
+                'State+1+2+3+4',
+              ][i++],
+            );
+          },
+          count: 5,
+        ),
+      );
+
+      subscription
+          .pause(Future<void>.delayed(const Duration(milliseconds: 300)));
+    });
   });
 }
