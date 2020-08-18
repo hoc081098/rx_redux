@@ -20,21 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f16490be-0275-4932-b35a-ad2b03e3791d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/src/logger.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/src/store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis_options.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_options.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/rx_redux_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/rx_redux_example.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/rx_redux.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/rx_redux.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/reducer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/reducer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/reducer_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/reducer_exception.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/redux_store_stream_transformer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/redux_store_stream_transformer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/side_affect.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/side_effect.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/rx_redux_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/rx_redux_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,13 +62,13 @@
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
-  <component name="RunManager" selected="Dart Command Line App.store.dart">
+  <component name="RunManager" selected="Dart Test.tests in rx_redux_test.dart">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" editBeforeRun="true" singleton="false">
       <option name="filePath" value="$PROJECT_DIR$/example/rx_redux_example.dart" />
       <option name="workingDirectory" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
-    <configuration name="rx_redux_example.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" editBeforeRun="true" singleton="false" temporary="true" nameIsGenerated="true">
+    <configuration name="rx_redux_example.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/example/rx_redux_example.dart" />
       <option name="workingDirectory" value="$PROJECT_DIR$" />
       <method v="2" />
@@ -97,10 +84,10 @@
       <option name="testName" value="Sync stream" />
       <method v="2" />
     </configuration>
-    <configuration name="ahihih in rx_redux_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+    <configuration name="initialStateSupplier throws in rx_redux_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/test/rx_redux_test.dart" />
       <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
-      <option name="testName" value="ahihih" />
+      <option name="testName" value="initialStateSupplier throws" />
       <method v="2" />
     </configuration>
     <configuration name="tests in rx_redux_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
@@ -108,19 +95,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Dart Test.tests in rx_redux_test.dart" />
-      <item itemvalue="Dart Test.ahihih in rx_redux_test.dart" />
-      <item itemvalue="Dart Test.Sync stream in rx_redux_test.dart" />
       <item itemvalue="Dart Command Line App.rx_redux_example.dart" />
       <item itemvalue="Dart Command Line App.store.dart" />
+      <item itemvalue="Dart Test.tests in rx_redux_test.dart" />
+      <item itemvalue="Dart Test.Sync stream in rx_redux_test.dart" />
+      <item itemvalue="Dart Test.initialStateSupplier throws in rx_redux_test.dart" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Dart Command Line App.store.dart" />
         <item itemvalue="Dart Test.tests in rx_redux_test.dart" />
+        <item itemvalue="Dart Test.initialStateSupplier throws in rx_redux_test.dart" />
+        <item itemvalue="Dart Command Line App.store.dart" />
         <item itemvalue="Dart Command Line App.rx_redux_example.dart" />
         <item itemvalue="Dart Test.Sync stream in rx_redux_test.dart" />
-        <item itemvalue="Dart Test.ahihih in rx_redux_test.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -170,7 +157,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576548167187</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="up">
+      <created>1597678998734</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1597678998734</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -206,7 +200,8 @@
     <MESSAGE value="[UPDATE] add tests and remove print in class StreamTransformer" />
     <MESSAGE value="Publish v1.0.1" />
     <MESSAGE value="Publish 1.1.1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Publish 1.1.1" />
+    <MESSAGE value="up" />
+    <option name="LAST_COMMIT_MESSAGE" value="up" />
   </component>
   <component name="WindowStateProjectService">
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597300735308">
@@ -217,38 +212,46 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="488" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1597676042659" />
-    <state x="392" y="92" key="#rx_redux_example.dart" timestamp="1597671586429">
+    <state x="392" y="92" key="#rx_redux_example.dart" timestamp="1597680503310">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="392" y="92" key="#rx_redux_example.dart/0.0.1366.728@0.0.1366.728" timestamp="1597671586429" />
+    <state x="392" y="92" key="#rx_redux_example.dart/0.0.1366.728@0.0.1366.728" timestamp="1597680503310" />
     <state x="392" y="92" key="#store.dart" timestamp="1597676760447">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="392" y="92" key="#store.dart/0.0.1366.728@0.0.1366.728" timestamp="1597676760447" />
+    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597678996714">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597678996714" />
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1597298177141">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1597298177141" />
-    <state width="1323" height="412" key="GridCell.Tab.0.bottom" timestamp="1597678867958">
+    <state width="1323" height="280" key="GridCell.Tab.0.bottom" timestamp="1597756102359">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="412" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597678867958" />
-    <state width="1323" height="412" key="GridCell.Tab.0.center" timestamp="1597678867958">
+    <state width="1323" height="280" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597756102359" />
+    <state width="1323" height="280" key="GridCell.Tab.0.center" timestamp="1597756102359">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="412" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597678867958" />
-    <state width="1323" height="412" key="GridCell.Tab.0.left" timestamp="1597678867958">
+    <state width="1323" height="280" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597756102359" />
+    <state width="1323" height="280" key="GridCell.Tab.0.left" timestamp="1597756102358">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="412" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597678867958" />
-    <state width="1323" height="412" key="GridCell.Tab.0.right" timestamp="1597678867958">
+    <state width="1323" height="280" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597756102358" />
+    <state width="1323" height="280" key="GridCell.Tab.0.right" timestamp="1597756102359">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="412" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597678867958" />
+    <state width="1323" height="280" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597756102359" />
     <state x="184" y="8" key="SettingsEditor" timestamp="1597300821053">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="8" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1597300821053" />
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597679000270">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597679000270" />
     <state x="389" y="99" width="587" height="582" key="find.popup" timestamp="1597670919157">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

@@ -306,5 +306,14 @@ void main() {
         ]),
       );
     });
+
+    test('initialStateSupplier throws', () {
+      final stream = Stream.value(1).reduxStore<String>(
+        initialStateSupplier: () => throw Exception(),
+        sideEffects: [],
+        reducer: (state, action) => '$state+$action',
+      );
+      expect(stream, emitsInOrder([emitsError(isException), emitsDone]));
+    });
   });
 }
