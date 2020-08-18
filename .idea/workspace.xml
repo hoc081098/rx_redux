@@ -16,12 +16,19 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/v2" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f16490be-0275-4932-b35a-ad2b03e3791d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/rx_redux_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/rx_redux_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/store.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +68,7 @@
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
-  <component name="RunManager" selected="Dart Test.tests in rx_redux_test.dart">
+  <component name="RunManager" selected="Dart Command Line App.store.dart">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" editBeforeRun="true" singleton="false">
       <option name="filePath" value="$PROJECT_DIR$/example/rx_redux_example.dart" />
       <option name="workingDirectory" value="$PROJECT_DIR$" />
@@ -102,10 +109,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Dart Command Line App.store.dart" />
         <item itemvalue="Dart Test.tests in rx_redux_test.dart" />
         <item itemvalue="Dart Test.pause and resume in rx_redux_test.dart" />
         <item itemvalue="Dart Test.initialStateSupplier throws in rx_redux_test.dart" />
-        <item itemvalue="Dart Command Line App.store.dart" />
         <item itemvalue="Dart Command Line App.rx_redux_example.dart" />
       </list>
     </recent_temporary>
@@ -170,7 +177,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597756168814</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="pause resume">
+      <created>1597762605207</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1597762605207</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -178,7 +192,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/v2" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -208,7 +234,8 @@
     <MESSAGE value="Publish 1.1.1" />
     <MESSAGE value="up" />
     <MESSAGE value="try catch initialStateSupplier" />
-    <option name="LAST_COMMIT_MESSAGE" value="try catch initialStateSupplier" />
+    <MESSAGE value="pause resume" />
+    <option name="LAST_COMMIT_MESSAGE" value="pause resume" />
   </component>
   <component name="WindowStateProjectService">
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597300735308">
@@ -227,30 +254,30 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="392" y="92" key="#store.dart/0.0.1366.728@0.0.1366.728" timestamp="1597676760447" />
-    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597756166799">
+    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597762604277">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597756166799" />
+    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597762604277" />
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1597298177141">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1597298177141" />
-    <state width="1323" height="281" key="GridCell.Tab.0.bottom" timestamp="1597762364501">
+    <state width="1323" height="225" key="GridCell.Tab.0.bottom" timestamp="1597763933741">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597762364501" />
-    <state width="1323" height="281" key="GridCell.Tab.0.center" timestamp="1597762364501">
+    <state width="1323" height="225" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597763933741" />
+    <state width="1323" height="225" key="GridCell.Tab.0.center" timestamp="1597763933740">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597762364501" />
-    <state width="1323" height="281" key="GridCell.Tab.0.left" timestamp="1597762364501">
+    <state width="1323" height="225" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597763933740" />
+    <state width="1323" height="225" key="GridCell.Tab.0.left" timestamp="1597763933740">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597762364501" />
-    <state width="1323" height="281" key="GridCell.Tab.0.right" timestamp="1597762364501">
+    <state width="1323" height="225" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597763933740" />
+    <state width="1323" height="225" key="GridCell.Tab.0.right" timestamp="1597763933740">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597762364501" />
+    <state width="1323" height="225" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597763933740" />
     <state x="475" y="66" key="RollbackChangesDialog" timestamp="1597761556792">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -259,18 +286,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="8" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1597300821053" />
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597756170189">
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597762607166">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597756170189" />
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597762607166" />
     <state x="389" y="99" width="587" height="582" key="find.popup" timestamp="1597670919157">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="389" y="99" width="587" height="582" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1597670919157" />
-    <state x="339" y="162" key="run.anything.popup" timestamp="1597675157260">
+    <state x="339" y="162" key="run.anything.popup" timestamp="1597763339976">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1597675157260" />
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1597763339976" />
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1597676279116">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
