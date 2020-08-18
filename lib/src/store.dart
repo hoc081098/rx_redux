@@ -19,10 +19,10 @@ class Store<A, S> {
     @required List<SideEffect<A, S>> sideEffects,
     @required Reducer<A, S> reducer,
     void Function(Object, StackTrace) handleError,
-    Function(S previous, S next) equals,
+    bool Function(S previous, S next) equals,
   }) {
     _state = initialState;
-    _equals = _equals;
+    _equals = equals;
 
     _stateStream = _action.stream.reduxStore<S>(
       initialStateSupplier: () => initialState,
