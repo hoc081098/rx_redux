@@ -3,7 +3,7 @@
 -   Breaking change: remove `rxdart` dependency
 
 ## 1.1.0
--   Update rxdart
+-   Update `rxdart`
 -   Now support extension methods
 
 ## 1.0.1+1
@@ -19,7 +19,7 @@
 
 ## 1.0.0
 
--   Add document, README, tests and some changes
+-   Add the document, README, tests and some changes
 
 ##  0.0.9
 
