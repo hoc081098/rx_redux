@@ -36,16 +36,15 @@ extension ReduxStoreExt<Action> on Stream<Action> {
     @required Iterable<SideEffect<Action, State>> sideEffects,
     @required Reducer<Action, State> reducer,
     RxReduxLogger logger,
-  }) {
-    return transform(
-      ReduxStoreStreamTransformer(
-        initialStateSupplier: initialStateSupplier,
-        reducer: reducer,
-        sideEffects: sideEffects,
-        logger: logger,
-      ),
-    );
-  }
+  }) =>
+      transform(
+        ReduxStoreStreamTransformer(
+          initialStateSupplier: initialStateSupplier,
+          reducer: reducer,
+          sideEffects: sideEffects,
+          logger: logger,
+        ),
+      );
 }
 
 /// Transform stream of actions to stream of states.
