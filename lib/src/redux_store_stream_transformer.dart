@@ -7,7 +7,7 @@ import 'reducer.dart';
 import 'reducer_exception.dart';
 import 'side_effect.dart';
 
-/// TODO
+/// Redux store stream Extension for Stream of actions.
 extension ReduxStoreExt<Action> on Stream<Action> {
   /// A ReduxStore is a RxDart based implementation of Redux and redux-observable.js.org.
   ///
@@ -48,7 +48,19 @@ extension ReduxStoreExt<Action> on Stream<Action> {
   }
 }
 
-/// TODO
+/// Transform stream of actions to stream of states.
+///
+/// A ReduxStore takes Actions from upstream as input events.
+/// [SideEffect]s can be registered to listen for a certain
+/// Action to react on a that Action as a (impure) side effect and create yet another Action as
+/// output. Every Action goes through the a [Reducer], which is basically a pure function that takes
+/// the current State and an Action to compute a new State.
+/// The new state will be emitted downstream to any listener interested in it.
+///
+/// A ReduxStore stream never reaches onDone(). If a error occurs in the [Reducer] or in any
+/// side effect (any has been thrown) then the ReduxStore reaches onError() as well and
+/// according to the reactive stream specs the store cannot recover the error state.
+///
 class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
   final S Function() _initialStateSupplier;
   final Iterable<SideEffect<A, S>> _sideEffects;

@@ -28,6 +28,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f16490be-0275-4932-b35a-ad2b03e3791d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/redux_store_stream_transformer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/redux_store_stream_transformer.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597827402070</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="wip">
+      <created>1597829109727</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1597829109727</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -298,30 +306,30 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="392" y="92" key="#store.dart/0.0.1366.728@0.0.1366.728" timestamp="1597676760447" />
-    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597827400890">
+    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597829108645">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597827400890" />
+    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597829108645" />
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1597298177141">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1597298177141" />
-    <state width="1323" height="371" key="GridCell.Tab.0.bottom" timestamp="1597826074981">
+    <state width="1323" height="371" key="GridCell.Tab.0.bottom" timestamp="1597832628361">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="371" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597826074981" />
-    <state width="1323" height="371" key="GridCell.Tab.0.center" timestamp="1597826074980">
+    <state width="1323" height="371" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597832628361" />
+    <state width="1323" height="371" key="GridCell.Tab.0.center" timestamp="1597832628361">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="371" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597826074980" />
-    <state width="1323" height="371" key="GridCell.Tab.0.left" timestamp="1597826074980">
+    <state width="1323" height="371" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597832628361" />
+    <state width="1323" height="371" key="GridCell.Tab.0.left" timestamp="1597832628361">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="371" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597826074980" />
-    <state width="1323" height="371" key="GridCell.Tab.0.right" timestamp="1597826074980">
+    <state width="1323" height="371" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597832628361" />
+    <state width="1323" height="371" key="GridCell.Tab.0.right" timestamp="1597832628361">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="371" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597826074980" />
+    <state width="1323" height="371" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597832628361" />
     <state x="475" y="66" key="RollbackChangesDialog" timestamp="1597761556792">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -330,10 +338,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="8" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1597300821053" />
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597827403777">
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597829111265">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597827403777" />
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597829111265" />
     <state x="389" y="99" width="587" height="582" key="find.popup" timestamp="1597670919157">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
