@@ -20,6 +20,7 @@ class Store<A, S> {
     @required Reducer<A, S> reducer,
     void Function(Object, StackTrace) handleError,
     bool Function(S previous, S next) equals,
+    RxReduxLogger logger,
   }) {
     _state = initialState;
     _equals = equals;
@@ -28,7 +29,7 @@ class Store<A, S> {
       initialStateSupplier: () => initialState,
       sideEffects: sideEffects,
       reducer: reducer,
-      logger: rxReduxDefaultLogger,
+      logger: logger,
     );
 
     _subscription = _stateStream.listen(

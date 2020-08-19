@@ -103,7 +103,10 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
 
         // add initial state
         if (type == _ActionType.initial) {
-          _logger?.call('Action $type -> Current state: $currentState');
+          final message = '\n'
+              '   ⟶ Action       : $type\n'
+              '   ⟹ Current state: $currentState';
+          _logger?.call(message);
           return controller.add(currentState);
         }
 
@@ -112,8 +115,11 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           controller.add(newState);
           state = newState;
 
-          _logger?.call(
-              'Action $type: $action - Current state: $currentState -> New state: $newState');
+          final message = '\n'
+              '   ⟶ Action       : $type ↭ $action\n'
+              '   ⟶ Current state: $currentState\n'
+              '   ⟹ New state    : $newState';
+          _logger?.call(message);
         } catch (e, s) {
           controller.addError(
             ReducerException<A, S>(
@@ -124,8 +130,11 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
             ),
           );
 
-          _logger?.call(
-              'Action $type: $action - Current state: $currentState -> Error: $e $s');
+          final message = '\n'
+              '   ⟶ Action       : $type ↭ $action\n'
+              '   ⟶ Current state: $currentState\n'
+              '   ⟹ Error        : $e ↭ $s';
+          _logger?.call(message);
         }
       }
 
@@ -220,13 +229,13 @@ abstract class _ActionType {
   @override
   String toString() {
     if (this is _Initial) {
-      return 'Initial';
+      return '⭍';
     }
     if (this is _External) {
-      return 'Upstream';
+      return '↓';
     }
     if (this is _SideEffect) {
-      return 'SideEffect${(this as _SideEffect).index}';
+      return '⟳${(this as _SideEffect).index}';
     }
     throw StateError('Unknown $this');
   }

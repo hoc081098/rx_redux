@@ -1,119 +1,135 @@
 import 'dart:async';
 
-import 'package:pedantic/pedantic.dart';
 import 'package:rx_redux/rx_redux.dart';
 import 'package:rxdart/rxdart.dart';
 
-abstract class Action {}
+/// Actions
+class Action {
+  final Todo todo;
+  final ActionType type;
 
-class IncrementAction implements Action {
-  final int p;
-
-  IncrementAction(this.p);
-
-  @override
-  String toString() => 'IncrementAction{p=$p}';
-}
-
-class IncrementLoadedAction implements Action {
-  final int p;
-
-  IncrementLoadedAction(this.p);
+  const Action(this.todo, this.type);
 
   @override
-  String toString() => 'IncrementLoadedAction{p=$p}';
+  String toString() => 'Action { ${todo.id}, $type }';
 }
 
-class DecrementAction implements Action {}
+enum ActionType {
+  add,
+  remove,
+  toggle,
+  //
+  added,
+  removed,
+  toggled,
+}
 
-class State {
-  final int count;
+/// View state
+class Todo {
+  final int id;
+  final String title;
+  final bool completed;
 
-  const State(this.count);
+  const Todo(this.id, this.title, this.completed);
 
   @override
-  String toString() => 'State{count=$count}';
+  String toString() => 'Todo { $id, $completed }';
 }
+
+class ViewState {
+  final List<Todo> todos;
+
+  const ViewState(this.todos);
+
+  @override
+  String toString() => 'ViewState { ${todos.length} }';
+}
+
+/// Reducer
+ViewState reducer(ViewState vs, Action action) {
+  switch (action.type) {
+    case ActionType.add:
+      return vs;
+    case ActionType.remove:
+      return vs;
+    case ActionType.toggle:
+      return vs;
+    case ActionType.added:
+      return ViewState([...vs.todos, action.todo]);
+    case ActionType.removed:
+      return ViewState(
+        vs.todos.where((t) => t.id != action.todo.id).toList(),
+      );
+    case ActionType.toggled:
+      final todos = vs.todos
+          .map((t) =>
+              t.id != action.todo.id ? t : Todo(t.id, t.title, !t.completed))
+          .toList(growable: false);
+      return ViewState(todos);
+    default:
+      return vs;
+  }
+}
+
+/// Side effects
+
+final SideEffect<Action, ViewState> addTodoEffect = (action$, state) => action$
+    .where((event) => event.type == ActionType.add)
+    .map((event) => event.todo)
+    .flatMap(
+      (todo) => Rx.timer(
+        Action(todo, ActionType.added),
+        const Duration(milliseconds: 300),
+      ),
+    );
+
+Stream<Action> removeTodoEffect(
+  Stream<Action> action$,
+  GetState<ViewState> state,
+) {
+  final executeRemove = (Todo todo) async* {
+    await Future.delayed(const Duration(milliseconds: 200));
+    yield Action(todo, ActionType.removed);
+  };
+  return action$
+      .where((event) => event.type == ActionType.remove)
+      .map((action) => action.todo)
+      .flatMap(executeRemove);
+}
+
+final SideEffect<Action, ViewState> toggleTodoEffect = (action$, state) {
+  final executeToggle = (Todo todo) async* {
+    await Future.delayed(const Duration(milliseconds: 500));
+    yield Action(todo, ActionType.toggled);
+  };
+  return action$
+      .where((event) => event.type == ActionType.toggle)
+      .map((action) => action.todo)
+      .flatMap(executeToggle);
+};
 
 void main() async {
-  final actions = PublishSubject<Action>(
-    onCancel: () => print('[action onCancel]'),
-    onListen: () => print('[action onListen]'),
+  final store = Store(
+    initialState: ViewState([]),
+    sideEffects: [addTodoEffect, removeTodoEffect, toggleTodoEffect],
+    reducer: reducer,
+    logger: rxReduxDefaultLogger,
   );
 
-  final state$ = actions
-      .doOnData((action) => print('[dispatch] action=$action'))
-      .reduxStore<State>(
-    initialStateSupplier: () => const State(0),
-    reducer: (state, action) {
-      if (action is IncrementAction) {
-        // return State(action.p ~/ 0);
-        return state;
-      }
-      if (action is IncrementLoadedAction) {
-        return State(state.count + action.p);
-      }
-      if (action is DecrementAction) {
-        return State(state.count - 1);
-      }
-      return state;
-    },
-    sideEffects: [
-      (actions, state) {
-        return actions.whereType<IncrementAction>().asyncExpand(
-          (incrementAction) async* {
-            await Future.delayed(const Duration(milliseconds: 1000));
-            print('[in side effect] access state=${state()}');
-            yield IncrementLoadedAction(incrementAction.p);
-          },
-        ).doOnData((action) => print('[side effect] action=$action'));
-      },
-      (actions, state) {
-        return actions.whereType<DecrementAction>().flatMap((action) async* {
-          await Future.delayed(const Duration(milliseconds: 1000));
-          print('[in side effect] access state=${state()}');
-          yield IncrementLoadedAction(-1);
-        });
-      }
-    ],
-  );
+  store.stateStream.listen((event) => print('~> $event'));
 
-  final sub = state$.doOnCancel(() => print('[state onCancel]')).listen(
-        print,
-        onError: print,
-        onDone: () => print('[state onDone]'),
-        cancelOnError: true,
-      );
+  for (var i = 0; i < 5; i++) {
+    store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.add));
+  }
+  await Future.delayed(const Duration(seconds: 1));
 
-  unawaited(
-    () async {
-      for (var i = 0; i < 5; i++) {
-        //  sub.pause();
+  for (var i = 0; i < 5; i++) {
+    store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.toggle));
+  }
+  await Future.delayed(const Duration(seconds: 1));
 
-        if (i.isEven) {
-          actions.add(IncrementAction(i));
-        } else {
-          actions.add(DecrementAction());
-        }
-
-        await Future.delayed(const Duration(milliseconds: 300));
-        // sub.resume();
-      }
-
-      //await sub.cancel();
-      print('continue');
-
-      for (var i = 0; i < 5; i++) {
-        print('continue $i');
-        if (i.isEven) {
-          actions.add(IncrementAction(i));
-        } else {
-          actions.add(DecrementAction());
-        }
-        await Future.delayed(const Duration(milliseconds: 300));
-      }
-    }(),
-  );
-
-  await Future.delayed(const Duration(seconds: 5));
+  for (var i = 0; i < 5; i++) {
+    store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.remove));
+  }
+  await Future.delayed(const Duration(seconds: 1));
 }
