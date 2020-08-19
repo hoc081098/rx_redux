@@ -5,7 +5,7 @@ import 'package:rx_redux/rx_redux.dart';
 
 /// Rx Redux Store.
 /// Redux store based on [Stream].
-class Store<A, S> {
+class RxReduxStore<A, S> {
   final _action = StreamController<A>.broadcast();
 
   StreamSubscription _subscription;
@@ -13,8 +13,8 @@ class Store<A, S> {
   Stream<S> _stateStream;
   bool Function(S previous, S next) _equals;
 
-  /// Construct a [Store]
-  Store({
+  /// Construct a [RxReduxStore]
+  RxReduxStore({
     @required S initialState,
     @required List<SideEffect<A, S>> sideEffects,
     @required Reducer<A, S> reducer,
@@ -67,7 +67,7 @@ class Store<A, S> {
 enum _Action { a1, a2, a3, b1, b2, b3, b0 }
 
 void main() async {
-  final store = Store<_Action, int>(
+  final store = RxReduxStore<_Action, int>(
     initialState: 0,
     sideEffects: [
       (action, getState) => action

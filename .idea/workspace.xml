@@ -29,8 +29,8 @@
     <list default="true" id="f16490be-0275-4932-b35a-ad2b03e3791d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/rx_redux_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/rx_redux_example.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/rx_redux.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/rx_redux.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/redux_store_stream_transformer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/redux_store_stream_transformer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/side_effect.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/side_effect.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/store.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -215,7 +215,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597765052645</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="wip">
+      <created>1597826099958</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1597826099958</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -268,7 +275,8 @@
     <MESSAGE value="pause resume" />
     <MESSAGE value="updated store" />
     <MESSAGE value="update CHANGELOG.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="update CHANGELOG.md" />
+    <MESSAGE value="wip" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip" />
   </component>
   <component name="WindowStateProjectService">
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597300735308">
@@ -287,10 +295,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="392" y="92" key="#store.dart/0.0.1366.728@0.0.1366.728" timestamp="1597676760447" />
-    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597765051831">
+    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597826098614">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597765051831" />
+    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597826098614" />
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1597298177141">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -319,14 +327,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="8" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1597300821053" />
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597765054103">
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597826117809">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597765054103" />
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597826117809" />
     <state x="389" y="99" width="587" height="582" key="find.popup" timestamp="1597670919157">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="389" y="99" width="587" height="582" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1597670919157" />
+    <state width="634" height="295" key="javadoc.popup.new" timestamp="1597826618213">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="634" height="295" key="javadoc.popup.new/0.0.1366.728@0.0.1366.728" timestamp="1597826618213" />
     <state x="339" y="162" key="run.anything.popup" timestamp="1597763339976">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

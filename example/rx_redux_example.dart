@@ -109,7 +109,7 @@ final SideEffect<Action, ViewState> toggleTodoEffect = (action$, state) {
 };
 
 void main() async {
-  final store = Store(
+  final store = RxReduxStore(
     initialState: ViewState([]),
     sideEffects: [addTodoEffect, removeTodoEffect, toggleTodoEffect],
     reducer: reducer,

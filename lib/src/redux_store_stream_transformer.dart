@@ -104,8 +104,8 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         // add initial state
         if (type == _ActionType.initial) {
           final message = '\n'
-              '   ⟶ Action       : $type\n'
-              '   ⟹ Current state: $currentState';
+              '  ⟶ Action       : $type\n'
+              '  ⟹ Current state: $currentState';
           _logger?.call(message);
           return controller.add(currentState);
         }
@@ -116,9 +116,9 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           state = newState;
 
           final message = '\n'
-              '   ⟶ Action       : $type ↭ $action\n'
-              '   ⟶ Current state: $currentState\n'
-              '   ⟹ New state    : $newState';
+              '  ⟶ Action       : $type ↭ $action\n'
+              '  ⟶ Current state: $currentState\n'
+              '  ⟹ New state    : $newState';
           _logger?.call(message);
         } catch (e, s) {
           controller.addError(
@@ -131,9 +131,9 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           );
 
           final message = '\n'
-              '   ⟶ Action       : $type ↭ $action\n'
-              '   ⟶ Current state: $currentState\n'
-              '   ⟹ Error        : $e ↭ $s';
+              '  ⟶ Action       : $type ↭ $action\n'
+              '  ⟶ Current state: $currentState\n'
+              '  ⟹ Error        : $e ↭ $s';
           _logger?.call(message);
         }
       }
@@ -216,6 +216,10 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
     );
   }
 }
+
+//
+// Internal
+//
 
 @sealed
 abstract class _ActionType {
