@@ -165,7 +165,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
       ];
     }
 
-    final onCancel = () async {
+    Future<void> onCancel() async {
       final futures = subscriptions?.map((s) => s.cancel());
       if (futures?.isNotEmpty == true) {
         await Future.wait(futures);
@@ -175,7 +175,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         await future;
       }
       _logger?.call('Cancelled');
-    };
+    }
 
     if (stream.isBroadcast) {
       controller = StreamController<S>.broadcast(
