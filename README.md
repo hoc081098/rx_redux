@@ -21,6 +21,10 @@ that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDar
     <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png" width="600" alt="RxRedux In a Nutshell"/>
 </p>
 
+<p align="center">
+    <img src="https://github.com/hoc081098/rx_redux/blob/v2/images/counter.png?raw=true" height="600">
+</p>
+
 ## Get started
 
 ```yaml
