@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   meta: ^1.1.6
+  disposebag: '>=1.2.0 <2.0.0'
 
 dev_dependencies:
   pedantic: ^1.9.0
