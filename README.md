@@ -363,7 +363,7 @@ actions
 
 ## What if I would like to have a SideEffect that returns no Action?
 
-For example, let's say you just store something in a database but you don't need a Action as result
+For example, let's say you just store something in a database, but you don't need a Action as result
 piped backed to your redux store. In that case you can simple use `Stream.empty()` like this:
 
 ```dart
