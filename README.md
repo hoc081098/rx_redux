@@ -4,7 +4,7 @@
 [![Pub](https://img.shields.io/pub/v/rx_redux.svg)](https://pub.dartlang.org/packages/rx_redux)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
--   Port from **[RxRedux-freeletics](https://github.com/freeletics/RxRedux)**
+-   Reactive redux store for `Dart` & `Flutter` inspired by **[RxRedux-freeletics](https://github.com/freeletics/RxRedux)**
 -   A Redux store implementation entirely based on Dart `Stream`, with the power of `RxDart` (inspired by [redux-observable](https://redux-observable.js.org)) 
 that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDart's `.scan()` operator. 
 
