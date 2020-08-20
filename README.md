@@ -4,17 +4,19 @@
 [![Pub](https://img.shields.io/pub/v/rx_redux.svg)](https://pub.dartlang.org/packages/rx_redux)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
--   Port from [RxRedux-freeletics](https://github.com/freeletics/RxRedux)
--   A Redux store implementation entirely based on Dart `Stream`, with the power of RxDart (inspired by [redux-observable](https://redux-observable.js.org)) 
+-   Port from **[RxRedux-freeletics](https://github.com/freeletics/RxRedux)**
+-   A Redux store implementation entirely based on Dart `Stream`, with the power of `RxDart` (inspired by [redux-observable](https://redux-observable.js.org)) 
 that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDart's `.scan()` operator. 
 
-![RxRedux In a Nutshell](https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png" width="631" alt="RxRedux In a Nutshell"/>
+</p>
 
-## Dependency
+## Get started
 
 ```yaml
 dependencies:
-  rx_redux: ^1.0.0
+  rx_redux: ^2.0.0
 ```
 
 ## How is this different from other Redux implementations
@@ -217,7 +219,9 @@ class PageLoadedAction implements Action {
 Final remark:
 This system allows you to create a plugin in system of `SideEffects` that are highly reusable and specific to do a single use case.
 
-![Step12](https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/step13.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/step13.png" width="640" alt="Step12" />
+</p>
 
 Also `SideEffects` can be invoked by `Actions` from other `SideEffects`.
 
@@ -259,12 +263,12 @@ final upstreamActions = Stream.value(SomeAction());
 
 SideEffect<State, Action> sideEffect1 = (actions, state) {
   // 3. Runs because of SomeAction
-  return actions.filter((a) => a is SomeAction).mapTo(OtherAction());
+  return actions.where((a) => a is SomeAction).mapTo(OtherAction());
 };
 
 SideEffect<State, Action> sideEffect2 = (actions, state) {
   // 5. Runs because of OtherAction
-  return actions.filter((a) => a is OtherAction).mapTo(YetAnotherAction());
+  return actions.where((a) => a is OtherAction).mapTo(YetAnotherAction());
 };
 
 upstreamActions.reduxStore(
@@ -296,7 +300,7 @@ In `Dart` you can use a lambda for that like this:
 ```dart
 SideEffect<State, Action> sideEffect1 = (actions, state) {
   return actions
-      .filter((a) => a is SomeAction)
+      .where((a) => a is SomeAction)
       .mapTo(OtherAction());
 };
 ```
@@ -309,7 +313,7 @@ Stream<Action> sideEffect2(
   GetState<State> state,
 ) {
   return actions
-      .filter((a) => a is SomeAction)
+      .where((a) => a is SomeAction)
       .mapTo(OtherAction());
 }
 ```
