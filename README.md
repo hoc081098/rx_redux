@@ -1,18 +1,19 @@
 # rx_redux
 
+## Author: [Petrus Nguyễn Thái Học](https://github.com/hoc081098)
+
 [![Build Status](https://travis-ci.org/hoc081098/rx_redux.svg?branch=master)](https://travis-ci.org/hoc081098/rx_redux)
 [![Pub](https://img.shields.io/pub/v/rx_redux.svg)](https://pub.dartlang.org/packages/rx_redux)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/github/license/hoc081098/rx_redux?color=4EB1BA)](https://opensource.org/licenses/MIT)
+[![Style](https://img.shields.io/badge/style-pedantic-40c4ff.svg)](https://github.com/dart-lang/pedantic)
 
 -   Reactive redux store for `Dart` & `Flutter` inspired by **[RxRedux-freeletics](https://github.com/freeletics/RxRedux)**
 -   A Redux store implementation entirely based on Dart `Stream`, with the power of `RxDart` (inspired by [redux-observable](https://redux-observable.js.org)) 
 that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDart's `.scan()` operator. 
 
-<p float="left">
-  <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png" width="512" alt="RxRedux In a Nutshell"/> 
-  <img src="https://github.com/hoc081098/rx_redux/blob/v2/logo.png?raw=true" />
-</p>
-
+| RxRedux in a nutshell | Rx Redux |
+| :---: | :---: |
+| <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png" width="600" alt="RxRedux In a Nutshell"/>  | <img src="https://github.com/hoc081098/rx_redux/blob/v2/logo.png?raw=true" alt="Logo"/> |
 
 ## Get started
 
@@ -48,7 +49,7 @@ A Side Effect is a function of type `(Stream<Action>, GetState<State>) -> Stream
 You can think of a `SideEffect` as a use case in clean architecture: It should do just one job.
 Every `SideEffect` can trigger multiple `Actions` (remember it returns `Stream<Action>`) which go through the `Reducer` but can also trigger other `SideEffects` registered for the corresponding `Action`.
 An `Action` can also have a `payload`. For example, if you load some data from backend, you emit the loaded data as an `Action` like `class DataLoadedAction { final Foo data; }`. 
-The mantra an Action is a command to do something is still true: in that case it means data is loaded, do with it "something".
+The mantra an Action is a command to do something is still true: in that case it means data is loaded, do with it "something".t
 
 # GetState
 Whenever a `SideEffect` needs to know the current State it can use `GetState` to grab the latest state from Redux Store. `GetState` is basically just a function `() -> State` to grab the latest State anytime you need it.
