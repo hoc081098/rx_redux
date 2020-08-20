@@ -69,6 +69,11 @@
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Admin\Documents\Java\rx_redux\images" />
+    </key>
+  </component>
   <component name="RunManager" selected="Dart Command Line App.counter.dart">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" editBeforeRun="true" singleton="false">
       <option name="filePath" value="$PROJECT_DIR$/example/rx_redux_example.dart" />
