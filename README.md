@@ -3,7 +3,7 @@
 ## Author: [Petrus Nguyễn Thái Học](https://github.com/hoc081098)
 
 <p align="center">
-    <img src="https://github.com/hoc081098/rx_redux/blob/v2/logo.png?raw=true" alt="Logo"/>
+    <img src="https://github.com/hoc081098/rx_redux/blob/v2/images/logo.png?raw=true" alt="Logo"/>
 </p>
 
 <p align="center">
