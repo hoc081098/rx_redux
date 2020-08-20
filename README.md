@@ -239,7 +239,7 @@ This system allows you to create a plugin in system of `SideEffects` that are hi
 Also `SideEffects` can be invoked by `Actions` from other `SideEffects`.
 
 
-**For a complete example check [the sample application incl. README](https://github.com/freeletics/RxRedux/master/sample)**
+**For a complete example check [the sample application incl. README](example/README.md)**
 
 # FAQ
 
