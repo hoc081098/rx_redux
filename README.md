@@ -2,6 +2,10 @@
 
 ## Author: [Petrus Nguyễn Thái Học](https://github.com/hoc081098)
 
+<p align="center">
+    <img src="https://github.com/hoc081098/rx_redux/blob/v2/logo.png?raw=true" alt="Logo"/>
+</p>
+
 [![Build Status](https://travis-ci.org/hoc081098/rx_redux.svg?branch=master)](https://travis-ci.org/hoc081098/rx_redux)
 [![Pub](https://img.shields.io/pub/v/rx_redux.svg)](https://pub.dartlang.org/packages/rx_redux)
 [![License: MIT](https://img.shields.io/github/license/hoc081098/rx_redux?color=4EB1BA)](https://opensource.org/licenses/MIT)
@@ -11,9 +15,9 @@
 -   A Redux store implementation entirely based on Dart `Stream`, with the power of `RxDart` (inspired by [redux-observable](https://redux-observable.js.org)) 
 that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDart's `.scan()` operator. 
 
-| RxRedux in a nutshell | Rx Redux |
-| :---: | :---: |
-| <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png" width="600" alt="RxRedux In a Nutshell"/>  | <img src="https://github.com/hoc081098/rx_redux/blob/v2/logo.png?raw=true" alt="Logo"/> |
+<p align="center">
+    <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png" width="600" alt="RxRedux In a Nutshell"/>
+</p>
 
 ## Get started
 
