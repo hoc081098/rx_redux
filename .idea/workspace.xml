@@ -104,11 +104,11 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Dart Command Line App.counter.dart" />
       <item itemvalue="Dart Test.tests in rx_redux_test.dart" />
       <item itemvalue="Dart Test.toString in rx_redux_test.dart" />
       <item itemvalue="Dart Test.hashCode in rx_redux_test.dart" />
       <item itemvalue="Dart Test.constructor in rx_redux_test.dart" />
-      <item itemvalue="Dart Command Line App.counter.dart" />
     </list>
     <recent_temporary>
       <list>

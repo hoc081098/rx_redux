@@ -38,7 +38,7 @@ void main() async {
 
   store.stateStream.listen(print);
 
-  await Stream.periodic(const Duration(seconds: 1), (i) => i)
+  await Stream.periodic(const Duration(seconds: 1), (i) => i + 1)
       .take(10)
       .map((i) => i.isEven ? Increment(i) : Decrement(i))
       .forEach(store.dispatch);
