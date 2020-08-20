@@ -6,10 +6,12 @@
     <img src="https://github.com/hoc081098/rx_redux/blob/v2/logo.png?raw=true" alt="Logo"/>
 </p>
 
-[![Build Status](https://travis-ci.org/hoc081098/rx_redux.svg?branch=master)](https://travis-ci.org/hoc081098/rx_redux)
-[![Pub](https://img.shields.io/pub/v/rx_redux.svg)](https://pub.dartlang.org/packages/rx_redux)
-[![License: MIT](https://img.shields.io/github/license/hoc081098/rx_redux?color=4EB1BA)](https://opensource.org/licenses/MIT)
-[![Style](https://img.shields.io/badge/style-pedantic-40c4ff.svg)](https://github.com/dart-lang/pedantic)
+<p align="center">
+    <a href="https://travis-ci.org/hoc081098/rx_redux"><img src="https://travis-ci.org/hoc081098/rx_redux.svg?branch=master"/></a>
+    <a href="https://pub.dev/packages/rx_redux"><img src="https://img.shields.io/pub/v/rx_redux.svg"/></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/hoc081098/rx_redux?color=4EB1BA" /></a>
+    <a href="https://github.com/dart-lang/pedantic"><img src="https://img.shields.io/badge/style-pedantic-40c4ff.svg" /></a>
+</p>
 
 -   Reactive redux store for `Dart` & `Flutter` inspired by **[RxRedux-freeletics](https://github.com/freeletics/RxRedux)**
 -   A Redux store implementation entirely based on Dart `Stream`, with the power of `RxDart` (inspired by [redux-observable](https://redux-observable.js.org)) 

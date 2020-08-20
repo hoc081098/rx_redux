@@ -27,7 +27,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f16490be-0275-4932-b35a-ad2b03e3791d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -286,7 +285,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597930011245</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="README.md">
+      <created>1597931465928</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1597931465928</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -345,7 +351,8 @@
     <MESSAGE value="more tests" />
     <MESSAGE value="pubspec.yaml and imports" />
     <MESSAGE value="example" />
-    <option name="LAST_COMMIT_MESSAGE" value="example" />
+    <MESSAGE value="README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="README.md" />
   </component>
   <component name="WindowStateProjectService">
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597300735308">
@@ -364,10 +371,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="392" y="92" key="#store.dart/0.0.1366.728@0.0.1366.728" timestamp="1597676760447" />
-    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597930010191">
+    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597931465030">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597930010191" />
+    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597931465030" />
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1597298177141">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -396,10 +403,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="8" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1597300821053" />
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597930013422">
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597931466912">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597930013422" />
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597931466912" />
     <state x="389" y="99" width="587" height="582" key="find.popup" timestamp="1597670919157">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
