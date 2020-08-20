@@ -8,10 +8,8 @@
 -   A Redux store implementation entirely based on Dart `Stream`, with the power of `RxDart` (inspired by [redux-observable](https://redux-observable.js.org)) 
 that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDart's `.scan()` operator. 
 
-<p align="center" float="left">
-  
-  
-  <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png" width="631" alt="RxRedux In a Nutshell"/> 
+<p float="left">
+  <img src="https://raw.githubusercontent.com/freeletics/RxRedux/master/docs/rxredux.png" width="512" alt="RxRedux In a Nutshell"/> 
   <img src="https://github.com/hoc081098/rx_redux/blob/v2/logo.png?raw=true" />
 </p>
 
