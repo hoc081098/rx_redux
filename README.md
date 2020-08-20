@@ -7,6 +7,7 @@
 </p>
 
 <p align="center">
+    <a href="#"><img src="https://github.com/hoc081098/rx_redux/workflows/Dart%20CI/badge.svg"/></a>
     <a href="https://travis-ci.org/hoc081098/rx_redux"><img src="https://travis-ci.org/hoc081098/rx_redux.svg?branch=master"/></a>
     <a href="https://pub.dev/packages/rx_redux"><img src="https://img.shields.io/pub/v/rx_redux.svg"/></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/hoc081098/rx_redux?color=4EB1BA" /></a>
