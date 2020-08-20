@@ -27,7 +27,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f16490be-0275-4932-b35a-ad2b03e3791d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/counter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,16 +69,15 @@
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
-  <component name="RunManager" selected="Dart Test.tests in rx_redux_test.dart">
+  <component name="RunManager" selected="Dart Command Line App.counter.dart">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" editBeforeRun="true" singleton="false">
       <option name="filePath" value="$PROJECT_DIR$/example/rx_redux_example.dart" />
       <option name="workingDirectory" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
-    <configuration name="Error handler called when SideEffect returns error Stream in store_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/store_test.dart" />
-      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
-      <option name="testName" value="Error handler called when SideEffect returns error Stream" />
+    <configuration name="counter.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" singleton="false" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/example/counter.dart" />
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
     <configuration name="constructor in rx_redux_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
@@ -104,19 +104,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Dart Test.Error handler called when SideEffect returns error Stream in store_test.dart" />
       <item itemvalue="Dart Test.tests in rx_redux_test.dart" />
       <item itemvalue="Dart Test.toString in rx_redux_test.dart" />
       <item itemvalue="Dart Test.hashCode in rx_redux_test.dart" />
       <item itemvalue="Dart Test.constructor in rx_redux_test.dart" />
+      <item itemvalue="Dart Command Line App.counter.dart" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Dart Command Line App.counter.dart" />
         <item itemvalue="Dart Test.tests in rx_redux_test.dart" />
         <item itemvalue="Dart Test.constructor in rx_redux_test.dart" />
         <item itemvalue="Dart Test.hashCode in rx_redux_test.dart" />
         <item itemvalue="Dart Test.toString in rx_redux_test.dart" />
-        <item itemvalue="Dart Test.Error handler called when SideEffect returns error Stream in store_test.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -292,8 +292,32 @@
       <option name="project" value="LOCAL" />
       <updated>1597931465928</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="README.md">
+      <created>1597931875841</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1597931875841</updated>
+    </task>
+    <task id="LOCAL-00025" summary="README.md">
+      <created>1597932913925</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1597932913925</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -363,6 +387,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="488" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1597824024231" />
+    <state x="392" y="92" key="#counter.dart" timestamp="1597933600789">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="392" y="92" key="#counter.dart/0.0.1366.728@0.0.1366.728" timestamp="1597933600789" />
     <state x="392" y="92" key="#rx_redux_example.dart" timestamp="1597680503310">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -371,30 +399,30 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="392" y="92" key="#store.dart/0.0.1366.728@0.0.1366.728" timestamp="1597676760447" />
-    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597931465030">
+    <state x="337" y="0" key="CommitChangelistDialog2" timestamp="1597932913124">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597931465030" />
-    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1597298177141">
+    <state x="337" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1597932913124" />
+    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1597932909911">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1597298177141" />
-    <state width="1323" height="486" key="GridCell.Tab.0.bottom" timestamp="1597929071140">
+    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1597932909911" />
+    <state width="1323" height="486" key="GridCell.Tab.0.bottom" timestamp="1597932925684">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="486" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597929071140" />
-    <state width="1323" height="486" key="GridCell.Tab.0.center" timestamp="1597929071140">
+    <state width="1323" height="486" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597932925684" />
+    <state width="1323" height="486" key="GridCell.Tab.0.center" timestamp="1597932925684">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="486" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597929071140" />
-    <state width="1323" height="486" key="GridCell.Tab.0.left" timestamp="1597929071140">
+    <state width="1323" height="486" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597932925684" />
+    <state width="1323" height="486" key="GridCell.Tab.0.left" timestamp="1597932925684">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="486" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597929071140" />
-    <state width="1323" height="486" key="GridCell.Tab.0.right" timestamp="1597929071140">
+    <state width="1323" height="486" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597932925683" />
+    <state width="1323" height="486" key="GridCell.Tab.0.right" timestamp="1597932925684">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="486" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597929071140" />
+    <state width="1323" height="486" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597932925684" />
     <state x="475" y="66" key="RollbackChangesDialog" timestamp="1597761556792">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -403,10 +431,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="8" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1597300821053" />
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597931466912">
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2" timestamp="1597932915486">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597931466912" />
+    <state x="275" y="83" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1597932915486" />
     <state x="389" y="99" width="587" height="582" key="find.popup" timestamp="1597670919157">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
