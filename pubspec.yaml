@@ -1,7 +1,8 @@
 name: rx_redux
-description: A library that manages state using Dart Stream. Redux implementation based on Dart Stream, with the power of RxDart.
-version: 1.2.0
+description: Redux implementation based on Dart Stream, with the power of RxDart. Reactive redux store for Dart & Flutter.
+version: 2.0.0
 homepage: https://github.com/hoc081098/rx_redux.git
+repository: https://github.com/hoc081098/rx_redux.git
 issue_tracker: https://github.com/hoc081098/rx_redux/issues
 
 environment:

@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-import '../rx_redux.dart';
+import 'logger.dart';
+import 'reducer.dart';
+import 'redux_store_stream_transformer.dart';
+import 'side_effect.dart';
 
 /// Rx Redux Store.
 /// Redux store based on [Stream].

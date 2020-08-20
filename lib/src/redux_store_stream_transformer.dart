@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:rx_redux/rx_redux.dart';
 
+import 'logger.dart';
 import 'reducer.dart';
 import 'reducer_exception.dart';
 import 'side_effect.dart';
