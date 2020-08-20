@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:disposebag/disposebag.dart';
 import 'package:meta/meta.dart';
 
 import '../rx_redux.dart';
@@ -27,7 +26,7 @@ class RxReduxStore<A, S> {
     @required S initialState,
     @required List<SideEffect<A, S>> sideEffects,
     @required Reducer<A, S> reducer,
-    void Function(Object, StackTrace) handleError,
+    void Function(Object, StackTrace) errorHandler,
     bool Function(S previous, S next) equals,
     RxReduxLogger logger,
   }) {
@@ -41,6 +40,10 @@ class RxReduxStore<A, S> {
     );
 
     var currentState = initialState;
+    final subscription = stateStream.listen(
+      (newState) => currentState = newState,
+      onError: errorHandler,
+    );
 
     return RxReduxStore._(
       actionSubject.add,
@@ -50,16 +53,10 @@ class RxReduxStore<A, S> {
         yield* stateStream;
       }()
           .distinct(equals),
-      DisposeBag(
-        [
-          stateStream.listen(
-            (newState) => currentState = newState,
-            onError: handleError,
-          ),
-          actionSubject
-        ],
-        false,
-      ).dispose,
+      () => Future.wait([
+        actionSubject.close(),
+        subscription.cancel(),
+      ]),
     );
   }
 

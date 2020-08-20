@@ -289,7 +289,7 @@ void main() {
       expect(true, true);
     });
 
-    test('extension method', () async {
+    test('Extension method', () async {
       final state = Stream.periodic(const Duration(seconds: 1), (i) => i)
           .take(2)
           .reduxStore<String>(
@@ -307,7 +307,7 @@ void main() {
       );
     });
 
-    test('initialStateSupplier throws', () {
+    test('InitialStateSupplier throws', () {
       final stream = Stream.value(1).reduxStore<String>(
         initialStateSupplier: () => throw Exception(),
         sideEffects: [],
@@ -316,7 +316,7 @@ void main() {
       expect(stream, emitsInOrder([emitsError(isException), emitsDone]));
     });
 
-    test('pause and resume', () {
+    test('Pause and resume', () {
       final stream = Stream.fromIterable([1, 2, 3, 4])
           .asyncMap((action) => Future(() => action))
           .reduxStore<String>(

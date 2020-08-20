@@ -213,17 +213,27 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
     StreamController<S> controller,
   ) {
     return _sideEffects.mapIndexed(
-      (index, sideEffect) => sideEffect(
-              actionController.stream.map((wrapper) => wrapper.action),
-              getState)
-          .map(
-              (action) => _WrapperAction(action, _ActionType.sideEffect(index)))
-          .listen(
-            actionController.add,
-            onError: controller.addError,
-            // Swallow onDone because just if one SideEffect reaches onDone
-            // we don't want to make everything incl. ReduxStore and other SideEffects reach onDone
-          ),
+      (index, sideEffect) {
+        Stream<A> actions;
+        try {
+          actions = sideEffect(
+            actionController.stream.map((wrapper) => wrapper.action),
+            getState,
+          );
+        } catch (e, s) {
+          actions = Stream.error(e, s);
+        }
+
+        return actions
+            .map((action) =>
+                _WrapperAction(action, _ActionType.sideEffect(index)))
+            .listen(
+              actionController.add,
+              onError: controller.addError,
+              // Swallow onDone because just if one SideEffect reaches onDone
+              // we don't want to make everything incl. ReduxStore and other SideEffects reach onDone
+            );
+      },
     );
   }
 }
