@@ -389,5 +389,26 @@ void main() {
           )
           .listen(null);
     });
+
+    test('Stream.first', () {
+      final streamController = StreamController<int>.broadcast(sync: true);
+
+      streamController.add(1);
+      streamController.add(2);
+      streamController.add(3);
+
+      final reduxStore = streamController.stream.reduxStore<String>(
+        initialStateSupplier: () => '0',
+        sideEffects: [],
+        reducer: (state, action) => '$state$action',
+        logger: rxReduxDefaultLogger,
+      );
+      reduxStore.first.then((value) => expect(value, '0'));
+
+      reduxStore.listen(print);
+      for (var i = 0; i < 50; i++) {
+        streamController.add(4 + i);
+      }
+    });
   });
 }
