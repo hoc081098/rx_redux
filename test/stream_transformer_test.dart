@@ -405,10 +405,27 @@ void main() {
       );
       reduxStore.first.then((value) => expect(value, '0'));
 
-      reduxStore.listen(print);
       for (var i = 0; i < 50; i++) {
         streamController.add(4 + i);
       }
+    });
+
+    test('Cancel subscription', () async {
+      final controller = StreamController(sync: true);
+
+      // ignore: unawaited_futures
+      controller.stream
+          .reduxStore<String>(
+            initialStateSupplier: () => '0',
+            sideEffects: [],
+            reducer: (state, action) => '$state$action',
+            logger: rxReduxDefaultLogger,
+          )
+          .listen(expectAsync1((_) {}, count: 0))
+          .cancel();
+
+      controller.add(1);
+      controller.add(2);
     });
   });
 }
