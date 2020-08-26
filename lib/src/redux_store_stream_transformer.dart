@@ -120,14 +120,11 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
 
         // add pending states
         if (type == _ActionType.initial) {
-          print('[Pending] ${pendingStates.length} $pendingStates');
-
           for (final s in pendingStates) {
             if (controller.isClosed) {
               return;
             }
             controller.add(s);
-            print('[Pending] add $s');
           }
           pendingStates.clear();
 
