@@ -108,6 +108,8 @@ final SideEffect<Action, ViewState> toggleTodoEffect = (action$, state) {
       .flatMap(executeToggle);
 };
 
+final delay = () => Future.delayed(const Duration(seconds: 1));
+
 void main() async {
   final store = RxReduxStore(
     initialState: ViewState([]),
@@ -116,20 +118,24 @@ void main() async {
     logger: rxReduxDefaultLogger,
   );
 
-  store.stateStream.listen((event) => print('~> $event'));
+  store.stateStream.listen((event) => print('~> State : $event'));
+  store.actionStream.listen((event) => print('~> Action: $event'));
 
   for (var i = 0; i < 5; i++) {
     store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.add));
   }
-  await Future.delayed(const Duration(seconds: 1));
+  await delay();
 
   for (var i = 0; i < 5; i++) {
     store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.toggle));
   }
-  await Future.delayed(const Duration(seconds: 1));
+  await delay();
 
   for (var i = 0; i < 5; i++) {
     store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.remove));
   }
-  await Future.delayed(const Duration(seconds: 1));
+  await delay();
+
+  await Future(() {});
+  await store.dispose();
 }

@@ -37,24 +37,26 @@ dependencies:
 In contrast to any other Redux inspired library out there, this library is pure backed on top of Dart Stream.
 This library offers a custom stream transformer `ReduxStoreStreamTransformer` (or extension method `reduxStore`) and treats upstream events as `Actions`. 
 
-# Redux Store
-A Store is basically an stream container for state. 
+## Basic concepts
+### Redux Store
+-   A Store is basically an stream container for state. 
 This library offers a custom stream transformer `ReduxStoreStreamTransformer` (or extension method `reduxStore`) to create such a state container.
-It takes an `initialState` and a list of `SideEffect<State, Action>` and a `Reducer<State, Action>`
+It takes an `initialState` and a list of `SideEffect<State, Action>` and a `Reducer<State, Action>`.
+-   Since version 2.x, add `RxReduxStore` class, built for Flutter UI.
 
-# Action
+### Action
 An Action is a command to "do something" in the store. 
 An `Action` can be triggered by the user of your app (i.e. UI interaction like clicking a button) but also a `SideEffect` can trigger actions.
 Every Action goes through the reducer. 
 If an `Action` is not changing the state at all by the `Reducer` (because it's handled as a side effect), just return the previous state.
 Furthermore, `SideEffects` can be registered for a certain type of `Action`.
 
-# Reducer
+### Reducer
 A `Reducer` is basically a function `(State, Action) -> State` that takes the current State and an Action to compute a new State.
 Every `Action` goes through the state reducer.
 If an `Action` is not changing the state at all by the `Reducer` (because it's handled as a side effect), just return the previous state.
 
-# Side Effect
+### Side Effect
 A Side Effect is a function of type `(Stream<Action>, GetState<State>) -> Stream<Action>`.
 **So basically it's Actions in and Actions out.** 
 You can think of a `SideEffect` as a use case in clean architecture: It should do just one job.
@@ -62,13 +64,35 @@ Every `SideEffect` can trigger multiple `Actions` (remember it returns `Stream<A
 An `Action` can also have a `payload`. For example, if you load some data from backend, you emit the loaded data as an `Action` like `class DataLoadedAction { final Foo data; }`. 
 The mantra an Action is a command to do something is still true: in that case it means data is loaded, do with it "something".t
 
-# GetState
-Whenever a `SideEffect` needs to know the current State it can use `GetState` to grab the latest state from Redux Store. `GetState` is basically just a function `() -> State` to grab the latest State anytime you need it.
+### GetState
+Whenever a `SideEffect` needs to know the current State it can use `GetState` to grab the latest state from Redux Store.
+`GetState` is basically just a function `() -> State` to grab the latest State anytime you need it.
 
-# Usage
+## Usage
+
+### Version 2.x: Prefer to use `RxReduxStore` over `ReduxStoreStreamTransformer`, but have same concept as version 1.x.
+
+```dart
+final store = RxReduxStore(
+  initialState: ViewState([]),
+  sideEffects: [addTodoEffect, removeTodoEffect, toggleTodoEffect],
+  reducer: reducer,
+  logger: rxReduxDefaultLogger,
+);
+
+store.stateStream.listen((event) => print('~> State : $event'));
+store.actionStream.listen((event) => print('~> Action: $event'));
+store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.add));
+await store.dispose();
+```
+
+### Note: below is the documentation for version 1.x, but have same concept as version 2.x.
+
 Let's create a simple Redux Store for Pagination: Goal is to display a list of `Persons` on screen.
 **For a complete example check [the sample application incl. README](example/README.md)**
 but for the sake of simplicity let's stick with this simple "list of persons example":
+
+#### 1. Define `State` and `initialState`:
 
 ```dart
 class State {
@@ -88,6 +112,8 @@ final initialState = State(
   errorLoadingNextPage: null,
 );
 ```
+
+#### 2. Define `Actions`:
 
 ```dart
 abstract class Action { }
@@ -116,6 +142,8 @@ class ErrorLoadingNextPageAction implements Action {
 }
 ```
 
+#### 3. Define `SideEffects`:
+
 ```dart
 // SideEffect is just a type alias for such a function:
 Stream<State> loadNextPageSideEffect (
@@ -143,6 +171,8 @@ Stream<State> loadNextPageSideEffect (
     });
 ```
 
+#### 4. Define `Reducer`:
+
 ```dart
 // Reducer is just a type alias for a function
 State reducer(State state, Action action) {
@@ -169,8 +199,12 @@ State reducer(State state, Action action) {
 }
 ```
 
+#### 5. Combine all it into one:
+
+- Using `ReduxStoreStreamTransformer`:
+
 ```dart
-final Stream<Action> actions = ...;
+final Stream<Action> actions = PublishSubject<Action>();
 final List<SideEffect<State, Action> sideEffects = [loadNextPageSideEffect, ...];
 
 actions.transform(
@@ -182,7 +216,7 @@ actions.transform(
 ).listen(view.render);
 ```
 
-or using extension method `reduxStore`:
+-   Using extension method `reduxStore`:
 
 ```dart
 actions.reduxStore(
@@ -191,6 +225,23 @@ actions.reduxStore(
   reducer: reducer,
 ).listen(view.render);
 ```
+
+-   Using `RxReduxStore`:
+```dart
+final store = RxReduxStore(
+  initialState: initialState,
+  sideEffects: sideEffects,
+  reducer: reducer,
+  logger: rxReduxDefaultLogger,
+  errorHandler: (error, st) => print('$error, $st'),
+);
+store.stateStream.listen(view.render);
+
+Action action = ...;
+store.dispatch(action);
+```
+
+#### 6. More:
 
 The [following video](https://youtu.be/M7lx9Y9ANYo) (click on it) illustrates the workflow:
 
@@ -239,12 +290,11 @@ This system allows you to create a plugin in system of `SideEffects` that are hi
 
 Also `SideEffects` can be invoked by `Actions` from other `SideEffects`.
 
-
 **For a complete example check [the sample application incl. README](example/README.md)**
 
-# FAQ
+## FAQ
 
-## I get a `StackOverflowError`
+### I get a `StackOverflowError`
 This is a common pitfall and is most of the time caused by the fact that a `SideEffect` emits an `Action` as output that it also consumes from upstream leading to an infinite loop.
 
 ```dart
@@ -263,7 +313,7 @@ inputActions.reduxStore(
 The problem is that from upstream we get `Int 1`.
 But since `SideEffect` reacts on that action `Int 1` too, it computes `1 * 2` and emits `2`, which then again gets handled by the same SideEffect ` 2 * 2 = 4` and emits `4`, which then again gets handled by the same SideEffect `4 * 2 = 8` and emits `8`, which then getst handled by the same SideEffect and so on (endless loop) ...
 
-## Who processes an `Action` first: `Reducer` or `SideEffect`?
+### Who processes an `Action` first: `Reducer` or `SideEffect`?
 
 Since every Action runs through both `Reducer` and registered `SideEffects` this is a valid question.
 Technically speaking `Reducer` gets every `Action` from upstream before the registered `SideEffects`.
@@ -306,7 +356,7 @@ So the workflow is as follows:
 5. `SideEffect2` reacts on `OtherAction` and emits `YetAnotherAction`
 6. `reducer` processes `YetAnotherAction`
 
-## Can I use `variable` and `function` for `SideEffects` or `Reducer`?
+### Can I use `variable` and `function` for `SideEffects` or `Reducer`?
 
 Absolutely. `SideEffect` is just a type alias for a function `typedef Stream<A> SideEffect<S, A>(Stream<A> actions, GetState<S> state);`.
 
@@ -355,7 +405,7 @@ State reducer(State state, Action action) {
 }
 ```
 
-## Is `distinct` (More commonly known as `distinctUntilChanged` in other Rx implementations) considered as best practice?
+### Is `distinct` (More commonly known as `distinctUntilChanged` in other Rx implementations) considered as best practice?
 Yes it is because `reduxStore(...)` is not taking care of only emitting state that has been changed
 compared to previous state.
 Therefore, `.distinct()` is considered as best practice.
@@ -366,7 +416,7 @@ actions
   .listen(view.render);
 ```
 
-## What if I would like to have a SideEffect that returns no Action?
+### What if I would like to have a SideEffect that returns no Action?
 
 For example, let's say you just store something in a database, but you don't need a Action as result
 piped backed to your redux store. In that case you can simple use `Stream.empty()` like this:
@@ -380,7 +430,7 @@ Stream<Action> saveToDatabaseSideEffect(Stream<Action> actions, GetState<State> 
 }
 ```
 
-## How do I cancel ongoing `SideEffects` if a certain `Action` happens?
+### How do I cancel ongoing `SideEffects` if a certain `Action` happens?
 
 Let's assume you have a simple `SideEffect` that is triggered by `Action1`. 
 Whenever `Action2` is emitted our `SideEffect` should stop. 
@@ -394,7 +444,7 @@ mySideEffect(Stream<Action> actions, GetState<State> getState) =>
         .takeUntil(actions.whereType<Action2>()); // Once Action2 triggers the whole SideEffect gets canceled.
 ```
 
-## Do I need an Action to start observing data?
+### Do I need an Action to start observing data?
 Let's say you would like to start observing a database right from the start inside your Store.
 This sounds pretty much like as soon as you have subscribers to your Store and therefore you don't need a dedicated Action to start observing the database.
 
