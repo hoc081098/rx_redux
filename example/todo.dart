@@ -1,12 +1,3 @@
-# Example
-
-## [Pagination list (load more) (endless scrolling)](https://github.com/hoc081098/load_more_flutter_BLoC_pattern_RxDart_and_RxRedux/tree/master/lib/pages/rx_redux)
-
-An example of how to load more data when scroll to end of list view using [rx_redux](https://pub.dev/packages/rx_redux).
-
-## [Simple todo](https://github.com/hoc081098/rx_redux/blob/master/example/rx_redux_example.dart)
-
-```dart
 import 'dart:async';
 
 import 'package:rx_redux/rx_redux.dart';
@@ -97,7 +88,7 @@ Stream<Action> removeTodoEffect(
   GetState<ViewState> state,
 ) {
   final executeRemove = (Todo todo) async* {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future<void>.delayed(const Duration(milliseconds: 200));
     yield Action(todo, ActionType.removed);
   };
   return action$
@@ -108,7 +99,7 @@ Stream<Action> removeTodoEffect(
 
 final SideEffect<Action, ViewState> toggleTodoEffect = (action$, state) {
   final executeToggle = (Todo todo) async* {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     yield Action(todo, ActionType.toggled);
   };
   return action$
@@ -116,6 +107,8 @@ final SideEffect<Action, ViewState> toggleTodoEffect = (action$, state) {
       .map((action) => action.todo)
       .flatMap(executeToggle);
 };
+
+final delay = () => Future<void>.delayed(const Duration(seconds: 1));
 
 void main() async {
   final store = RxReduxStore(
@@ -125,21 +118,24 @@ void main() async {
     logger: rxReduxDefaultLogger,
   );
 
-  store.stateStream.listen((event) => print('~> $event'));
+  store.stateStream.listen((event) => print('~> State : $event'));
+  store.actionStream.listen((event) => print('~> Action: $event'));
 
   for (var i = 0; i < 5; i++) {
     store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.add));
   }
-  await Future.delayed(const Duration(seconds: 1));
+  await delay();
 
   for (var i = 0; i < 5; i++) {
     store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.toggle));
   }
-  await Future.delayed(const Duration(seconds: 1));
+  await delay();
 
   for (var i = 0; i < 5; i++) {
     store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.remove));
   }
-  await Future.delayed(const Duration(seconds: 1));
+  await delay();
+
+  await Future(() {});
+  await store.dispose();
 }
-```

@@ -8,4 +8,4 @@
 /// * Param [newAction] [A] The type of the Actions
 ///
 
-typedef Reducer<S, A> = S Function(S currentState, A newAction);
+typedef Reducer<A, S> = S Function(S currentState, A newAction);
