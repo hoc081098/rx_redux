@@ -246,6 +246,7 @@ store.dispatch(action);
 
 The [following video](https://youtu.be/M7lx9Y9ANYo) (click on it) illustrates the workflow:
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7ecf57bd3c634804a7f596b4f3b35b30)](https://app.codacy.com/manual/hoc081098/rx_redux?utm_source=github.com&utm_medium=referral&utm_content=hoc081098/rx_redux&utm_campaign=Badge_Grade_Dashboard)
 [![RxRedux explanation](https://i.ytimg.com/vi/M7lx9Y9ANYo/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAqwunKP2_qGE0HYUlquWkFccM5MA)](https://youtu.be/M7lx9Y9ANYo)
 
 
