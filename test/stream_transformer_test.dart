@@ -421,11 +421,13 @@ void main() {
             reducer: (state, action) => '$state$action',
             logger: rxReduxDefaultLogger,
           )
-          .listen(expectAsync1((_) {}, count: 0))
+          .listen((_) => expect(false, true))
           .cancel();
 
       controller.add(1);
       controller.add(2);
+
+      await Future.delayed(const Duration(seconds: 1));
     });
   });
 }

@@ -166,6 +166,117 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 100));
     });
 
+    test('Get action stream', () async {
+      final store = RxReduxStore<int, String>(
+        initialState: '0',
+        sideEffects: [],
+        reducer: (s, a) => '$s+$a',
+      );
+
+      expect(
+        store.actionStream,
+        emitsInOrder([1, 2, 3]),
+      );
+
+      await delay(100);
+
+      store.dispatch(1);
+      store.dispatch(2);
+      store.dispatch(3);
+    });
+
+    test('Get action stream with SideEffects', () async {
+      final store = RxReduxStore<Action, int>(
+        initialState: 0,
+        sideEffects: [
+          (action, getState) => action
+              .where((event) => event == Action.action1)
+              .asyncExpand((event) => Stream.periodic(
+                  const Duration(milliseconds: 100),
+                  (_) => Action.actionSideEffect1).take(1)),
+          (action, getState) => action
+              .where((event) => event == Action.action2)
+              .asyncExpand((event) => Stream.periodic(
+                  const Duration(milliseconds: 200),
+                  (_) => Action.actionSideEffect2).take(1)),
+          (action, getState) => action
+              .where((event) => event == Action.action3)
+              .asyncExpand((event) => Stream.periodic(
+                  const Duration(milliseconds: 300),
+                  (_) => Action.actionSideEffect3).take(1)),
+        ],
+        reducer: (state, action) {
+          switch (action) {
+            case Action.actionSideEffect1:
+              return state + 1;
+            case Action.actionSideEffect2:
+              return state + 2;
+            case Action.actionSideEffect3:
+              return state + 3;
+            default:
+              return state;
+          }
+        },
+      );
+
+      expect(
+        store.actionStream,
+        emitsInOrder(
+          [
+            Action.action1,
+            Action.action2,
+            Action.action3,
+            Action.actionSideEffect1,
+            Action.actionSideEffect2,
+            Action.actionSideEffect3,
+            Action.action1,
+            Action.action2,
+            Action.action3,
+            Action.actionSideEffect1,
+            Action.actionSideEffect2,
+            Action.actionSideEffect3,
+            Action.actionNoOp,
+            Action.actionNoOp,
+            Action.actionNoOp,
+          ],
+        ),
+      );
+
+      await Future.delayed(const Duration(milliseconds: 100));
+      store.dispatch(Action.action1);
+      store.dispatch(Action.action2);
+      store.dispatch(Action.action3);
+      await Future.delayed(const Duration(seconds: 1));
+
+      expect(
+        store.actionStream,
+        emitsInOrder(
+          [
+            Action.action1,
+            Action.action2,
+            Action.action3,
+            Action.actionSideEffect1,
+            Action.actionSideEffect2,
+            Action.actionSideEffect3,
+            Action.actionNoOp,
+            Action.actionNoOp,
+            Action.actionNoOp,
+          ],
+        ),
+      );
+
+      await Future.delayed(const Duration(milliseconds: 100));
+      store.dispatch(Action.action1);
+      store.dispatch(Action.action2);
+      store.dispatch(Action.action3);
+      await Future.delayed(const Duration(seconds: 1));
+
+      store.dispatch(Action.actionNoOp);
+      store.dispatch(Action.actionNoOp);
+      store.dispatch(Action.actionNoOp);
+      await Future.delayed(const Duration(milliseconds: 100));
+    });
+
     test('Dispose', () async {
       final rxReduxStore = RxReduxStore<int, String>(
         initialState: '0',
