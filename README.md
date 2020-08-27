@@ -13,6 +13,9 @@
     <a href="https://codecov.io/gh/hoc081098/rx_redux"><img src="https://codecov.io/gh/hoc081098/rx_redux/branch/master/graph/badge.svg" /></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/hoc081098/rx_redux?color=4EB1BA" /></a>
     <a href="https://github.com/dart-lang/pedantic"><img src="https://img.shields.io/badge/style-pedantic-40c4ff.svg" /></a>
+    <a href="https://app.codacy.com/manual/hoc081098/rx_redux?utm_source=github.com&utm_medium=referral&utm_content=hoc081098/rx_redux&utm_campaign=Badge_Grade_Dashboard">
+        <img src="https://api.codacy.com/project/badge/Grade/7ecf57bd3c634804a7f596b4f3b35b30" />
+    </a>
 </p>
 
 -   Reactive redux store for `Dart` & `Flutter` inspired by **[RxRedux-freeletics](https://github.com/freeletics/RxRedux)**
@@ -246,7 +249,6 @@ store.dispatch(action);
 
 The [following video](https://youtu.be/M7lx9Y9ANYo) (click on it) illustrates the workflow:
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7ecf57bd3c634804a7f596b4f3b35b30)](https://app.codacy.com/manual/hoc081098/rx_redux?utm_source=github.com&utm_medium=referral&utm_content=hoc081098/rx_redux&utm_campaign=Badge_Grade_Dashboard)
 [![RxRedux explanation](https://i.ytimg.com/vi/M7lx9Y9ANYo/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAqwunKP2_qGE0HYUlquWkFccM5MA)](https://youtu.be/M7lx9Y9ANYo)
 
 
