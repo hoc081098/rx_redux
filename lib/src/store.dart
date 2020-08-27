@@ -31,7 +31,7 @@ class RxReduxStore<A, S> {
   final void Function(A) _dispatch;
 
   final GetState<S> _getState;
-  final Stream<S> Function() _stateStream;
+  final Stream<S> _stateStream;
   final Stream<A> _actionStream;
 
   final Future<void> Function() _dispose;
@@ -62,18 +62,22 @@ class RxReduxStore<A, S> {
     bool Function(S previous, S next) equals,
     RxReduxLogger logger,
   }) {
-    final actionSubject = StreamController<A>.broadcast(sync: true);
+    final actionSubject = StreamController<A>(sync: true);
     final actionOutputController = StreamController<A>.broadcast(sync: true);
 
-    final stateStream = actionSubject.stream.reduxStore<S>(
-      initialStateSupplier: () => initialState,
-      sideEffects: [
-        ...sideEffects,
-        _onEachActionSideEffect(actionOutputController),
-      ],
-      reducer: reducer,
-      logger: logger,
-    );
+    final stateStream = actionSubject.stream
+        .reduxStore<S>(
+          initialStateSupplier: () => initialState,
+          sideEffects: [
+            ...sideEffects,
+            _onEachActionSideEffect(actionOutputController),
+          ],
+          reducer: reducer,
+          logger: logger,
+        )
+        .distinct(equals)
+        .skip(1)
+        .asBroadcastStream(onCancel: (subscription) => subscription.cancel());
 
     var currentState = initialState;
     final subscription = stateStream.listen(
@@ -84,11 +88,7 @@ class RxReduxStore<A, S> {
     return RxReduxStore._(
       actionSubject.add,
       () => currentState,
-      () => () async* {
-        yield currentState;
-        yield* stateStream;
-      }()
-          .distinct(equals),
+      stateStream,
       actionOutputController.stream,
       () => Future.wait([
         actionSubject.close(),
@@ -115,7 +115,7 @@ class RxReduxStore<A, S> {
   ///         return LoginWidget(state); // build widget based on state.
   ///       },
   ///     );
-  Stream<S> get stateStream => _stateStream();
+  Stream<S> get stateStream => _stateStream;
 
   /// Get current state synchronously.
   /// This is useful for filling `initialData` when using `StreamBuilder` in Flutter.
