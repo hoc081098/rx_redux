@@ -318,7 +318,7 @@ inputActions.reduxStore(
 The problem is that from upstream we get `Int 1`.
 But since `SideEffect` reacts on that action `Int 1` too, it computes `1 * 2` and emits `2`, which then again gets handled by the same SideEffect ` 2 * 2 = 4` and emits `4`, which then again gets handled by the same SideEffect `4 * 2 = 8` and emits `8`, which then getst handled by the same SideEffect and so on (endless loop) ...
 
-### Who processes an `Action` first: `Reducer` or `SideEffect`?
+### Who processes an `Action` first: `Reducer` or `SideEffect`
 
 Since every Action runs through both `Reducer` and registered `SideEffects` this is a valid question.
 Technically speaking `Reducer` gets every `Action` from upstream before the registered `SideEffects`.
@@ -361,7 +361,7 @@ So the workflow is as follows:
 5.  `SideEffect2` reacts on `OtherAction` and emits `YetAnotherAction`
 6.  `reducer` processes `YetAnotherAction`
 
-### Can I use `variable` and `function` for `SideEffects` or `Reducer`?
+### Can I use `variable` and `function` for `SideEffects` or `Reducer`
 
 Absolutely. `SideEffect` is just a type alias for a function `typedef Stream<A> SideEffect<S, A>(Stream<A> actions, GetState<S> state);`.
 
@@ -410,7 +410,7 @@ State reducer(State state, Action action) {
 }
 ```
 
-### Is `distinct` (More commonly known as `distinctUntilChanged` in other Rx implementations) considered as best practice?
+### Is `distinct` (More commonly known as `distinctUntilChanged` in other Rx implementations) considered as best practice
 Yes it is because `reduxStore(...)` is not taking care of only emitting state that has been changed
 compared to previous state.
 Therefore, `.distinct()` is considered as best practice.
@@ -421,7 +421,7 @@ actions
   .listen(view.render);
 ```
 
-### What if I would like to have a SideEffect that returns no Action?
+### What if I would like to have a SideEffect that returns no Action
 
 For example, let's say you just store something in a database, but you don't need a Action as result
 piped backed to your redux store. In that case you can simple use `Stream.empty()` like this:
@@ -435,7 +435,7 @@ Stream<Action> saveToDatabaseSideEffect(Stream<Action> actions, GetState<State> 
 }
 ```
 
-### How do I cancel ongoing `SideEffects` if a certain `Action` happens?
+### How do I cancel ongoing `SideEffects` if a certain `Action` happens
 
 Let's assume you have a simple `SideEffect` that is triggered by `Action1`. 
 Whenever `Action2` is emitted our `SideEffect` should stop. 
@@ -449,7 +449,7 @@ mySideEffect(Stream<Action> actions, GetState<State> getState) =>
         .takeUntil(actions.whereType<Action2>()); // Once Action2 triggers the whole SideEffect gets canceled.
 ```
 
-### Do I need an Action to start observing data?
+### Do I need an Action to start observing data
 Let's say you would like to start observing a database right from the start inside your Store.
 This sounds pretty much like as soon as you have subscribers to your Store and therefore you don't need a dedicated Action to start observing the database.
 
