@@ -31,4 +31,4 @@
 
 ## 0.0.9 - May 22, 2019
 
-- Initial version, created by Stagehand
+-   Initial version, created by Stagehand

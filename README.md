@@ -19,6 +19,7 @@
 </p>
 
 -   Reactive redux store for `Dart` & `Flutter` inspired by **[RxRedux-freeletics](https://github.com/freeletics/RxRedux)**
+
 -   A Redux store implementation entirely based on Dart `Stream`, with the power of `RxDart` (inspired by [redux-observable](https://redux-observable.js.org)) 
 that helps to isolate side effects. RxRedux is (kind of) a replacement for RxDart's `.scan()` operator. 
 
@@ -46,6 +47,7 @@ This library offers a custom stream transformer `ReduxStoreStreamTransformer` (o
 -   A Store is basically an stream container for state. 
 This library offers a custom stream transformer `ReduxStoreStreamTransformer` (or extension method `reduxStore`) to create such a state container.
 It takes an `initialState` and a list of `SideEffect<State, Action>` and a `Reducer<State, Action>`.
+
 -   Since version 2.x, add `RxReduxStore` class, built for Flutter UI.
 
 ### Action
@@ -205,7 +207,7 @@ State reducer(State state, Action action) {
 
 #### 5. Combine all it into one
 
-- Using `ReduxStoreStreamTransformer`:
+-   Using `ReduxStoreStreamTransformer`:
 
 ```dart
 final Stream<Action> actions = PublishSubject<Action>();
@@ -250,7 +252,6 @@ store.dispatch(action);
 The [following video](https://youtu.be/M7lx9Y9ANYo) (click on it) illustrates the workflow:
 
 [![RxRedux explanation](https://i.ytimg.com/vi/M7lx9Y9ANYo/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAqwunKP2_qGE0HYUlquWkFccM5MA)](https://youtu.be/M7lx9Y9ANYo)
-
 
 0.  Let's take a look at the following illustration:
 The blue box is the `View` (think UI). 
@@ -353,12 +354,12 @@ upstreamActions.reduxStore(
 ```
 
 So the workflow is as follows:
-1. Upstream emits `SomeAction`
-2. `reducer` processes `SomeAction`
-3. `SideEffect1` reacts on `SomeAction` and emits `OtherAction` as output
-4. `reducer` processes `OtherAction`
-5. `SideEffect2` reacts on `OtherAction` and emits `YetAnotherAction`
-6. `reducer` processes `YetAnotherAction`
+1.  Upstream emits `SomeAction`
+2.  `reducer` processes `SomeAction`
+3.  `SideEffect1` reacts on `SomeAction` and emits `OtherAction` as output
+4.  `reducer` processes `OtherAction`
+5.  `SideEffect2` reacts on `OtherAction` and emits `YetAnotherAction`
+6.  `reducer` processes `YetAnotherAction`
 
 ### Can I use `variable` and `function` for `SideEffects` or `Reducer`?
 
