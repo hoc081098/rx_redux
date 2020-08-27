@@ -71,7 +71,7 @@ Whenever a `SideEffect` needs to know the current State it can use `GetState` to
 
 ## Usage
 
-### Version 2.x: Prefer to use `RxReduxStore` over `ReduxStoreStreamTransformer`, but have same concept as version 1.x.
+### Version 2.x: Prefer to use `RxReduxStore` over `ReduxStoreStreamTransformer`, but have same concept as version 1.x
 
 ```dart
 final store = RxReduxStore(
@@ -87,13 +87,13 @@ store.dispatch(Action(Todo(i, 'Title $i', i.isEven), ActionType.add));
 await store.dispose();
 ```
 
-### Note: below is the documentation for version 1.x, but have same concept as version 2.x.
+### Note: below is the documentation for version 1.x, but have same concept as version 2.x
 
 Let's create a simple Redux Store for Pagination: Goal is to display a list of `Persons` on screen.
 **For a complete example check [the sample application incl. README](example/README.md)**
 but for the sake of simplicity let's stick with this simple "list of persons example":
 
-#### 1. Define `State` and `initialState`:
+#### 1. Define `State` and `initialState`
 
 ```dart
 class State {
@@ -114,7 +114,7 @@ final initialState = State(
 );
 ```
 
-#### 2. Define `Actions`:
+#### 2. Define `Actions`
 
 ```dart
 abstract class Action { }
@@ -143,7 +143,7 @@ class ErrorLoadingNextPageAction implements Action {
 }
 ```
 
-#### 3. Define `SideEffects`:
+#### 3. Define `SideEffects`
 
 ```dart
 // SideEffect is just a type alias for such a function:
@@ -172,7 +172,7 @@ Stream<State> loadNextPageSideEffect (
     });
 ```
 
-#### 4. Define `Reducer`:
+#### 4. Define `Reducer`
 
 ```dart
 // Reducer is just a type alias for a function
@@ -200,7 +200,7 @@ State reducer(State state, Action action) {
 }
 ```
 
-#### 5. Combine all it into one:
+#### 5. Combine all it into one
 
 - Using `ReduxStoreStreamTransformer`:
 
@@ -242,14 +242,14 @@ Action action = ...;
 store.dispatch(action);
 ```
 
-#### 6. More:
+#### 6. More details
 
 The [following video](https://youtu.be/M7lx9Y9ANYo) (click on it) illustrates the workflow:
 
 [![RxRedux explanation](https://i.ytimg.com/vi/M7lx9Y9ANYo/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAqwunKP2_qGE0HYUlquWkFccM5MA)](https://youtu.be/M7lx9Y9ANYo)
 
 
-0. Let's take a look at the following illustration:
+0.  Let's take a look at the following illustration:
 The blue box is the `View` (think UI). 
 The `Presenter` or `ViewModel` has not been drawn for the sake of readability but you can think of having such additional layers between View and Redux State Machine.
 The yellow box represents a `Store`. 
@@ -258,19 +258,19 @@ The pink box is a `SideEffect`
 Additionally, a green circle represents `State` and a red circle represents an `Action` (see next step).
 On the right you see a UI mock of a mobile app to illustrate UI changes.
 
-1. `NextPageAction` gets triggered from the UI (by scrolling at the end of the list). Every `Action` goes through the `reducer` and all `SideEffects` registered for this type of Action.
+1.  `NextPageAction` gets triggered from the UI (by scrolling at the end of the list). Every `Action` goes through the `reducer` and all `SideEffects` registered for this type of Action.
 
-2. `Reducer` is not interested in `NextPageAction`. So while `NextPageAction` goes through the reducer, it doesn't change the state.
+2.  `Reducer` is not interested in `NextPageAction`. So while `NextPageAction` goes through the reducer, it doesn't change the state.
 
-3. `loadNextPageSideEffect` (pink box), however, cares about `NextPageAction`. This is the trigger to run the side-effect.
+3.  `loadNextPageSideEffect` (pink box), however, cares about `NextPageAction`. This is the trigger to run the side-effect.
 
-4. So `loadNextPageSideEffect` takes `NextPageAction` and starts doing the job and makes the http request to load the next page from backend. Before doing that, this side effect starts with emitting `LoadPageAction`.
+4.  So `loadNextPageSideEffect` takes `NextPageAction` and starts doing the job and makes the http request to load the next page from backend. Before doing that, this side effect starts with emitting `LoadPageAction`.
 
-5. `Reducer` takes `LoadPageAction` emitted from the side effect and reacts on it by "reducing the state". 
+5.  `Reducer` takes `LoadPageAction` emitted from the side effect and reacts on it by "reducing the state". 
 This means `Reducer` knows how to react on `LoadPageAction` to compute the new state (showing progress indicator at the bottom of the list).
 Please note that the state has changed (highlighted in green) which also results in changing the UI (progress indicator at the end of the list).
 
-6. Once `loadNextPageSideEffect` gets the result back from backend, the side effect emits a new `PageLoadedAction`.
+6.  Once `loadNextPageSideEffect` gets the result back from backend, the side effect emits a new `PageLoadedAction`.
 This Action contains a "payload" - the loaded data.
 
 ```dart
@@ -280,7 +280,7 @@ class PageLoadedAction implements Action {
 }
 ```
 
-7. As any other Action `PageLoadedAction` goes through the `Reducer`. The Reducer processes this Action and computes a new state out of it by appending the loaded data to the already existing data (progress bar also is hidden).
+7.  As any other Action `PageLoadedAction` goes through the `Reducer`. The Reducer processes this Action and computes a new state out of it by appending the loaded data to the already existing data (progress bar also is hidden).
 
 Final remark:
 This system allows you to create a plugin in system of `SideEffects` that are highly reusable and specific to do a single use case.
