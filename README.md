@@ -16,6 +16,10 @@
     <a href="https://app.codacy.com/manual/hoc081098/rx_redux?utm_source=github.com&utm_medium=referral&utm_content=hoc081098/rx_redux&utm_campaign=Badge_Grade_Dashboard">
         <img src="https://api.codacy.com/project/badge/Grade/7ecf57bd3c634804a7f596b4f3b35b30" />
     </a>
+    <a href="https://hits.seeyoufarm.com">
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhoc081098%2Frx_redux&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=rx_redux&edge_flat=false"/>
+    </a>
+
 </p>
 
 -   Reactive redux store for `Dart` & `Flutter` inspired by **[RxRedux-freeletics](https://github.com/freeletics/RxRedux)**
