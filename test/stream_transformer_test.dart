@@ -93,7 +93,7 @@ void main() {
       () async {
         Stream<String> returnNoActionEffect(
           Stream<String> actions,
-          GetState<String> accessor,
+          GetState<String> getState,
         ) =>
             actions.asyncExpand((_) => Stream<String>.empty());
 
