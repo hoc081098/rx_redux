@@ -182,7 +182,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
       final futures = [...?cancelFutures, if (future != null) future];
 
       if (futures.isNotEmpty) {
-        await Future.wait(futures);
+        await Future.wait<void>(futures);
       }
       _logger?.call('Cancelled');
     }

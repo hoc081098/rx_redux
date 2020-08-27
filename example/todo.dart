@@ -88,7 +88,7 @@ Stream<Action> removeTodoEffect(
   GetState<ViewState> state,
 ) {
   final executeRemove = (Todo todo) async* {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future<void>.delayed(const Duration(milliseconds: 200));
     yield Action(todo, ActionType.removed);
   };
   return action$
@@ -99,7 +99,7 @@ Stream<Action> removeTodoEffect(
 
 final SideEffect<Action, ViewState> toggleTodoEffect = (action$, state) {
   final executeToggle = (Todo todo) async* {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     yield Action(todo, ActionType.toggled);
   };
   return action$
@@ -108,7 +108,7 @@ final SideEffect<Action, ViewState> toggleTodoEffect = (action$, state) {
       .flatMap(executeToggle);
 };
 
-final delay = () => Future.delayed(const Duration(seconds: 1));
+final delay = () => Future<void>.delayed(const Duration(seconds: 1));
 
 void main() async {
   final store = RxReduxStore(

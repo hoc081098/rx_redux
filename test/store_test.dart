@@ -66,7 +66,7 @@ void main() {
       final future = expectLater(
         store.stateStream,
         emitsInOrder(
-          [
+          <String>[
             '0',
             '0+1',
             '0+1+2',
@@ -122,7 +122,7 @@ void main() {
       expect(
         store.stateStream,
         emitsInOrder(
-          [
+          <int>[
             0,
             1,
             3,
@@ -135,17 +135,17 @@ void main() {
       );
       expect(store.state, 0);
 
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       store.dispatch(Action.action1);
       store.dispatch(Action.action2);
       store.dispatch(Action.action3);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       expect(store.state, 6);
       expect(
         store.stateStream,
         emitsInOrder(
-          [
+          <int>[
             6,
             7,
             9,
@@ -154,16 +154,16 @@ void main() {
         ),
       );
 
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       store.dispatch(Action.action1);
       store.dispatch(Action.action2);
       store.dispatch(Action.action3);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       store.dispatch(Action.actionNoOp);
       store.dispatch(Action.actionNoOp);
       store.dispatch(Action.actionNoOp);
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
     });
 
     test('Get action stream', () async {
@@ -175,7 +175,7 @@ void main() {
 
       expect(
         store.actionStream,
-        emitsInOrder([1, 2, 3]),
+        emitsInOrder(<int>[1, 2, 3]),
       );
 
       await delay(100);
@@ -222,7 +222,7 @@ void main() {
       expect(
         store.actionStream,
         emitsInOrder(
-          [
+          <Action>[
             Action.action1,
             Action.action2,
             Action.action3,
@@ -242,16 +242,16 @@ void main() {
         ),
       );
 
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       store.dispatch(Action.action1);
       store.dispatch(Action.action2);
       store.dispatch(Action.action3);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       expect(
         store.actionStream,
         emitsInOrder(
-          [
+          <Action>[
             Action.action1,
             Action.action2,
             Action.action3,
@@ -265,16 +265,16 @@ void main() {
         ),
       );
 
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       store.dispatch(Action.action1);
       store.dispatch(Action.action2);
       store.dispatch(Action.action3);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       store.dispatch(Action.actionNoOp);
       store.dispatch(Action.actionNoOp);
       store.dispatch(Action.actionNoOp);
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
     });
 
     test('Dispose', () async {

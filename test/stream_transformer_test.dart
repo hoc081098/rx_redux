@@ -25,13 +25,13 @@ void main() {
 
       await expectLater(
         inputActions.transform(
-          ReduxStoreStreamTransformer(
+          ReduxStoreStreamTransformer<String, String>(
             initialStateSupplier: () => 'InitialState',
             sideEffects: [sideEffect1, sideEffect2],
             reducer: (currentState, action) => action,
           ),
         ),
-        emitsInOrder([
+        emitsInOrder(<dynamic>[
           'InitialState',
           'InputAction1',
           'InputAction1SideEffect1',
@@ -55,7 +55,7 @@ void main() {
           ),
         ),
         emitsInOrder(
-          [
+          <dynamic>[
             'InitialState',
             emitsDone,
           ],
@@ -76,7 +76,7 @@ void main() {
             ),
           ),
           emitsInOrder(
-            [
+            <dynamic>[
               'InitialState',
               emitsError(
                 const TypeMatcher<String>()
@@ -110,7 +110,7 @@ void main() {
               reducer: (currentState, action) => currentState + action,
             ),
           ),
-          emitsInOrder([
+          emitsInOrder(<String>[
             'Initial',
             'Initial' 'Action1',
             'Initial' 'Action1' 'Action2',
@@ -136,7 +136,7 @@ void main() {
             ),
           ),
           emitsInOrder(
-            [
+            <dynamic>[
               'Initial',
               emitsError(
                 const TypeMatcher<ReducerException>()
@@ -185,7 +185,7 @@ void main() {
       expect(
         stateStream,
         emitsInOrder(
-          [
+          <String>[
             '0',
             '0-1',
             '0-1-2',
@@ -203,7 +203,7 @@ void main() {
       'Disposing reduxStore disposes all side effects and upstream',
       () async {
         var disposedSideffectsCount = 0;
-        var outputedError;
+        dynamic outputedError;
         var outputCompleted = false;
 
         final dummyAction = 'SomeAction';
@@ -234,24 +234,24 @@ void main() {
             )
             .listen(
               outputedStates.add,
-              onError: (e, s) => outputedError = e,
+              onError: (dynamic e, StackTrace s) => outputedError = e,
               onDone: () => outputCompleted = true,
             );
 
         // I know it's bad, but it does the job
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future<void>.delayed(const Duration(milliseconds: 100));
 
         // Trigger some action
         upstream.add(dummyAction);
 
         // I know it's bad, but it does the job
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future<void>.delayed(const Duration(milliseconds: 100));
 
         // Dispose the whole cain
         await subscription.cancel();
 
         // I know it's bad, but it does the job
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future<void>.delayed(const Duration(milliseconds: 500));
 
         // Verify everything is fine
         expect(disposedSideffectsCount, 2);
@@ -299,7 +299,7 @@ void main() {
           );
       await expectLater(
         state,
-        emitsInOrder([
+        emitsInOrder(<String>[
           'State',
           'State0',
           'State01',
@@ -313,7 +313,8 @@ void main() {
         sideEffects: [],
         reducer: (state, action) => '$state+$action',
       );
-      expect(stream, emitsInOrder([emitsError(isException), emitsDone]));
+      expect(
+          stream, emitsInOrder(<dynamic>[emitsError(isException), emitsDone]));
     });
 
     test('Pause and resume', () {
@@ -411,7 +412,7 @@ void main() {
     });
 
     test('Cancel subscription', () async {
-      final controller = StreamController(sync: true);
+      final controller = StreamController<int>(sync: true);
 
       // ignore: unawaited_futures
       controller.stream
@@ -427,7 +428,7 @@ void main() {
       controller.add(1);
       controller.add(2);
 
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
     });
   });
 }
