@@ -62,10 +62,10 @@ class RxReduxStore<A, S> {
     bool Function(S previous, S next) equals,
     RxReduxLogger logger,
   }) {
-    final actionSubject = StreamController<A>(sync: true);
+    final actionController = StreamController<A>(sync: true);
     final actionOutputController = StreamController<A>.broadcast(sync: true);
 
-    final stateStream = actionSubject.stream
+    final stateStream = actionController.stream
         .reduxStore<S>(
           initialStateSupplier: () => initialState,
           sideEffects: [
@@ -86,14 +86,14 @@ class RxReduxStore<A, S> {
     );
 
     return RxReduxStore._(
-      actionSubject.add,
+      actionController.add,
       () => currentState,
       stateStream,
       actionOutputController.stream,
-      () => Future.wait([
-        actionSubject.close(),
-        subscription.cancel(),
-      ]),
+      () async {
+        await actionController.close();
+        await subscription.cancel();
+      },
     );
   }
 
