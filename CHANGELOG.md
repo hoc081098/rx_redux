@@ -1,3 +1,8 @@
+## 2.1.0 - Aug 28, 2020
+
+-   State stream returned from `RxReduxStore` will not replay the latest state
+    (Use `RxReduxStore.state` getter instead).
+
 ## 2.0.0 - Aug 27, 2020
 
 -   Added `Logger` which allows logging current state, action and new state.

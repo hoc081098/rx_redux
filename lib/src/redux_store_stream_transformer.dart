@@ -6,6 +6,8 @@ import 'logger.dart';
 import 'reducer.dart';
 import 'reducer_exception.dart';
 import 'side_effect.dart';
+import 'utils.dart';
+import 'wrapper_action.dart';
 
 /// Redux store stream Extension for Stream of actions.
 extension ReduxStoreExt<Action> on Stream<Action> {
@@ -94,7 +96,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
   Stream<S> bind(Stream<A> stream) {
     StreamController<S> controller;
     List<StreamSubscription<dynamic>> subscriptions;
-    StreamController<_WrapperAction<A>> actionController;
+    StreamController<WrapperAction<A>> actionController;
 
     void onListen() {
       S state;
@@ -107,13 +109,13 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         return;
       }
 
-      void onDataActually(_WrapperAction<A> wrapper) {
+      void onDataActually(WrapperAction<A> wrapper) {
         final action = wrapper.action;
         final type = wrapper.type;
         final currentState = state;
 
         // add initial state
-        if (type == _ActionType.initial) {
+        if (identical(type, ActionType.initial)) {
           final message = '\n'
               '  ⟶ Action       : $type\n'
               '  ⟹ Current state: $currentState';
@@ -149,18 +151,18 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         }
       }
 
-      actionController = StreamController<_WrapperAction<A>>.broadcast();
+      actionController = StreamController<WrapperAction<A>>.broadcast();
 
       // Call reducer on each action.
       final subscriptionActionController =
           actionController.stream.listen(onDataActually);
 
       // Add initial action
-      actionController.add(_WrapperAction(null, _ActionType.initial));
+      actionController.add(WrapperAction(null, ActionType.initial));
 
       // Listening to upstream actions
       final subscriptionUpstream = stream
-          .map((action) => _WrapperAction(action, _ActionType.external))
+          .map((action) => WrapperAction(action, ActionType.external))
           .listen(
             actionController.add,
             onError: controller.addError,
@@ -207,7 +209,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
   }
 
   Iterable<StreamSubscription<dynamic>> _listenSideEffects(
-    StreamController<_WrapperAction<A>> actionController,
+    StreamController<WrapperAction<A>> actionController,
     GetState<S> getState,
     StreamController<S> controller,
   ) {
@@ -224,8 +226,8 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         }
 
         return actions
-            .map((action) =>
-                _WrapperAction(action, _ActionType.sideEffect(index)))
+            .map(
+                (action) => WrapperAction(action, ActionType.sideEffect(index)))
             .listen(
               actionController.add,
               onError: controller.addError,
@@ -234,61 +236,5 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
             );
       },
     );
-  }
-}
-
-//
-// Internal
-//
-
-@sealed
-abstract class _ActionType {
-  const _ActionType.empty();
-
-  static const initial = _Initial();
-  static const external = _External();
-
-  const factory _ActionType.sideEffect(int index) = _SideEffect;
-
-  @override
-  String toString() {
-    if (this is _Initial) {
-      return '⭍';
-    }
-    if (this is _External) {
-      return '↓';
-    }
-    if (this is _SideEffect) {
-      return '⟳${(this as _SideEffect).index}';
-    }
-    throw StateError('Unknown $this');
-  }
-}
-
-class _Initial extends _ActionType {
-  const _Initial() : super.empty();
-}
-
-class _External extends _ActionType {
-  const _External() : super.empty();
-}
-
-class _SideEffect extends _ActionType {
-  final int index;
-
-  const _SideEffect(this.index) : super.empty();
-}
-
-class _WrapperAction<A> {
-  final A action;
-  final _ActionType type;
-
-  _WrapperAction(this.action, this.type);
-}
-
-extension _MapIndexedIterableExtensison<T> on Iterable<T> {
-  Iterable<R> mapIndexed<R>(R Function(int, T) mapper) {
-    var index = 0;
-    return map((t) => mapper(index++, t));
   }
 }

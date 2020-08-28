@@ -46,14 +46,15 @@ void main() {
       expect(store.state, 0);
     });
 
-    test('Get state stream that emits initial state', () {
+    test('Get state stream that never emits', () {
       final store = RxReduxStore<int, int>(
         initialState: 0,
         sideEffects: [],
         reducer: (s, a) => s + a,
       );
 
-      expect(store.stateStream, emits(0));
+      store.stateStream.listen((event) => expect(true, isFalse));
+      Future<void>.delayed(const Duration(seconds: 1));
     });
 
     test('Get state stream', () async {
@@ -67,7 +68,6 @@ void main() {
         store.stateStream,
         emitsInOrder(
           <String>[
-            '0',
             '0+1',
             '0+1+2',
             '0+1+2+3',
@@ -82,7 +82,8 @@ void main() {
       store.dispatch(3);
 
       await future;
-      expect(store.stateStream, emits('0+1+2+3'));
+      store.stateStream.listen((_) => expect(true, isFalse));
+      await Future<void>.delayed(const Duration(seconds: 1));
     });
 
     test('Get state stream with SideEffects', () async {
@@ -123,7 +124,6 @@ void main() {
         store.stateStream,
         emitsInOrder(
           <int>[
-            0,
             1,
             3,
             6,
@@ -146,7 +146,6 @@ void main() {
         store.stateStream,
         emitsInOrder(
           <int>[
-            6,
             7,
             9,
             12,
@@ -286,16 +285,10 @@ void main() {
 
       await rxReduxStore.dispose();
 
-      rxReduxStore.stateStream.listen(
-        expectAsync1(
-          (v) => expect(v, '0'),
-          count: 1,
-        ),
-        onDone: expectAsync0(
-          () {},
-          count: 1,
-        ),
-      );
+      expect(rxReduxStore.state, '0');
+      expect(() => rxReduxStore.dispatch(0), throwsStateError);
+      expect(rxReduxStore.actionStream, emitsDone);
+      expect(rxReduxStore.stateStream, emitsDone);
     });
 
     test('Error handler called when reducer throws', () async {
