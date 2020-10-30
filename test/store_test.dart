@@ -1,4 +1,5 @@
 import 'package:rx_redux/rx_redux.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:test/test.dart';
 
 enum Action {
@@ -333,6 +334,51 @@ void main() {
       )
         ..dispatch(1)
         ..dispatch(2);
+    });
+
+    test('Dispatch many', () async {
+      {
+        final store = RxReduxStore<int, int>(
+          initialState: 0,
+          sideEffects: [],
+          reducer: (s, a) => s + a,
+        );
+
+        store.dispatchMany(Rx.range(0, 100));
+        await delay(200);
+
+        expect(store.state, 100 * 101 ~/ 2);
+        await store.dispose();
+      }
+
+      {
+        final store = RxReduxStore<int, int>(
+          initialState: 0,
+          sideEffects: [],
+          reducer: (s, a) => s + a,
+        );
+
+        Rx.range(0, 100).dispatchTo(store);
+        await delay(200);
+
+        expect(store.state, 100 * 101 ~/ 2);
+        await store.dispose();
+      }
+    });
+
+    test('Action.dispatchTo extension method', () async {
+      final store = RxReduxStore<int, int>(
+        initialState: 0,
+        sideEffects: [],
+        reducer: (s, a) => s + a,
+      );
+
+      1.dispatchTo(store);
+      2.dispatchTo(store);
+      await delay(100);
+
+      expect(store.state, 3);
+      await store.dispose();
     });
   });
 }

@@ -1,3 +1,8 @@
+## 2.1.1 - Oct 30, 2020
+
+-   Add `RxReduxStore.dispatchMany(Stream<A>)`: Dispatch a `Stream` of actions to store.
+-   Add extension method `dispatchTo` on `A` and `Stream<A>`, eg: `anAction.dispatchTo(store)`, `streamOfActions.dispatchTo(store)`.
+
 ## 2.1.0 - Aug 28, 2020
 
 -   State stream returned from `RxReduxStore` will not replay the latest state
