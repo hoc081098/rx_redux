@@ -29,6 +29,7 @@ SideEffect<A, S> _onEachActionSideEffect<A, S>(StreamSink<A> outputSink) {
 /// Redux store based on [Stream].
 class RxReduxStore<A, S> {
   final void Function(A) _dispatch;
+  final void Function(Stream<A>) _dispatchMany;
 
   final GetState<S> _getState;
   final Stream<S> _stateStream;
@@ -38,6 +39,7 @@ class RxReduxStore<A, S> {
 
   const RxReduxStore._(
     this._dispatch,
+    this._dispatchMany,
     this._getState,
     this._stateStream,
     this._actionStream,
@@ -80,19 +82,22 @@ class RxReduxStore<A, S> {
         .asBroadcastStream(onCancel: (subscription) => subscription.cancel());
 
     var currentState = initialState;
-    final subscription = stateStream.listen(
-      (newState) => currentState = newState,
-      onError: errorHandler,
-    );
+    final subscriptions = <StreamSubscription<Object>>[
+      stateStream.listen(
+        (newState) => currentState = newState,
+        onError: errorHandler,
+      ),
+    ];
 
     return RxReduxStore._(
       actionController.add,
+      (actions) => subscriptions.add(actions.listen(actionController.add)),
       () => currentState,
       stateStream,
       actionOutputController.stream,
       () async {
+        await Future.wait(subscriptions.map((s) => s.cancel()));
         await actionController.close();
-        await subscription.cancel();
       },
     );
   }
@@ -169,6 +174,21 @@ class RxReduxStore<A, S> {
   ///     store.dispatch(SubmitLogin());
   void dispatch(A action) => _dispatch(action);
 
+  /// Dispatch [Stream] of actions to store.
+  ///
+  /// The [StreamSubscription] from listening [actionStream]
+  /// will be cancelled when calling [dispose].
+  /// Therefore, don't forget to call [dispose] to avoid memory leaks.
+  ///
+  /// ### Example:
+  ///
+  ///     abstract class Action {}
+  ///     class LoadNextPageAction implements Action {}
+  ///
+  ///     Stream<LoadNextPageAction> loadNextPageActionStream;
+  ///     store.dispatchMany(loadNextPageActionStream);
+  void dispatchMany(Stream<A> actionStream) => _dispatchMany(actionStream);
+
   /// Dispose all resources.
   /// This method is typically called in `dispose` method of Flutter `State` object.
   ///
@@ -182,4 +202,18 @@ class RxReduxStore<A, S> {
   ///       }
   ///     }
   Future<void> dispose() => _dispose();
+}
+
+/// Dispatch this action to [store].
+extension DispatchToExtension<A> on A {
+  /// Dispatch this action to [store].
+  /// See [RxReduxStore.dispatch]
+  void dispatchTo<S>(RxReduxStore<A, S> store) => store.dispatch(this);
+}
+
+/// /// Dispatch this actions [Stream] to [store].
+extension DispatchToStreamExtension<A> on Stream<A> {
+  /// Dispatch this actions [Stream] to [store].
+  /// See [RxReduxStore.dispatchMany].
+  void dispatchTo<S>(RxReduxStore<A, S> store) => store.dispatchMany(this);
 }
