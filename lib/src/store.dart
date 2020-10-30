@@ -207,7 +207,7 @@ class RxReduxStore<A, S> {
 /// Dispatch this action to [store].
 extension DispatchToExtension<A> on A {
   /// Dispatch this action to [store].
-  /// See [RxReduxStore.dispatch]
+  /// See [RxReduxStore.dispatch].
   void dispatchTo<S>(RxReduxStore<A, S> store) => store.dispatch(this);
 }
 
