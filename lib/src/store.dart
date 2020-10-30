@@ -96,7 +96,11 @@ class RxReduxStore<A, S> {
       stateStream,
       actionOutputController.stream,
       () async {
-        await Future.wait(subscriptions.map((s) => s.cancel()));
+        if (subscriptions.length == 1) {
+          await subscriptions[0].cancel();
+        } else {
+          await Future.wait(subscriptions.map((s) => s.cancel()));
+        }
         await actionController.close();
       },
     );
