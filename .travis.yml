@@ -1,6 +1,5 @@
 language: dart
 dart:
-  - stable
   - dev
 script:
   - dartanalyzer --fatal-infos --fatal-warnings ./lib ./test
