@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 /// Exception thrown by reducer
 class ReducerException<A, S> implements Exception {
   /// Action passed into reducer
@@ -16,10 +14,10 @@ class ReducerException<A, S> implements Exception {
 
   /// Construct a [ReducerException]
   const ReducerException({
-    @required this.action,
-    @required this.state,
-    @required this.error,
-    this.stackTrace,
+    required this.action,
+    required this.state,
+    required this.error,
+    required this.stackTrace,
   });
 
   @override

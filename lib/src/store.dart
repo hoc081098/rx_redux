@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
-
 import 'logger.dart';
 import 'reducer.dart';
 import 'redux_store_stream_transformer.dart';
@@ -12,7 +10,7 @@ import 'side_effect.dart';
 SideEffect<A, S> _onEachActionSideEffect<A, S>(StreamSink<A> outputSink) {
   return (actions, _) {
     final neverController = StreamController<A>();
-    StreamSubscription<A> subscription;
+    late StreamSubscription<A> subscription;
 
     neverController.onListen =
         () => subscription = actions.listen(outputSink.add);
@@ -57,12 +55,12 @@ class RxReduxStore<A, S> {
   /// If calling it returns true, the new state will not be emitted.
   /// If [equals] is omitted, the '==' operator is used.
   factory RxReduxStore({
-    @required S initialState,
-    @required List<SideEffect<A, S>> sideEffects,
-    @required Reducer<A, S> reducer,
-    void Function(Object, StackTrace) errorHandler,
-    bool Function(S previous, S next) equals,
-    RxReduxLogger logger,
+    required S initialState,
+    required List<SideEffect<A, S>> sideEffects,
+    required Reducer<A, S> reducer,
+    void Function(Object, StackTrace)? errorHandler,
+    bool Function(S previous, S next)? equals,
+    RxReduxLogger? logger,
   }) {
     final actionController = StreamController<A>(sync: true);
     final actionOutputController = StreamController<A>.broadcast(sync: true);
@@ -82,7 +80,7 @@ class RxReduxStore<A, S> {
         .asBroadcastStream(onCancel: (subscription) => subscription.cancel());
 
     var currentState = initialState;
-    final subscriptions = <StreamSubscription<Object>>[
+    final subscriptions = <StreamSubscription<dynamic>>[
       stateStream.listen(
         (newState) => currentState = newState,
         onError: errorHandler,

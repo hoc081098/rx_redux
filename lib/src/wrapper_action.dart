@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-// ignore_for_file: public_member_api_docs, missing_return
+// ignore_for_file: public_member_api_docs
 
 @sealed
 abstract class ActionType {
@@ -14,7 +14,7 @@ abstract class ActionType {
   @override
   String toString() {
     if (this is _Initial) {
-      return '⭍';
+      return '↯';
     }
     if (this is _External) {
       return '↓';
@@ -22,6 +22,7 @@ abstract class ActionType {
     if (this is _SideEffect) {
       return '⟳${(this as _SideEffect).index}';
     }
+    throw StateError('What is $this');
   }
 }
 
@@ -40,7 +41,7 @@ class _SideEffect extends ActionType {
 }
 
 class WrapperAction<A> {
-  final A action;
+  final A? action;
   final ActionType type;
 
   WrapperAction(this.action, this.type);
