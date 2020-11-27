@@ -169,11 +169,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
 
       subscriptions = [
         ..._listenSideEffects(
-          actionController,
-          getState,
-          controller,
-          actionStream,
-        ),
+            actionController, getState, controller, actionStream),
         subscriptionUpstream,
         subscriptionActionController,
       ];
