@@ -19,10 +19,7 @@ abstract class ActionType {
     if (this is _External) {
       return '↓';
     }
-    if (this is _SideEffect) {
-      return '⟳${(this as _SideEffect).index}';
-    }
-    throw StateError('What is $this');
+    return '⟳${(this as _SideEffect).index}';
   }
 }
 

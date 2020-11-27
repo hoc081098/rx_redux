@@ -175,7 +175,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           actionStream,
         ),
         subscriptionUpstream,
-        subscriptionActionController
+        subscriptionActionController,
       ];
     }
 
