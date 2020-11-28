@@ -45,21 +45,21 @@ class _SideEffect extends ActionType {
   _SideEffect(this.index) : super._empty();
 }
 
-class WrapperAction<A> {
+class WrapperAction {
   final dynamic _action;
   final ActionType type;
 
   const WrapperAction._(this._action, this.type);
 
-  factory WrapperAction.external(A action) =>
+  factory WrapperAction.external(dynamic action) =>
       WrapperAction._(action, ActionType._external);
 
-  factory WrapperAction.sideEffect(A action, int index) =>
+  factory WrapperAction.sideEffect(dynamic action, int index) =>
       WrapperAction._(action, ActionType._sideEffect(index));
 
-  static const initial = WrapperAction<Never>._(null, ActionType._initial);
+  static const initial = WrapperAction._(null, ActionType._initial);
 
-  A get action {
+  A action<A>() {
     if (identical(this, initial)) {
       throw StateError('Cannot get action from WrapperAction.initial');
     }

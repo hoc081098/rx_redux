@@ -88,7 +88,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
   Stream<S> bind(Stream<A> stream) {
     late StreamController<S> controller;
     List<StreamSubscription<dynamic>>? subscriptions;
-    StreamController<WrapperAction<A>>? _actionController;
+    StreamController<WrapperAction>? _actionController;
 
     void onListen() {
       S state;
@@ -101,7 +101,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         return;
       }
 
-      void onDataActually(WrapperAction<A> wrapper) {
+      void onDataActually(WrapperAction wrapper) {
         final type = wrapper.type;
         final currentState = state;
 
@@ -114,7 +114,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           return controller.add(currentState);
         }
 
-        final action = wrapper.action;
+        final action = wrapper.action<A>();
         try {
           final newState = _reducer(currentState, action);
           controller.add(newState);
@@ -144,7 +144,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
       }
 
       final actionController =
-          _actionController = StreamController<WrapperAction<A>>.broadcast();
+          _actionController = StreamController<WrapperAction>.broadcast();
 
       // Call reducer on each action.
       final subscriptionActionController =
@@ -163,7 +163,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
 
       final getState = () => state;
       final actionStream = actionController.stream
-          .map((wrapper) => wrapper.action)
+          .map((wrapper) => wrapper.action<A>())
           .asBroadcastStream(onCancel: (s) => s.cancel());
 
       subscriptions = [
@@ -205,7 +205,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
   }
 
   Iterable<StreamSubscription<dynamic>> _listenSideEffects(
-    StreamController<WrapperAction<A>> actionController,
+    StreamController<WrapperAction> actionController,
     GetState<S> getState,
     StreamController<S> stateController,
     Stream<A> actionStream,
