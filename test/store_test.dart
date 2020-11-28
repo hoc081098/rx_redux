@@ -380,5 +380,47 @@ void main() {
       expect(store.state, 3);
       await store.dispose();
     });
+
+    test('Nullable action', () async {
+      final store = RxReduxStore<int?, String>(
+        initialState: '0',
+        sideEffects: [(actions, getState) => Stream.empty()],
+        reducer: (s, a) => s + a.toString(),
+      );
+
+      // ignore: unnecessary_cast
+      (1 as int?).dispatchTo(store);
+      store.dispatch(2);
+      await delay(100);
+      expect(store.state, '012');
+
+      store.dispatch(null);
+      // ignore: unnecessary_cast
+      (null as int?).dispatchTo(store);
+      await delay(100);
+      expect(store.state, '012nullnull');
+
+      await store.dispose();
+    });
+
+    test('Nullable state', () async {
+      final store = RxReduxStore<int, String?>(
+        initialState: null,
+        sideEffects: [(actions, getState) => Stream.empty()],
+        reducer: (s, a) => a == 1 ? '1' : null,
+      );
+
+      expect(store.state, null);
+
+      1.dispatchTo(store);
+      await delay(100);
+      expect(store.state, '1');
+
+      2.dispatchTo(store);
+      await delay(100);
+      expect(store.state, null);
+
+      await store.dispose();
+    });
   });
 }

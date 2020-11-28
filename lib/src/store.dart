@@ -213,7 +213,7 @@ extension DispatchToExtension<A> on A {
   void dispatchTo<S>(RxReduxStore<A, S> store) => store.dispatch(this);
 }
 
-/// /// Dispatch this actions [Stream] to [store].
+/// Dispatch this actions [Stream] to [store].
 extension DispatchToStreamExtension<A> on Stream<A> {
   /// Dispatch this actions [Stream] to [store].
   /// See [RxReduxStore.dispatchMany].

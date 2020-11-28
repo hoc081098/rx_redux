@@ -106,7 +106,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         final currentState = state;
 
         // add initial state
-        if (identical(type, ActionType.initial)) {
+        if (identical(wrapper, WrapperAction.initial)) {
           final message = '\n'
               '  ⟶ Action       : $type\n'
               '  ⟹ Current state: $currentState';
@@ -114,7 +114,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           return controller.add(currentState);
         }
 
-        final action = wrapper.action!;
+        final action = wrapper.action;
         try {
           final newState = _reducer(currentState, action);
           controller.add(newState);
@@ -151,20 +151,19 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           actionController.stream.listen(onDataActually);
 
       // Add initial action
-      actionController.add(WrapperAction(null, ActionType.initial));
+      actionController.add(WrapperAction.initial);
 
       // Listening to upstream actions
-      final subscriptionUpstream = stream
-          .map((action) => WrapperAction(action, ActionType.external))
-          .listen(
-            actionController.add,
-            onError: controller.addError,
-            onDone: controller.close,
-          );
+      final subscriptionUpstream =
+          stream.map((action) => WrapperAction.external(action)).listen(
+                actionController.add,
+                onError: controller.addError,
+                onDone: controller.close,
+              );
 
       final getState = () => state;
       final actionStream = actionController.stream
-          .map((wrapper) => wrapper.action!)
+          .map((wrapper) => wrapper.action)
           .asBroadcastStream(onCancel: (s) => s.cancel());
 
       subscriptions = [
@@ -220,9 +219,8 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           actions = Stream.error(e, s);
         }
 
-        final sideEffectAction = ActionType.sideEffect(index);
         return actions
-            .map((action) => WrapperAction(action, sideEffectAction))
+            .map((action) => WrapperAction.sideEffect(action, index))
             .listen(
               actionController.add,
               onError: stateController.addError,
