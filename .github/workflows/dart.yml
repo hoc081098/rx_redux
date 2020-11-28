@@ -17,14 +17,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install dependencies
+      run: pub get
+
     - name: Analyze
       run: dartanalyzer --fatal-infos --fatal-warnings ./lib ./test
 
     - name: Format code
       run: dartfmt -n ./lib ./test --set-exit-if-changed
-
-    - name: Install dependencies
-      run: pub get
 
     - name: Active coverage
       run: pub global activate coverage
