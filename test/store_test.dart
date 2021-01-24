@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:rx_redux/rx_redux.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:test/test.dart';
@@ -422,5 +423,130 @@ void main() {
 
       await store.dispose();
     });
+
+    test('Select', () async {
+      final store = RxReduxStore<int, _State>(
+        initialState: _State(true, null, <String>[].build(), 1),
+        sideEffects: [],
+        reducer: (s, a) {
+          if (a == 0) {
+            return _State(
+              s.isLoading,
+              s.term,
+              Iterable.generate(10, (i) => i.toString()).toBuiltList(),
+              s.otherState,
+            );
+          }
+          if (a == 1) {
+            return _State(
+              false,
+              s.term,
+              s.items,
+              s.otherState,
+            );
+          }
+          if (a == 2) {
+            return _State(
+              true,
+              s.term,
+              s.items,
+              s.otherState,
+            );
+          }
+          if (a == 3) {
+            return _State(
+              true,
+              '4',
+              s.items,
+              s.otherState,
+            );
+          }
+          if (a == 4) {
+            return _State(
+              s.isLoading,
+              '4',
+              s.items,
+              s.otherState,
+            );
+          }
+          if (a == 5) {
+            return _State(
+              false,
+              '4',
+              s.items,
+              999,
+            );
+          }
+
+          throw a;
+        },
+      );
+      //
+      // final future = expectLater(
+      //   store.stateStream,
+      //   emitsInOrder(
+      //     <String>[
+      //       '0+1',
+      //       '0+1+2',
+      //       '0+1+2+3',
+      //     ],
+      //   ),
+      // );
+
+      await delay(100);
+      final selec =
+          store.select2<String?, BuiltList<String>, BuiltList<String>>(
+        (s) => s.term,
+        (s) => s.items,
+        (term, items) {
+          print('call...');
+          return items.where((i) => i.contains(term ?? '')).toBuiltList();
+        },
+      );
+
+      print(store.state);
+      print('>> ${selec.requireValue}');
+
+      store.stateStream.listen(print);
+      selec.listen((event) => print('>> $event'));
+
+      store.dispatch(0);
+      store.dispatch(1);
+      store.dispatch(2);
+      store.dispatch(3);
+      store.dispatch(4);
+      store.dispatch(5);
+
+      await delay(4000);
+
+      // await future;
+    });
   });
+}
+
+class _State {
+  final bool isLoading;
+  final String? term;
+  final BuiltList<String> items;
+  final double otherState;
+
+  _State(this.isLoading, this.term, this.items, this.otherState);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _State &&
+          runtimeType == other.runtimeType &&
+          isLoading == other.isLoading &&
+          term == other.term &&
+          items == other.items &&
+          otherState == other.otherState;
+
+  @override
+  int get hashCode =>
+      isLoading.hashCode ^ term.hashCode ^ items.hashCode ^ otherState.hashCode;
+
+  @override
+  String toString() =>
+      '_State{isLoading: $isLoading, term: $term, items: $items, otherState: $otherState}';
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:disposebag/disposebag.dart';
 import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tuple/tuple.dart';
 
 import 'logger.dart';
 import 'reducer.dart';
@@ -60,7 +61,7 @@ class RxReduxStore<A, S> {
   /// The [equals] used to determine equality between old and new states.
   /// If calling it returns true, the new state will not be emitted.
   /// If [equals] is omitted, the '==' operator is used.
-  /// If providing [equals], calling it must not throw any errors.
+  /// If [equals] is provided, calling it must not throw any errors.
   factory RxReduxStore({
     required S initialState,
     required List<SideEffect<A, S>> sideEffects,
@@ -168,14 +169,14 @@ class RxReduxStore<A, S> {
   void dispatchMany(Stream<A> actionStream) =>
       _bag.add(actionStream.listen(_dispatch));
 
-  /// TODO
-  Stream<R> select<R>(
-    R Function(S) select, {
+  /// Observe a value of type [R] exposed from a state stream, and listen only partially to changes.
+  DistinctValueStream<R> select<R>(
+    R Function(S) selector, {
     bool Function(R previous, R next)? equals,
   }) {
     return stateStream
-        .map(select)
-        .publishValueDistinct(select(state), equals: equals)
+        .map(selector)
+        .publishValueDistinct(selector(state), equals: equals)
           ..connect().disposedBy(_bag);
   }
 
@@ -192,6 +193,34 @@ class RxReduxStore<A, S> {
   ///       }
   ///     }
   Future<void> dispose() => _bag.dispose();
+}
+
+bool _equals<T>(T a, T b) => a == b;
+
+/// TODO
+extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
+  /// TODO
+  DistinctValueStream<R> select2<S1, S2, R>(
+    S1 Function(S) selector1,
+    S2 Function(S) selector2,
+    R Function(S1, S2) projector, {
+    bool Function(S1 previous, S1 next)? equals1,
+    bool Function(S2 previous, S2 next)? equals2,
+    bool Function(R previous, R next)? equals,
+  }) {
+    final eq1 = equals1 ?? _equals;
+    final eq2 = equals2 ?? _equals;
+    final seedValue = projector(selector1(state), selector2(state));
+
+    return stateStream
+        .map((s) => Tuple2(selector1(s), selector2(s)))
+        .distinct((previous, next) =>
+            eq1(previous.item1, next.item1) &&
+            eq2(previous.item2, previous.item2))
+        .map((tuple) => projector(tuple.item1, tuple.item2))
+        .publishValueDistinct(seedValue, equals: equals)
+          ..connect();
+  }
 }
 
 /// Get current state synchronously.
