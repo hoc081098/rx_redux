@@ -496,8 +496,14 @@ void main() {
       await delay(100);
       final selec =
           store.select2<String?, BuiltList<String>, BuiltList<String>>(
-        (s) => s.term,
-        (s) => s.items,
+        (s) {
+          print('call 1...');
+          return s.term;
+        },
+        (s) {
+          print('call 2...');
+          return s.items;
+        },
         (term, items) {
           print('call...');
           return items.where((i) => i.contains(term ?? '')).toBuiltList();
