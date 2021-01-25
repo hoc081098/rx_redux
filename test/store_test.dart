@@ -429,103 +429,87 @@ void main() {
         initialState: _State(true, null, <String>[].build(), 1),
         sideEffects: [],
         reducer: (s, a) {
+          // items [*]
           if (a == 0) {
             return _State(
               s.isLoading,
               s.term,
-              Iterable.generate(10, (i) => i.toString()).toBuiltList(),
+              List.generate(10, (i) => i.toString()).build(),
               s.otherState,
             );
           }
+
+          // loading
           if (a == 1) {
-            return _State(
-              false,
-              s.term,
-              s.items,
-              s.otherState,
-            );
+            return _State(!s.isLoading, s.term, s.items, s.otherState);
           }
+
+          // loading
           if (a == 2) {
-            return _State(
-              true,
-              s.term,
-              s.items,
-              s.otherState,
-            );
+            return _State(!s.isLoading, s.term, s.items, s.otherState);
           }
+
+          // term [*]
           if (a == 3) {
-            return _State(
-              true,
-              '4',
-              s.items,
-              s.otherState,
-            );
+            return _State(s.isLoading, '4', s.items, s.otherState);
           }
+
+          // otherState
           if (a == 4) {
-            return _State(
-              s.isLoading,
-              '4',
-              s.items,
-              s.otherState,
-            );
+            return _State(s.isLoading, s.term, s.items, s.otherState + 2);
           }
+
+          // loading & otherState
           if (a == 5) {
-            return _State(
-              false,
-              '4',
-              s.items,
-              999,
-            );
+            return _State(!s.isLoading, s.term, s.items, -s.otherState);
           }
 
           throw a;
         },
       );
-      //
-      // final future = expectLater(
-      //   store.stateStream,
-      //   emitsInOrder(
-      //     <String>[
-      //       '0+1',
-      //       '0+1+2',
-      //       '0+1+2+3',
-      //     ],
-      //   ),
-      // );
 
-      await delay(100);
-      final selec =
-          store.select2<String?, BuiltList<String>, BuiltList<String>>(
+      await pumpEventQueue(times: 50);
+
+      var termCount = 0;
+      var itemsCount = 0;
+      var projectorCount = 0;
+
+      final filtered = store.select2(
         (s) {
-          print('call 1...');
+          ++termCount;
           return s.term;
         },
         (s) {
-          print('call 2...');
+          ++itemsCount;
           return s.items;
         },
-        (term, items) {
-          print('call...');
+        (String? term, BuiltList<String> items) {
+          ++projectorCount;
           return items.where((i) => i.contains(term ?? '')).toBuiltList();
         },
       );
 
-      print(store.state);
-      print('>> ${selec.requireValue}');
+      expect(filtered.requireValue, <String>[].build());
+      final future = expectLater(
+        filtered,
+        emitsInOrder(<Object>[
+          List.generate(10, (i) => i.toString()).build(),
+          ['4'].build(),
+        ]),
+      );
 
-      store.stateStream.listen(print);
-      selec.listen((event) => print('>> $event'));
+      final numberOfActions = 6;
+      for (var i = 0; i < numberOfActions; i++) {
+        store.dispatch(i);
+      }
+      await pumpEventQueue(times: 50);
+      await future;
 
-      store.dispatch(0);
-      store.dispatch(1);
-      store.dispatch(2);
-      store.dispatch(3);
-      store.dispatch(4);
-      store.dispatch(5);
-
-      await delay(4000);
-
-      // await future;
+      expect(
+          termCount, numberOfActions + 1); // inc. calling to produce seed value
+      expect(itemsCount,
+          numberOfActions + 1); // inc. calling to produce seed value
+      expect(projectorCount, 3);
     });
   });
 }
