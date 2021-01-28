@@ -1,4 +1,8 @@
-import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
+import 'dart:async';
+
+import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart'
+    show DistinctValueStream;
+import 'package:rxdart/rxdart.dart' show ValueWrapper;
 
 import '../rx_redux.dart';
 
@@ -21,7 +25,7 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
   }) =>
       stateStream
           .map(selector)
-          .shareValueDistinct(selector(state), equals: equals);
+          .toDistinctValueStream(selector(state), equals: equals);
 
   /// TODO
   DistinctValueStream<R> select2<S1, S2, R>(
@@ -100,9 +104,59 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
         .map(selectSubStats)
         .distinct(subStatesEquals)
         .map(projector)
-        .shareValueDistinct(
+        .toDistinctValueStream(
           projector(selectSubStats(state)),
           equals: equals,
         );
+  }
+}
+
+extension _Stream<T> on Stream<T> {
+  DistinctValueStream<T> toDistinctValueStream(
+    T value, {
+    bool Function(T p1, T p2)? equals,
+  }) =>
+      _DistinctValueStream(equals, this, value);
+}
+
+class _DistinctValueStream<T> extends Stream<T>
+    implements DistinctValueStream<T> {
+  @override
+  final bool Function(T p1, T p2) equals;
+
+  final Stream<T> stream;
+  T value;
+
+  _DistinctValueStream(
+    bool Function(T p1, T p2)? equals,
+    this.stream,
+    this.value,
+  ) : equals = equals ?? _equals;
+
+  @override
+  Never get errorAndStackTrace =>
+      throw StateError('This Stream always has no error!');
+
+  @override
+  ValueWrapper<T> get valueWrapper => ValueWrapper(value);
+
+  @override
+  StreamSubscription<T> listen(
+    void Function(T event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return stream.listen(
+      (data) {
+        if (!equals(value, data)) {
+          value = data;
+          onData?.call(data);
+        }
+      },
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
   }
 }
