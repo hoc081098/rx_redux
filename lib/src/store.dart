@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:disposebag/disposebag.dart';
 import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'logger.dart';
 import 'reducer.dart';
