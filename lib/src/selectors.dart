@@ -19,7 +19,7 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
   }) =>
       stateStream.map(selector).distinctValue(selector(state), equals: equals);
 
-  /// TODO
+  /// Select two sub state and combine them by [projector].
   DistinctValueStream<R> select2<S1, S2, R>(
     S1 Function(S state) selector1,
     S2 Function(S state) selector2,
@@ -73,9 +73,22 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
     Result Function(List<SubState> subStates) projector, {
     bool Function(Result previous, Result next)? equals,
   }) {
-    if (selectors.length != subStateEquals.length) {
-      throw StateError('selectors and subStateEquals should have same length');
+    final length = selectors.length;
+    if (length != subStateEquals.length) {
+      throw ArgumentError(
+          'selectors and subStateEquals should have same length');
     }
+
+    if (length == 0) {
+      throw ArgumentError('selectors must be not empty');
+    }
+    if (length == 1) {
+      throw ArgumentError(
+          'selectors contains single element. Use select(selector) instead.');
+    }
+
+    selectors = selectors.toList(growable: false);
+    subStateEquals = subStateEquals.toList(growable: false);
 
     final selectSubStats =
         (S state) => selectors.map((s) => s(state)).toList(growable: false);
@@ -84,13 +97,9 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
         .map((e) => e ?? DistinctValueStream.defaultEquals)
         .toList(growable: false);
 
-    final subStatesEquals = (List<SubState> previous, List<SubState> next) {
-      if (previous.length != next.length) {
-        throw StateError('selectors should be a fixed-length List');
-      }
-      return Iterable<int>.generate(previous.length)
-          .every((i) => eqs[i](previous[i], next[i]));
-    };
+    late final indices = Iterable<int>.generate(length);
+    final subStatesEquals = (List<SubState> previous, List<SubState> next) =>
+        indices.every((i) => eqs[i](previous[i], next[i]));
 
     return stateStream
         .map(selectSubStats)
