@@ -88,10 +88,8 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
       if (previous.length != next.length) {
         throw StateError('selectors should be a fixed-length List');
       }
-      return Iterable<int>.generate(previous.length).every((i) {
-        final eq = eqs[i];
-        return eq(previous[i], next[i]);
-      });
+      return Iterable<int>.generate(previous.length)
+          .every((i) => eqs[i](previous[i], next[i]));
     };
 
     return stateStream
