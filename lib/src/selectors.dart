@@ -2,8 +2,6 @@ import 'package:distinct_value_connectable_stream/distinct_value_connectable_str
 
 import '../rx_redux.dart';
 
-bool _equals<T>(T a, T b) => a == b;
-
 bool Function(Object?, Object?)? _castToDynamicParams<T>(
     bool Function(T previous, T next)? f) {
   if (T == dynamic) {
@@ -82,7 +80,9 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
     final selectSubStats =
         (S state) => selectors.map((s) => s(state)).toList(growable: false);
 
-    final eqs = subStateEquals.map((e) => e ?? _equals).toList(growable: false);
+    final eqs = subStateEquals
+        .map((e) => e ?? DistinctValueStream.defaultEquals)
+        .toList(growable: false);
 
     final subStatesEquals = (List<SubState> previous, List<SubState> next) {
       if (previous.length != next.length) {
