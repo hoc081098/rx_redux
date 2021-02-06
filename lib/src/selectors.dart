@@ -12,20 +12,20 @@ bool Function(Object?, Object?)? _castToDynamicParams<T>(
   return f == null ? null : (Object? l, Object? r) => f(l as T, r as T);
 }
 
-/// TODO
+/// Select a sub state slice from state stream of [RxReduxStore].
 extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
   /// Observe a value of type [R] exposed from a state stream, and listen only partially to changes.
   DistinctValueStream<R> select<R>(
-    R Function(S) selector, {
+    R Function(S state) selector, {
     bool Function(R previous, R next)? equals,
   }) =>
       stateStream.map(selector).distinctValue(selector(state), equals: equals);
 
   /// TODO
   DistinctValueStream<R> select2<S1, S2, R>(
-    S1 Function(S) selector1,
-    S2 Function(S) selector2,
-    R Function(S1, S2) projector, {
+    S1 Function(S state) selector1,
+    S2 Function(S state) selector2,
+    R Function(S1 subState1, S2 subState2) projector, {
     bool Function(S1 previous, S1 next)? equals1,
     bool Function(S2 previous, S2 next)? equals2,
     bool Function(R previous, R next)? equals,
@@ -43,10 +43,10 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
 
   /// TODO
   DistinctValueStream<R> select3<S1, S2, S3, R>(
-    S1 Function(S) selector1,
-    S2 Function(S) selector2,
-    S3 Function(S) selector3,
-    R Function(S1, S2, S3) projector, {
+    S1 Function(S state) selector1,
+    S2 Function(S state) selector2,
+    S3 Function(S state) selector3,
+    R Function(S1 subState1, S2 subState2, S3 subState3) projector, {
     bool Function(S1 previous, S1 next)? equals1,
     bool Function(S2 previous, S2 next)? equals2,
     bool Function(S3 previous, S3 next)? equals3,
@@ -70,9 +70,9 @@ extension SelectorsExtension<A, S> on RxReduxStore<A, S> {
 
   /// TODO
   DistinctValueStream<Result> selectMany<Result, SubState>(
-    List<SubState Function(S)> selectors,
+    List<SubState Function(S state)> selectors,
     List<bool Function(SubState previous, SubState next)?> subStateEquals,
-    Result Function(List<SubState>) projector, {
+    Result Function(List<SubState> subStates) projector, {
     bool Function(Result previous, Result next)? equals,
   }) {
     if (selectors.length != subStateEquals.length) {
