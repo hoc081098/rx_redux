@@ -424,92 +424,194 @@ void main() {
       await store.dispose();
     });
 
-    test('Select', () async {
-      final store = RxReduxStore<int, _State>(
-        initialState: _State(true, null, <String>[].build(), 1),
-        sideEffects: [],
-        reducer: (s, a) {
-          // items [*]
-          if (a == 0) {
-            return _State(
-              s.isLoading,
-              s.term,
-              List.generate(10, (i) => i.toString()).build(),
-              s.otherState,
-            );
-          }
+    group('selector', () {
+      test('select2', () async {
+        final store = RxReduxStore<int, _State>(
+          initialState: _State(true, null, <String>[].build(), 1),
+          sideEffects: [],
+          reducer: (s, a) {
+            // items [*]
+            if (a == 0) {
+              return _State(
+                s.isLoading,
+                s.term,
+                List.generate(10, (i) => i.toString()).build(),
+                s.otherState,
+              );
+            }
 
-          // loading
-          if (a == 1) {
-            return _State(!s.isLoading, s.term, s.items, s.otherState);
-          }
+            // loading
+            if (a == 1) {
+              return _State(!s.isLoading, s.term, s.items, s.otherState);
+            }
 
-          // loading
-          if (a == 2) {
-            return _State(!s.isLoading, s.term, s.items, s.otherState);
-          }
+            // loading
+            if (a == 2) {
+              return _State(!s.isLoading, s.term, s.items, s.otherState);
+            }
 
-          // term [*]
-          if (a == 3) {
-            return _State(s.isLoading, '4', s.items, s.otherState);
-          }
+            // term [*]
+            if (a == 3) {
+              return _State(s.isLoading, '4', s.items, s.otherState);
+            }
 
-          // otherState
-          if (a == 4) {
-            return _State(s.isLoading, s.term, s.items, s.otherState + 2);
-          }
+            // otherState
+            if (a == 4) {
+              return _State(s.isLoading, s.term, s.items, s.otherState + 2);
+            }
 
-          // loading & otherState
-          if (a == 5) {
-            return _State(!s.isLoading, s.term, s.items, -s.otherState);
-          }
+            // loading & otherState
+            if (a == 5) {
+              return _State(!s.isLoading, s.term, s.items, -s.otherState);
+            }
 
-          throw a;
-        },
-      );
+            throw a;
+          },
+        );
 
-      await pumpEventQueue(times: 50);
+        await pumpEventQueue(times: 50);
 
-      var termCount = 0;
-      var itemsCount = 0;
-      var projectorCount = 0;
+        var termCount = 0;
+        var itemsCount = 0;
+        var projectorCount = 0;
 
-      final filtered = store.select2(
-        (s) {
-          ++termCount;
-          return s.term;
-        },
-        (s) {
-          ++itemsCount;
-          return s.items;
-        },
-        (String? term, BuiltList<String> items) {
-          ++projectorCount;
-          return items.where((i) => i.contains(term ?? '')).toBuiltList();
-        },
-      );
+        final filtered = store.select2(
+          (s) {
+            ++termCount;
+            return s.term;
+          },
+          (s) {
+            ++itemsCount;
+            return s.items;
+          },
+          (String? term, BuiltList<String> items) {
+            ++projectorCount;
+            return items.where((i) => i.contains(term ?? '')).toBuiltList();
+          },
+        );
 
-      expect(filtered.requireValue, <String>[].build());
-      final future = expectLater(
-        filtered,
-        emitsInOrder(<Object>[
-          List.generate(10, (i) => i.toString()).build(),
-          ['4'].build(),
-        ]),
-      );
+        expect(filtered.requireValue, <String>[].build());
+        final future = expectLater(
+          filtered,
+          emitsInOrder(<Object>[
+            List.generate(10, (i) => i.toString()).build(),
+            ['4'].build(),
+          ]),
+        );
 
-      final numberOfActions = 6;
-      for (var i = 0; i < numberOfActions; i++) {
-        store.dispatch(i);
-      }
-      await pumpEventQueue(times: 50);
-      await future;
+        final numberOfActions = 6;
+        for (var i = 0; i < numberOfActions; i++) {
+          store.dispatch(i);
+        }
+        await pumpEventQueue(times: 50);
+        await future;
 
-      expect(
-          termCount, numberOfActions + 1); // inc. calling to produce seed value
-      expect(itemsCount,
-          numberOfActions + 1); // inc. calling to produce seed value
-      expect(projectorCount, 3);
+        expect(termCount,
+            numberOfActions + 1); // inc. calling to produce seed value
+        expect(itemsCount,
+            numberOfActions + 1); // inc. calling to produce seed value
+        expect(projectorCount,
+            2 + 1); // 2 [*] and inc. calling to produce seed value
+      });
+
+      test('select3', () async {
+        final store = RxReduxStore<int, _State>(
+          initialState: _State(true, null, <String>[].build(), 2),
+          sideEffects: [],
+          reducer: (s, a) {
+            // items [*]
+            if (a == 0) {
+              return _State(
+                s.isLoading,
+                s.term,
+                List.generate(10, (i) => i.toString()).build(),
+                s.otherState,
+              );
+            }
+
+            // loading
+            if (a == 1) {
+              return _State(!s.isLoading, s.term, s.items, s.otherState);
+            }
+
+            // loading
+            if (a == 2) {
+              return _State(!s.isLoading, s.term, s.items, s.otherState);
+            }
+
+            // term [*]
+            if (a == 3) {
+              return _State(s.isLoading, '4', s.items, s.otherState);
+            }
+
+            // otherState [*]
+            if (a == 4) {
+              return _State(s.isLoading, s.term, s.items, s.otherState + 2);
+            }
+
+            // loading & otherState [*]
+            if (a == 5) {
+              return _State(!s.isLoading, s.term, s.items, s.otherState - 1);
+            }
+
+            throw a;
+          },
+        );
+
+        await pumpEventQueue(times: 50);
+
+        var termCount = 0;
+        var itemsCount = 0;
+        var otherStateCount = 0;
+        var projectorCount = 0;
+
+        final filtered = store.select3(
+          (s) {
+            ++termCount;
+            return s.term;
+          },
+          (s) {
+            ++itemsCount;
+            return s.items;
+          },
+          (s) {
+            ++otherStateCount;
+            return s.otherState.round();
+          },
+          (String? term, BuiltList<String> items, int otherState) {
+            ++projectorCount;
+            return items
+                .where((i) => i.contains(term ?? ''))
+                .take(otherState)
+                .toBuiltList();
+          },
+        );
+
+        expect(filtered.requireValue, <String>[].build());
+        final future = expectLater(
+          filtered,
+          emitsInOrder(<Object>[
+            ['0', '1'].build(),
+            ['4'].build(),
+          ]),
+        );
+
+        final numberOfActions = 6;
+        for (var i = 0; i < numberOfActions; i++) {
+          store.dispatch(i);
+        }
+        await pumpEventQueue(times: 50);
+        await future;
+
+        expect(termCount,
+            numberOfActions + 1); // inc. calling to produce seed value
+        expect(itemsCount,
+            numberOfActions + 1); // inc. calling to produce seed value
+        expect(otherStateCount,
+            numberOfActions + 1); // inc. calling to produce seed value
+        expect(projectorCount,
+            4 + 1); // 4 [*] and inc. calling to produce seed value
+      });
     });
   });
 }

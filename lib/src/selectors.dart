@@ -21,7 +21,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   }) =>
       stateStream.map(selector).distinctValue(selector(state), equals: equals);
 
-  /// Select two sub state and combine them by [projector].
+  /// Select two sub states and combine them by [projector].
   DistinctValueStream<Result> select2<SubState1, SubState2, Result>(
     SubState1 Function(State state) selector1,
     SubState2 Function(State state) selector2,
@@ -40,32 +40,30 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
         equals,
       );
 
-  /// TODO
-  DistinctValueStream<R> select3<S1, S2, S3, R>(
-    S1 Function(State state) selector1,
-    S2 Function(State state) selector2,
-    S3 Function(State state) selector3,
-    R Function(S1 subState1, S2 subState2, S3 subState3) projector, {
-    bool Function(S1 previous, S1 next)? equals1,
-    bool Function(S2 previous, S2 next)? equals2,
-    bool Function(S3 previous, S3 next)? equals3,
-    bool Function(R previous, R next)? equals,
-  }) {
-    return selectMany<R, Object?>(
-      [selector1, selector2, selector3],
-      [
-        _castToDynamicParams<S1>(equals1),
-        _castToDynamicParams<S2>(equals2),
-        _castToDynamicParams<S3>(equals3),
-      ],
-      (subStates) => projector(
-        subStates[0] as S1,
-        subStates[1] as S2,
-        subStates[2] as S3,
-      ),
-      equals: equals,
-    );
-  }
+  /// Select three sub states and combine them by [projector].
+  DistinctValueStream<Result> select3<SubState1, SubState2, SubState3, Result>(
+    SubState1 Function(State state) selector1,
+    SubState2 Function(State state) selector2,
+    SubState3 Function(State state) selector3,
+    Result Function(
+            SubState1 subState1, SubState2 subState2, SubState3 subState3)
+        projector, {
+    bool Function(SubState1 previous, SubState1 next)? equals1,
+    bool Function(SubState2 previous, SubState2 next)? equals2,
+    bool Function(SubState3 previous, SubState3 next)? equals3,
+    bool Function(Result previous, Result next)? equals,
+  }) =>
+      _select3Internal(
+        stateStream,
+        selector1,
+        selector2,
+        selector3,
+        projector,
+        equals1,
+        equals2,
+        equals3,
+        equals,
+      );
 
   /// TODO
   DistinctValueStream<Result> selectMany<Result, SubState>(
@@ -186,6 +184,76 @@ DistinctValueStream<Result>
   final state = stateStream.value;
   return controller.stream.distinctValue(
     projector(selector1(state), selector2(state)),
+    equals: equals,
+  );
+}
+
+DistinctValueStream<Result>
+    _select3Internal<State, SubState1, SubState2, SubState3, Result>(
+  DistinctValueStream<State> stateStream,
+  SubState1 Function(State state) selector1,
+  SubState2 Function(State state) selector2,
+  SubState3 Function(State state) selector3,
+  Result Function(SubState1 subState1, SubState2 subState2, SubState3 subState3)
+      projector,
+  bool Function(SubState1 previous, SubState1 next)? equals1,
+  bool Function(SubState2 previous, SubState2 next)? equals2,
+  bool Function(SubState3 previous, SubState3 next)? equals3,
+  bool Function(Result previous, Result next)? equals,
+) {
+  final eq1 = equals1 ?? DistinctValueStream.defaultEquals;
+  final eq2 = equals2 ?? DistinctValueStream.defaultEquals;
+  final eq3 = equals3 ?? DistinctValueStream.defaultEquals;
+
+  final controller = StreamController<Result>(sync: true);
+
+  StreamSubscription<State>? subscription;
+  Object? subState1 = _sentinel;
+  Object? subState2 = _sentinel;
+  Object? subState3 = _sentinel;
+
+  controller.onListen = () {
+    subscription = stateStream.listen(
+      (state) {
+        final prev1 = subState1;
+        final prev2 = subState2;
+        final prev3 = subState3;
+
+        final current1 = selector1(state);
+        final current2 = selector2(state);
+        final current3 = selector3(state);
+
+        if ((identical(prev1, _sentinel) &&
+                identical(prev2, _sentinel) &&
+                identical(prev3, _sentinel)) ||
+            (!eq1(prev1 as SubState1, current1) ||
+                !eq2(prev2 as SubState2, current2) ||
+                !eq3(prev3 as SubState3, current3))) {
+          subState1 = current1;
+          subState2 = current2;
+          subState3 = current3;
+          controller.add(projector(current1, current2, current3));
+        }
+      },
+      onDone: () {
+        subscription = null;
+        controller.close();
+      },
+    );
+  };
+  controller.onCancel = () {
+    subState1 = null;
+    subState2 = null;
+    subState3 = null;
+
+    final toCancel = subscription;
+    subscription = null;
+    return toCancel?.cancel();
+  };
+
+  final state = stateStream.value;
+  return controller.stream.distinctValue(
+    projector(selector1(state), selector2(state), selector3(state)),
     equals: equals,
   );
 }
