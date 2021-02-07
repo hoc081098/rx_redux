@@ -28,6 +28,8 @@ typedef Selector<State, V> = V Function(State state);
 ///   This practice is known as memoization.
 extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Observe a value of type [Result] exposed from a state stream, and listen only partially to changes.
+  ///
+  /// The returned Stream is a single-subscription Stream.
   DistinctValueStream<Result> select<Result>(
     Selector<State, Result> selector, {
     Equals<Result>? equals,
@@ -35,6 +37,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
       stateStream.map(selector).distinctValue(selector(state), equals: equals);
 
   /// Select two sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
   DistinctValueStream<Result> select2<SubState1, SubState2, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
@@ -54,6 +58,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
       );
 
   /// Select three sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
   DistinctValueStream<Result> select3<SubState1, SubState2, SubState3, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
@@ -79,6 +85,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
       );
 
   /// Select four sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
   DistinctValueStream<Result>
       select4<SubState1, SubState2, SubState3, SubState4, Result>(
     Selector<State, SubState1> selector1,
@@ -113,6 +121,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
           );
 
   /// Select five sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
   DistinctValueStream<Result>
       select5<SubState1, SubState2, SubState3, SubState4, SubState5, Result>(
     Selector<State, SubState1> selector1,
@@ -161,6 +171,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   }
 
   /// Select five sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
   DistinctValueStream<Result> select6<SubState1, SubState2, SubState3,
       SubState4, SubState5, SubState6, Result>(
     Selector<State, SubState1> selector1,
@@ -215,6 +227,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   }
 
   /// Select many sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
   DistinctValueStream<Result> selectMany<SubState, Result>(
     List<Selector<State, SubState>> selectors,
     List<Equals<SubState>?> subStateEquals,
