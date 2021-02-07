@@ -566,8 +566,8 @@ DistinctValueStream<Result>
         final current2 = selector2(state);
 
         if ((identical(prev1, _sentinel) && identical(prev2, _sentinel)) ||
-            (!eq1(prev1 as SubState1, current1) ||
-                !eq2(prev2 as SubState2, current2))) {
+            !(eq1(prev1 as SubState1, current1) &&
+                eq2(prev2 as SubState2, current2))) {
           subState1 = current1;
           subState2 = current2;
           controller.add(projector(current1, current2));
@@ -633,9 +633,9 @@ DistinctValueStream<Result>
         if ((identical(prev1, _sentinel) &&
                 identical(prev2, _sentinel) &&
                 identical(prev3, _sentinel)) ||
-            (!eq1(prev1 as SubState1, current1) ||
-                !eq2(prev2 as SubState2, current2) ||
-                !eq3(prev3 as SubState3, current3))) {
+            !(eq1(prev1 as SubState1, current1) &&
+                eq2(prev2 as SubState2, current2) &&
+                eq3(prev3 as SubState3, current3))) {
           subState1 = current1;
           subState2 = current2;
           subState3 = current3;
@@ -715,10 +715,10 @@ DistinctValueStream<Result>
                 identical(prev2, _sentinel) &&
                 identical(prev3, _sentinel) &&
                 identical(prev4, _sentinel)) ||
-            (!eq1(prev1 as SubState1, current1) ||
-                !eq2(prev2 as SubState2, current2) ||
-                !eq3(prev3 as SubState3, current3) ||
-                !eq4(prev4 as SubState4, current4))) {
+            !(eq1(prev1 as SubState1, current1) &&
+                eq2(prev2 as SubState2, current2) &&
+                eq3(prev3 as SubState3, current3) &&
+                eq4(prev4 as SubState4, current4))) {
           subState1 = current1;
           subState2 = current2;
           subState3 = current3;
