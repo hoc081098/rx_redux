@@ -15,13 +15,6 @@ import '../rx_redux.dart';
 ///   This practice is known as memoization.
 typedef Selector<State, V> = V Function(State state);
 
-Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) {
-  if (T == dynamic) {
-    throw StateError('Missing generic type');
-  }
-  return f == null ? null : (Object? l, Object? r) => f(l as T, r as T);
-}
-
 /// Select a sub state slice from state stream of [RxReduxStore].
 ///
 /// Inspirited by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
@@ -190,6 +183,13 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
 // _select3Internal
 // _select4Internal
 // from select5 to select9, using `selectMany`.
+
+Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) {
+  if (T == dynamic) {
+    throw StateError('Missing generic type');
+  }
+  return f == null ? null : (Object? l, Object? r) => f(l as T, r as T);
+}
 
 const _sentinel = Object();
 
