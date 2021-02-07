@@ -4,6 +4,17 @@ import 'package:distinct_value_connectable_stream/distinct_value_connectable_str
 
 import '../rx_redux.dart';
 
+/// Inspirited by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
+/// - Selectors can compute derived data, allowing Redux to store the minimal possible state.
+/// - Selectors are efficient. A selector is not recomputed unless one of its arguments changes.
+/// - When using the [select], [select2] to [select9], [selectMany] functions,
+///   keeps track of the latest arguments in which your selector function was invoked.
+///   Because selectors are pure functions, the last result can be returned
+///   when the arguments match without reinvoking your selector function.
+///   This can provide performance benefits, particularly with selectors that perform expensive computation.
+///   This practice is known as memoization.
+typedef Selector<State, V> = V Function(State state);
+
 Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) {
   if (T == dynamic) {
     throw StateError('Missing generic type');
@@ -12,18 +23,28 @@ Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) {
 }
 
 /// Select a sub state slice from state stream of [RxReduxStore].
+///
+/// Inspirited by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
+/// - Selectors can compute derived data, allowing Redux to store the minimal possible state.
+/// - Selectors are efficient. A selector is not recomputed unless one of its arguments changes.
+/// - When using the [select], [select2] to [select9], [selectMany] functions,
+///   keeps track of the latest arguments in which your selector function was invoked.
+///   Because selectors are pure functions, the last result can be returned
+///   when the arguments match without reinvoking your selector function.
+///   This can provide performance benefits, particularly with selectors that perform expensive computation.
+///   This practice is known as memoization.
 extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Observe a value of type [Result] exposed from a state stream, and listen only partially to changes.
   DistinctValueStream<Result> select<Result>(
-    Result Function(State state) selector, {
+    Selector<State, Result> selector, {
     Equals<Result>? equals,
   }) =>
       stateStream.map(selector).distinctValue(selector(state), equals: equals);
 
   /// Select two sub states and combine them by [projector].
   DistinctValueStream<Result> select2<SubState1, SubState2, Result>(
-    SubState1 Function(State state) selector1,
-    SubState2 Function(State state) selector2,
+    Selector<State, SubState1> selector1,
+    Selector<State, SubState2> selector2,
     Result Function(SubState1 subState1, SubState2 subState2) projector, {
     Equals<SubState1>? equals1,
     Equals<SubState2>? equals2,
@@ -41,9 +62,9 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
 
   /// Select three sub states and combine them by [projector].
   DistinctValueStream<Result> select3<SubState1, SubState2, SubState3, Result>(
-    SubState1 Function(State state) selector1,
-    SubState2 Function(State state) selector2,
-    SubState3 Function(State state) selector3,
+    Selector<State, SubState1> selector1,
+    Selector<State, SubState2> selector2,
+    Selector<State, SubState3> selector3,
     Result Function(
             SubState1 subState1, SubState2 subState2, SubState3 subState3)
         projector, {
@@ -64,9 +85,36 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
         equals,
       );
 
+  /// Select four sub states and combine them by [projector].
+  DistinctValueStream<Result>
+      select4<SubState1, SubState2, SubState3, SubState4, Result>(
+    Selector<State, SubState1> selector1,
+    Selector<State, SubState2> selector2,
+    Selector<State, SubState3> selector3,
+    Selector<State, SubState4> selector4,
+    Result Function(
+            SubState1 subState1, SubState2 subState2, SubState3 subState3)
+        projector, {
+    Equals<SubState1>? equals1,
+    Equals<SubState2>? equals2,
+    Equals<SubState3>? equals3,
+    Equals<Result>? equals,
+  }) =>
+          _select3Internal(
+            stateStream,
+            selector1,
+            selector2,
+            selector3,
+            projector,
+            equals1,
+            equals2,
+            equals3,
+            equals,
+          );
+
   /// Select many sub states and combine them by [projector].
   DistinctValueStream<Result> selectMany<Result, SubState>(
-    List<SubState Function(State state)> selectors,
+    List<Selector<State, SubState>> selectors,
     List<Equals<SubState>?> subStateEquals,
     Result Function(List<SubState> subStates) projector, {
     Equals<Result>? equals,
@@ -84,6 +132,9 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
       throw ArgumentError(
           'selectors contains single element. Use select(selector) instead.');
     }
+
+    selectors = selectors.toList(growable: false);
+    subStateEquals = subStateEquals.toList(growable: false);
 
     if (length == 2) {
       return _select2Internal<State, SubState, SubState, Result>(
@@ -110,9 +161,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
         equals,
       );
     }
-
-    selectors = selectors.toList(growable: false);
-    subStateEquals = subStateEquals.toList(growable: false);
 
     final selectSubStats =
         (State state) => selectors.map((s) => s(state)).toList(growable: false);
@@ -148,8 +196,8 @@ const _sentinel = Object();
 DistinctValueStream<Result>
     _select2Internal<State, SubState1, SubState2, Result>(
   DistinctValueStream<State> stateStream,
-  SubState1 Function(State state) selector1,
-  SubState2 Function(State state) selector2,
+  Selector<State, SubState1> selector1,
+  Selector<State, SubState2> selector2,
   Result Function(SubState1 subState1, SubState2 subState2) projector,
   Equals<SubState1>? equals1,
   Equals<SubState2>? equals2,
@@ -206,9 +254,9 @@ DistinctValueStream<Result>
 DistinctValueStream<Result>
     _select3Internal<State, SubState1, SubState2, SubState3, Result>(
   DistinctValueStream<State> stateStream,
-  SubState1 Function(State state) selector1,
-  SubState2 Function(State state) selector2,
-  SubState3 Function(State state) selector3,
+  Selector<State, SubState1> selector1,
+  Selector<State, SubState2> selector2,
+  Selector<State, SubState3> selector3,
   Result Function(SubState1 subState1, SubState2 subState2, SubState3 subState3)
       projector,
   Equals<SubState1>? equals1,
