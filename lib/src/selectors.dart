@@ -226,6 +226,210 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
     );
   }
 
+  /// Select seven sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
+  DistinctValueStream<Result> select7<SubState1, SubState2, SubState3,
+      SubState4, SubState5, SubState6, SubState7, Result>(
+    Selector<State, SubState1> selector1,
+    Selector<State, SubState2> selector2,
+    Selector<State, SubState3> selector3,
+    Selector<State, SubState4> selector4,
+    Selector<State, SubState5> selector5,
+    Selector<State, SubState6> selector6,
+    Selector<State, SubState7> selector7,
+    Result Function(
+      SubState1 subState1,
+      SubState2 subState2,
+      SubState3 subState3,
+      SubState4 subState4,
+      SubState5 subState5,
+      SubState6 subState6,
+      SubState7 subState7,
+    )
+        projector, {
+    Equals<SubState1>? equals1,
+    Equals<SubState2>? equals2,
+    Equals<SubState3>? equals3,
+    Equals<SubState4>? equals4,
+    Equals<SubState5>? equals5,
+    Equals<SubState6>? equals6,
+    Equals<SubState7>? equals7,
+    Equals<Result>? equals,
+  }) {
+    return selectMany<Object?, Result>(
+      [
+        selector1,
+        selector2,
+        selector3,
+        selector4,
+        selector5,
+        selector6,
+        selector7,
+      ],
+      [
+        _castToDynamicParams<SubState1>(equals1),
+        _castToDynamicParams<SubState2>(equals2),
+        _castToDynamicParams<SubState3>(equals3),
+        _castToDynamicParams<SubState4>(equals4),
+        _castToDynamicParams<SubState5>(equals5),
+        _castToDynamicParams<SubState6>(equals6),
+        _castToDynamicParams<SubState7>(equals7),
+      ],
+      (subStates) => projector(
+        subStates[0] as SubState1,
+        subStates[1] as SubState2,
+        subStates[2] as SubState3,
+        subStates[3] as SubState4,
+        subStates[4] as SubState5,
+        subStates[5] as SubState6,
+        subStates[6] as SubState7,
+      ),
+    );
+  }
+
+  /// Select eight sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
+  DistinctValueStream<Result> select8<SubState1, SubState2, SubState3,
+      SubState4, SubState5, SubState6, SubState7, SubState8, Result>(
+    Selector<State, SubState1> selector1,
+    Selector<State, SubState2> selector2,
+    Selector<State, SubState3> selector3,
+    Selector<State, SubState4> selector4,
+    Selector<State, SubState5> selector5,
+    Selector<State, SubState6> selector6,
+    Selector<State, SubState7> selector7,
+    Selector<State, SubState8> selector8,
+    Result Function(
+      SubState1 subState1,
+      SubState2 subState2,
+      SubState3 subState3,
+      SubState4 subState4,
+      SubState5 subState5,
+      SubState6 subState6,
+      SubState7 subState7,
+      SubState8 subState8,
+    )
+        projector, {
+    Equals<SubState1>? equals1,
+    Equals<SubState2>? equals2,
+    Equals<SubState3>? equals3,
+    Equals<SubState4>? equals4,
+    Equals<SubState5>? equals5,
+    Equals<SubState6>? equals6,
+    Equals<SubState7>? equals7,
+    Equals<SubState8>? equals8,
+    Equals<Result>? equals,
+  }) {
+    return selectMany<Object?, Result>(
+      [
+        selector1,
+        selector2,
+        selector3,
+        selector4,
+        selector5,
+        selector6,
+        selector7,
+        selector8,
+      ],
+      [
+        _castToDynamicParams<SubState1>(equals1),
+        _castToDynamicParams<SubState2>(equals2),
+        _castToDynamicParams<SubState3>(equals3),
+        _castToDynamicParams<SubState4>(equals4),
+        _castToDynamicParams<SubState5>(equals5),
+        _castToDynamicParams<SubState6>(equals6),
+        _castToDynamicParams<SubState7>(equals7),
+        _castToDynamicParams<SubState8>(equals8),
+      ],
+      (subStates) => projector(
+        subStates[0] as SubState1,
+        subStates[1] as SubState2,
+        subStates[2] as SubState3,
+        subStates[3] as SubState4,
+        subStates[4] as SubState5,
+        subStates[5] as SubState6,
+        subStates[6] as SubState7,
+        subStates[7] as SubState8,
+      ),
+    );
+  }
+
+  /// Select nine sub states and combine them by [projector].
+  ///
+  /// The returned Stream is a single-subscription Stream.
+  DistinctValueStream<Result> select9<SubState1, SubState2, SubState3,
+      SubState4, SubState5, SubState6, SubState7, SubState8, SubState9, Result>(
+    Selector<State, SubState1> selector1,
+    Selector<State, SubState2> selector2,
+    Selector<State, SubState3> selector3,
+    Selector<State, SubState4> selector4,
+    Selector<State, SubState5> selector5,
+    Selector<State, SubState6> selector6,
+    Selector<State, SubState7> selector7,
+    Selector<State, SubState8> selector8,
+    Selector<State, SubState9> selector9,
+    Result Function(
+      SubState1 subState1,
+      SubState2 subState2,
+      SubState3 subState3,
+      SubState4 subState4,
+      SubState5 subState5,
+      SubState6 subState6,
+      SubState7 subState7,
+      SubState8 subState8,
+      SubState9 subState9,
+    )
+        projector, {
+    Equals<SubState1>? equals1,
+    Equals<SubState2>? equals2,
+    Equals<SubState3>? equals3,
+    Equals<SubState4>? equals4,
+    Equals<SubState5>? equals5,
+    Equals<SubState6>? equals6,
+    Equals<SubState7>? equals7,
+    Equals<SubState8>? equals8,
+    Equals<SubState9>? equals9,
+    Equals<Result>? equals,
+  }) {
+    return selectMany<Object?, Result>(
+      [
+        selector1,
+        selector2,
+        selector3,
+        selector4,
+        selector5,
+        selector6,
+        selector7,
+        selector8,
+        selector9,
+      ],
+      [
+        _castToDynamicParams<SubState1>(equals1),
+        _castToDynamicParams<SubState2>(equals2),
+        _castToDynamicParams<SubState3>(equals3),
+        _castToDynamicParams<SubState4>(equals4),
+        _castToDynamicParams<SubState5>(equals5),
+        _castToDynamicParams<SubState6>(equals6),
+        _castToDynamicParams<SubState7>(equals7),
+        _castToDynamicParams<SubState8>(equals8),
+        _castToDynamicParams<SubState9>(equals9),
+      ],
+      (subStates) => projector(
+        subStates[0] as SubState1,
+        subStates[1] as SubState2,
+        subStates[2] as SubState3,
+        subStates[3] as SubState4,
+        subStates[4] as SubState5,
+        subStates[5] as SubState6,
+        subStates[6] as SubState7,
+        subStates[7] as SubState8,
+        subStates[8] as SubState9,
+      ),
+    );
+  }
+
   /// Select many sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
