@@ -425,6 +425,35 @@ void main() {
     });
 
     group('selector', () {
+      test('select', () async {
+        final store = RxReduxStore<int, String>(
+          initialState: '',
+          sideEffects: [],
+          reducer: (s, a) => a.toString(),
+        );
+
+        final length$ = store.select((s) => s.length);
+        expect(length$.value, 0);
+        expect(
+          length$,
+          emitsInOrder(<Object>[
+            1,
+            2,
+            3,
+            4,
+            emitsDone,
+          ]),
+        );
+
+        await pumpEventQueue(times: 50);
+
+        for (var i = 0; i <= 1000; i += 10) {
+          i.dispatchTo(store);
+        }
+        await pumpEventQueue(times: 50);
+        await store.dispose();
+      });
+
       test('select2', () async {
         final store = RxReduxStore<int, _State>(
           initialState: _State(true, null, <String>[].build(), 1),
@@ -496,6 +525,7 @@ void main() {
           emitsInOrder(<Object>[
             List.generate(10, (i) => i.toString()).build(),
             ['4'].build(),
+            emitsDone,
           ]),
         );
 
@@ -504,6 +534,7 @@ void main() {
           store.dispatch(i);
         }
         await pumpEventQueue(times: 50);
+        await store.dispose();
         await future;
 
         expect(termCount,
@@ -593,6 +624,7 @@ void main() {
           emitsInOrder(<Object>[
             ['0', '1'].build(),
             ['4'].build(),
+            emitsDone,
           ]),
         );
 
@@ -601,6 +633,7 @@ void main() {
           store.dispatch(i);
         }
         await pumpEventQueue(times: 50);
+        await store.dispose();
         await future;
 
         expect(termCount,
