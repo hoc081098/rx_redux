@@ -19,3 +19,4 @@ dev_dependencies:
   test: ^1.16.0-nullsafety.12
   rxdart: ^0.26.0-nullsafety.0
   built_collection: ^5.0.0-nullsafety.0
+  tuple: ^2.0.0-nullsafety.0

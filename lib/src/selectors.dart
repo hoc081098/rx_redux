@@ -510,14 +510,13 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
     final subStatesEquals = (List<SubState> previous, List<SubState> next) =>
         indices.every((i) => eqs[i](previous[i], next[i]));
 
+    final currentSubStates = selectSubStats(state);
+
     return stateStream
         .map(selectSubStats)
-        .distinct(subStatesEquals)
+        .distinctValue(currentSubStates, equals: subStatesEquals)
         .map(projector)
-        .distinctValue(
-          projector(selectSubStats(state)),
-          equals: equals,
-        );
+        .distinctValue(projector(currentSubStates), equals: equals);
   }
 }
 
@@ -535,8 +534,6 @@ Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) {
   return f == null ? null : (Object? l, Object? r) => f(l as T, r as T);
 }
 
-const _sentinel = Object();
-
 DistinctValueStream<Result>
     _select2Internal<State, SubState1, SubState2, Result>(
   DistinctValueStream<State> stateStream,
@@ -551,23 +548,20 @@ DistinctValueStream<Result>
   final eq2 = equals2 ?? DistinctValueStream.defaultEquals;
 
   final controller = StreamController<Result>(sync: true);
-
   StreamSubscription<State>? subscription;
-  Object? subState1 = _sentinel;
-  Object? subState2 = _sentinel;
+
+  final state = stateStream.value;
+  var subState1 = selector1(state);
+  var subState2 = selector2(state);
+  final initialResult = projector(subState1, subState2);
 
   controller.onListen = () {
     subscription = stateStream.listen(
       (state) {
-        final prev1 = subState1;
-        final prev2 = subState2;
-
         final current1 = selector1(state);
         final current2 = selector2(state);
 
-        if ((identical(prev1, _sentinel) && identical(prev2, _sentinel)) ||
-            !(eq1(prev1 as SubState1, current1) &&
-                eq2(prev2 as SubState2, current2))) {
+        if (!(eq1(subState1, current1) && eq2(subState2, current2))) {
           subState1 = current1;
           subState2 = current2;
           controller.add(projector(current1, current2));
@@ -580,19 +574,12 @@ DistinctValueStream<Result>
     );
   };
   controller.onCancel = () {
-    subState1 = null;
-    subState2 = null;
-
     final toCancel = subscription;
     subscription = null;
     return toCancel?.cancel();
   };
 
-  final state = stateStream.value;
-  return controller.stream.distinctValue(
-    projector(selector1(state), selector2(state)),
-    equals: equals,
-  );
+  return controller.stream.distinctValue(initialResult, equals: equals);
 }
 
 DistinctValueStream<Result>
@@ -613,29 +600,24 @@ DistinctValueStream<Result>
   final eq3 = equals3 ?? DistinctValueStream.defaultEquals;
 
   final controller = StreamController<Result>(sync: true);
-
   StreamSubscription<State>? subscription;
-  Object? subState1 = _sentinel;
-  Object? subState2 = _sentinel;
-  Object? subState3 = _sentinel;
+
+  final state = stateStream.value;
+  var subState1 = selector1(state);
+  var subState2 = selector2(state);
+  var subState3 = selector3(state);
+  final initialResult = projector(subState1, subState2, subState3);
 
   controller.onListen = () {
     subscription = stateStream.listen(
       (state) {
-        final prev1 = subState1;
-        final prev2 = subState2;
-        final prev3 = subState3;
-
         final current1 = selector1(state);
         final current2 = selector2(state);
         final current3 = selector3(state);
 
-        if ((identical(prev1, _sentinel) &&
-                identical(prev2, _sentinel) &&
-                identical(prev3, _sentinel)) ||
-            !(eq1(prev1 as SubState1, current1) &&
-                eq2(prev2 as SubState2, current2) &&
-                eq3(prev3 as SubState3, current3))) {
+        if (!(eq1(subState1, current1) &&
+            eq2(subState2, current2) &&
+            eq3(subState3, current3))) {
           subState1 = current1;
           subState2 = current2;
           subState3 = current3;
@@ -649,20 +631,12 @@ DistinctValueStream<Result>
     );
   };
   controller.onCancel = () {
-    subState1 = null;
-    subState2 = null;
-    subState3 = null;
-
     final toCancel = subscription;
     subscription = null;
     return toCancel?.cancel();
   };
 
-  final state = stateStream.value;
-  return controller.stream.distinctValue(
-    projector(selector1(state), selector2(state), selector3(state)),
-    equals: equals,
-  );
+  return controller.stream.distinctValue(initialResult, equals: equals);
 }
 
 DistinctValueStream<Result>
@@ -691,34 +665,27 @@ DistinctValueStream<Result>
   final eq4 = equals4 ?? DistinctValueStream.defaultEquals;
 
   final controller = StreamController<Result>(sync: true);
-
   StreamSubscription<State>? subscription;
-  Object? subState1 = _sentinel;
-  Object? subState2 = _sentinel;
-  Object? subState3 = _sentinel;
-  Object? subState4 = _sentinel;
+
+  final state = stateStream.value;
+  var subState1 = selector1(state);
+  var subState2 = selector2(state);
+  var subState3 = selector3(state);
+  var subState4 = selector4(state);
+  final initialResult = projector(subState1, subState2, subState3, subState4);
 
   controller.onListen = () {
     subscription = stateStream.listen(
       (state) {
-        final prev1 = subState1;
-        final prev2 = subState2;
-        final prev3 = subState3;
-        final prev4 = subState4;
-
         final current1 = selector1(state);
         final current2 = selector2(state);
         final current3 = selector3(state);
         final current4 = selector4(state);
 
-        if ((identical(prev1, _sentinel) &&
-                identical(prev2, _sentinel) &&
-                identical(prev3, _sentinel) &&
-                identical(prev4, _sentinel)) ||
-            !(eq1(prev1 as SubState1, current1) &&
-                eq2(prev2 as SubState2, current2) &&
-                eq3(prev3 as SubState3, current3) &&
-                eq4(prev4 as SubState4, current4))) {
+        if (!(eq1(subState1, current1) &&
+            eq2(subState2, current2) &&
+            eq3(subState3, current3) &&
+            eq4(subState4, current4))) {
           subState1 = current1;
           subState2 = current2;
           subState3 = current3;
@@ -733,24 +700,10 @@ DistinctValueStream<Result>
     );
   };
   controller.onCancel = () {
-    subState1 = null;
-    subState2 = null;
-    subState3 = null;
-    subState4 = null;
-
     final toCancel = subscription;
     subscription = null;
     return toCancel?.cancel();
   };
 
-  final state = stateStream.value;
-  return controller.stream.distinctValue(
-    projector(
-      selector1(state),
-      selector2(state),
-      selector3(state),
-      selector4(state),
-    ),
-    equals: equals,
-  );
+  return controller.stream.distinctValue(initialResult, equals: equals);
 }

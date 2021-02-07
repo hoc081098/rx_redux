@@ -2,6 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:rx_redux/rx_redux.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:test/test.dart';
+import 'package:tuple/tuple.dart';
 
 enum Action {
   action1,
@@ -645,6 +646,79 @@ void main() {
         expect(projectorCount,
             4 + 1); // 4 [*] and inc. calling to produce seed value
       });
+
+      test('select4', () async {
+        final initial = Tuple5(0, 1.0, '', true, <String>[].build());
+
+        final store = RxReduxStore<int,
+            Tuple5<int, double, String, bool, BuiltList<String>>>(
+          initialState: initial,
+          sideEffects: [],
+          reducer: (s, a) {
+            switch (a) {
+              case 0:
+                return s;
+              case 1:
+                return s.withItem5(s.item5.rebuild((b) => b.remove('01')));
+              case 2:
+                return s.withItem1(s.item1 + 1);
+              case 3:
+                return s.withItem2(s.item2 + 2);
+              case 4:
+                return s.withItem5(s.item5.rebuild((b) => b.add('01')));
+              case 5:
+                return s;
+              case 6:
+                return s.withItem3(s.item3 + '3');
+              case 7:
+                return s.withItem4(!s.item4);
+              case 8:
+                return s.withItem5(s.item5.rebuild((b) => b.add('5')));
+              default:
+                throw a;
+            }
+          },
+        );
+
+        final tuple$ = store.select4(
+          expectAsync1((state) => state.item1, count: 7 + 1),
+          // 7 action causes state changed
+          expectAsync1((state) => state.item2, count: 7 + 1),
+          // 7 action causes state changed
+          expectAsync1((state) => state.item3, count: 7 + 1),
+          // 7 action causes state changed
+          expectAsync1((state) => state.item4, count: 7 + 1),
+          // 7 action causes state changed
+          expectAsync4(
+            (int subState1, double subState2, String subState3,
+                    bool subState4) =>
+                Tuple4(subState1, subState2, subState3, subState4),
+            count: 4 + 1, // inc. calling to produce seed value
+          ),
+        );
+
+        final tuple4 = Tuple4<int, double, String, bool>(0, 1.0, '', true);
+        expect(tuple$.value, tuple4);
+        final future = expectLater(
+          tuple$,
+          emitsInOrder(<Object>[
+            Tuple4(0, 1.0, '', false), // 7
+            Tuple4(0, 1.0, '3', false), // 6
+            Tuple4(0, 3.0, '3', false), // 3
+            Tuple4(1, 3.0, '3', false), // 2
+            emitsDone,
+          ]),
+        );
+
+        for (var i = 8; i >= 0; i--) {
+          i.dispatchTo(store);
+        }
+        await pumpEventQueue(times: 100);
+        await store.dispose();
+        await future;
+      });
+
+      group('selectMany', () {});
     });
   });
 }
