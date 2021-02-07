@@ -86,22 +86,29 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
     Selector<State, SubState3> selector3,
     Selector<State, SubState4> selector4,
     Result Function(
-            SubState1 subState1, SubState2 subState2, SubState3 subState3)
+      SubState1 subState1,
+      SubState2 subState2,
+      SubState3 subState3,
+      SubState4 subState4,
+    )
         projector, {
     Equals<SubState1>? equals1,
     Equals<SubState2>? equals2,
     Equals<SubState3>? equals3,
+    Equals<SubState4>? equals4,
     Equals<Result>? equals,
   }) =>
-          _select3Internal(
+          _select4Internal(
             stateStream,
             selector1,
             selector2,
             selector3,
+            selector4,
             projector,
             equals1,
             equals2,
             equals3,
+            equals4,
             equals,
           );
 
@@ -317,6 +324,96 @@ DistinctValueStream<Result>
   final state = stateStream.value;
   return controller.stream.distinctValue(
     projector(selector1(state), selector2(state), selector3(state)),
+    equals: equals,
+  );
+}
+
+DistinctValueStream<Result>
+    _select4Internal<State, SubState1, SubState2, SubState3, SubState4, Result>(
+  DistinctValueStream<State> stateStream,
+  Selector<State, SubState1> selector1,
+  Selector<State, SubState2> selector2,
+  Selector<State, SubState3> selector3,
+  Selector<State, SubState4> selector4,
+  Result Function(
+    SubState1 subState1,
+    SubState2 subState2,
+    SubState3 subState3,
+    SubState4 subState4,
+  )
+      projector,
+  Equals<SubState1>? equals1,
+  Equals<SubState2>? equals2,
+  Equals<SubState3>? equals3,
+  Equals<SubState4>? equals4,
+  Equals<Result>? equals,
+) {
+  final eq1 = equals1 ?? DistinctValueStream.defaultEquals;
+  final eq2 = equals2 ?? DistinctValueStream.defaultEquals;
+  final eq3 = equals3 ?? DistinctValueStream.defaultEquals;
+  final eq4 = equals4 ?? DistinctValueStream.defaultEquals;
+
+  final controller = StreamController<Result>(sync: true);
+
+  StreamSubscription<State>? subscription;
+  Object? subState1 = _sentinel;
+  Object? subState2 = _sentinel;
+  Object? subState3 = _sentinel;
+  Object? subState4 = _sentinel;
+
+  controller.onListen = () {
+    subscription = stateStream.listen(
+      (state) {
+        final prev1 = subState1;
+        final prev2 = subState2;
+        final prev3 = subState3;
+        final prev4 = subState4;
+
+        final current1 = selector1(state);
+        final current2 = selector2(state);
+        final current3 = selector3(state);
+        final current4 = selector4(state);
+
+        if ((identical(prev1, _sentinel) &&
+                identical(prev2, _sentinel) &&
+                identical(prev3, _sentinel) &&
+                identical(prev4, _sentinel)) ||
+            (!eq1(prev1 as SubState1, current1) ||
+                !eq2(prev2 as SubState2, current2) ||
+                !eq3(prev3 as SubState3, current3) ||
+                !eq4(prev4 as SubState4, current4))) {
+          subState1 = current1;
+          subState2 = current2;
+          subState3 = current3;
+          subState4 = current4;
+          controller.add(projector(current1, current2, current3, current4));
+        }
+      },
+      onDone: () {
+        subscription = null;
+        controller.close();
+      },
+    );
+  };
+  controller.onCancel = () {
+    subState1 = null;
+    subState2 = null;
+    subState3 = null;
+    subState4 = null;
+
+    final toCancel = subscription;
+    subscription = null;
+    return toCancel?.cancel();
+  };
+
+  final state = stateStream.value;
+  return controller.stream.distinctValue(
+    projector(
+      selector1(state),
+      selector2(state),
+      selector3(state),
+      selector4(state),
+    ),
     equals: equals,
   );
 }
