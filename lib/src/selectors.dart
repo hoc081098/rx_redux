@@ -64,7 +64,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
         equals,
       );
 
-  /// TODO
+  /// Select many sub states and combine them by [projector].
   DistinctValueStream<Result> selectMany<Result, SubState>(
     List<SubState Function(State state)> selectors,
     List<Equals<SubState>?> subStateEquals,
@@ -81,15 +81,10 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
       throw ArgumentError('selectors and subStateEquals must be not empty');
     }
     if (length == 1) {
-      final selector = selectors.first;
-      final subStateEqual = subStateEquals.first;
-
-      return stateStream
-          .map((s) => selector(s))
-          .distinct(subStateEqual)
-          .map((s) => projector([s]))
-          .distinctValue(projector([selector(state)]), equals: equals);
+      throw ArgumentError(
+          'selectors contains single element. Use select(selector) instead.');
     }
+
     if (length == 2) {
       return _select2Internal<State, SubState, SubState, Result>(
         stateStream,
@@ -98,6 +93,20 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
         (subState1, subState2) => projector([subState1, subState2]),
         subStateEquals[0],
         subStateEquals[1],
+        equals,
+      );
+    }
+    if (length == 3) {
+      return _select3Internal<State, SubState, SubState, SubState, Result>(
+        stateStream,
+        selectors[0],
+        selectors[1],
+        selectors[2],
+        (subState1, subState2, subState3) =>
+            projector([subState1, subState2, subState3]),
+        subStateEquals[0],
+        subStateEquals[1],
+        subStateEquals[2],
         equals,
       );
     }
