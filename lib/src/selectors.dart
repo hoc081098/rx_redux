@@ -263,6 +263,23 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
         equals,
       );
     }
+    if (length == 4) {
+      return _select4Internal<State, SubState, SubState, SubState, SubState,
+          Result>(
+        stateStream,
+        selectors[0],
+        selectors[1],
+        selectors[2],
+        selectors[3],
+        (subState1, subState2, subState3, subState4) =>
+            projector([subState1, subState2, subState3, subState4]),
+        subStateEquals[0],
+        subStateEquals[1],
+        subStateEquals[2],
+        subStateEquals[3],
+        equals,
+      );
+    }
 
     final selectSubStats =
         (State state) => selectors.map((s) => s(state)).toList(growable: false);
