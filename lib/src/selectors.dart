@@ -4,8 +4,7 @@ import 'package:distinct_value_connectable_stream/distinct_value_connectable_str
 
 import '../rx_redux.dart';
 
-bool Function(Object?, Object?)? _castToDynamicParams<T>(
-    bool Function(T previous, T next)? f) {
+Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) {
   if (T == dynamic) {
     throw StateError('Missing generic type');
   }
@@ -17,7 +16,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Observe a value of type [Result] exposed from a state stream, and listen only partially to changes.
   DistinctValueStream<Result> select<Result>(
     Result Function(State state) selector, {
-    bool Function(Result previous, Result next)? equals,
+    Equals<Result>? equals,
   }) =>
       stateStream.map(selector).distinctValue(selector(state), equals: equals);
 
@@ -26,9 +25,9 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
     SubState1 Function(State state) selector1,
     SubState2 Function(State state) selector2,
     Result Function(SubState1 subState1, SubState2 subState2) projector, {
-    bool Function(SubState1 previous, SubState1 next)? equals1,
-    bool Function(SubState2 previous, SubState2 next)? equals2,
-    bool Function(Result previous, Result next)? equals,
+    Equals<SubState1>? equals1,
+    Equals<SubState2>? equals2,
+    Equals<Result>? equals,
   }) =>
       _select2Internal(
         stateStream,
@@ -48,10 +47,10 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
     Result Function(
             SubState1 subState1, SubState2 subState2, SubState3 subState3)
         projector, {
-    bool Function(SubState1 previous, SubState1 next)? equals1,
-    bool Function(SubState2 previous, SubState2 next)? equals2,
-    bool Function(SubState3 previous, SubState3 next)? equals3,
-    bool Function(Result previous, Result next)? equals,
+    Equals<SubState1>? equals1,
+    Equals<SubState2>? equals2,
+    Equals<SubState3>? equals3,
+    Equals<Result>? equals,
   }) =>
       _select3Internal(
         stateStream,
@@ -68,9 +67,9 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// TODO
   DistinctValueStream<Result> selectMany<Result, SubState>(
     List<SubState Function(State state)> selectors,
-    List<bool Function(SubState previous, SubState next)?> subStateEquals,
+    List<Equals<SubState>?> subStateEquals,
     Result Function(List<SubState> subStates) projector, {
-    bool Function(Result previous, Result next)? equals,
+    Equals<Result>? equals,
   }) {
     final length = selectors.length;
     if (length != subStateEquals.length) {
@@ -136,9 +135,9 @@ DistinctValueStream<Result>
   SubState1 Function(State state) selector1,
   SubState2 Function(State state) selector2,
   Result Function(SubState1 subState1, SubState2 subState2) projector,
-  bool Function(SubState1 previous, SubState1 next)? equals1,
-  bool Function(SubState2 previous, SubState2 next)? equals2,
-  bool Function(Result previous, Result next)? equals,
+  Equals<SubState1>? equals1,
+  Equals<SubState2>? equals2,
+  Equals<Result>? equals,
 ) {
   final eq1 = equals1 ?? DistinctValueStream.defaultEquals;
   final eq2 = equals2 ?? DistinctValueStream.defaultEquals;
@@ -196,10 +195,10 @@ DistinctValueStream<Result>
   SubState3 Function(State state) selector3,
   Result Function(SubState1 subState1, SubState2 subState2, SubState3 subState3)
       projector,
-  bool Function(SubState1 previous, SubState1 next)? equals1,
-  bool Function(SubState2 previous, SubState2 next)? equals2,
-  bool Function(SubState3 previous, SubState3 next)? equals3,
-  bool Function(Result previous, Result next)? equals,
+  Equals<SubState1>? equals1,
+  Equals<SubState2>? equals2,
+  Equals<SubState3>? equals3,
+  Equals<Result>? equals,
 ) {
   final eq1 = equals1 ?? DistinctValueStream.defaultEquals;
   final eq2 = equals2 ?? DistinctValueStream.defaultEquals;

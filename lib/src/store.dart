@@ -8,6 +8,12 @@ import 'reducer.dart';
 import 'redux_store_stream_transformer.dart';
 import 'side_effect.dart';
 
+/// Determine equality.
+typedef Equals<T> = bool Function(T previous, T next);
+
+/// Handle an error and the corresponding stack trace.
+typedef ErrorHandler = void Function(Object error, StackTrace stackTrace);
+
 /// A [SideEffect] that returns a never-completed Stream and on each action received,
 /// adding it to [outputSink].
 SideEffect<A, S> _onEachActionSideEffect<A, S>(StreamSink<A> outputSink) {
@@ -27,8 +33,7 @@ SideEffect<A, S> _onEachActionSideEffect<A, S>(StreamSink<A> outputSink) {
 }
 
 extension _StreamExtension<S> on Stream<S> {
-  Stream<S> handleErrorIfNeeded(
-          void Function(Object, StackTrace)? errorHandler) =>
+  Stream<S> handleErrorIfNeeded(ErrorHandler? errorHandler) =>
       errorHandler == null ? this : handleError(errorHandler);
 }
 
@@ -64,8 +69,8 @@ class RxReduxStore<A, S> {
     required S initialState,
     required List<SideEffect<A, S>> sideEffects,
     required Reducer<A, S> reducer,
-    void Function(Object, StackTrace)? errorHandler,
-    bool Function(S previous, S next)? equals,
+    ErrorHandler? errorHandler,
+    Equals<S>? equals,
     RxReduxLogger? logger,
   }) {
     final actionController = StreamController<A>(sync: true);
