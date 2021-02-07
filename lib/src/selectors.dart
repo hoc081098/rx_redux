@@ -127,6 +127,13 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   }
 }
 
+//
+// Optimized for performance instead of using `selectMany`.
+// _select2Internal
+// _select3Internal
+// _select4Internal
+// from select5 to select9, using `selectMany`.
+
 const _sentinel = Object();
 
 DistinctValueStream<Result>
