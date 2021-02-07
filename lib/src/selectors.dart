@@ -112,8 +112,110 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
             equals,
           );
 
+  /// Select five sub states and combine them by [projector].
+  DistinctValueStream<Result>
+      select5<SubState1, SubState2, SubState3, SubState4, SubState5, Result>(
+    Selector<State, SubState1> selector1,
+    Selector<State, SubState2> selector2,
+    Selector<State, SubState3> selector3,
+    Selector<State, SubState4> selector4,
+    Selector<State, SubState5> selector5,
+    Result Function(
+      SubState1 subState1,
+      SubState2 subState2,
+      SubState3 subState3,
+      SubState4 subState4,
+      SubState5 subState5,
+    )
+        projector, {
+    Equals<SubState1>? equals1,
+    Equals<SubState2>? equals2,
+    Equals<SubState3>? equals3,
+    Equals<SubState4>? equals4,
+    Equals<SubState5>? equals5,
+    Equals<Result>? equals,
+  }) {
+    return selectMany<Object?, Result>(
+      [
+        selector1,
+        selector2,
+        selector3,
+        selector4,
+        selector5,
+      ],
+      [
+        _castToDynamicParams<SubState1>(equals1),
+        _castToDynamicParams<SubState2>(equals2),
+        _castToDynamicParams<SubState3>(equals3),
+        _castToDynamicParams<SubState4>(equals4),
+        _castToDynamicParams<SubState5>(equals5),
+      ],
+      (subStates) => projector(
+        subStates[0] as SubState1,
+        subStates[1] as SubState2,
+        subStates[2] as SubState3,
+        subStates[3] as SubState4,
+        subStates[4] as SubState5,
+      ),
+    );
+  }
+
+  /// Select five sub states and combine them by [projector].
+  DistinctValueStream<Result> select6<SubState1, SubState2, SubState3,
+      SubState4, SubState5, SubState6, Result>(
+    Selector<State, SubState1> selector1,
+    Selector<State, SubState2> selector2,
+    Selector<State, SubState3> selector3,
+    Selector<State, SubState4> selector4,
+    Selector<State, SubState5> selector5,
+    Selector<State, SubState6> selector6,
+    Result Function(
+      SubState1 subState1,
+      SubState2 subState2,
+      SubState3 subState3,
+      SubState4 subState4,
+      SubState5 subState5,
+      SubState6 subState6,
+    )
+        projector, {
+    Equals<SubState1>? equals1,
+    Equals<SubState2>? equals2,
+    Equals<SubState3>? equals3,
+    Equals<SubState4>? equals4,
+    Equals<SubState5>? equals5,
+    Equals<SubState6>? equals6,
+    Equals<Result>? equals,
+  }) {
+    return selectMany<Object?, Result>(
+      [
+        selector1,
+        selector2,
+        selector3,
+        selector4,
+        selector5,
+        selector6,
+      ],
+      [
+        _castToDynamicParams<SubState1>(equals1),
+        _castToDynamicParams<SubState2>(equals2),
+        _castToDynamicParams<SubState3>(equals3),
+        _castToDynamicParams<SubState4>(equals4),
+        _castToDynamicParams<SubState5>(equals5),
+        _castToDynamicParams<SubState6>(equals6),
+      ],
+      (subStates) => projector(
+        subStates[0] as SubState1,
+        subStates[1] as SubState2,
+        subStates[2] as SubState3,
+        subStates[3] as SubState4,
+        subStates[4] as SubState5,
+        subStates[5] as SubState6,
+      ),
+    );
+  }
+
   /// Select many sub states and combine them by [projector].
-  DistinctValueStream<Result> selectMany<Result, SubState>(
+  DistinctValueStream<Result> selectMany<SubState, Result>(
     List<Selector<State, SubState>> selectors,
     List<Equals<SubState>?> subStateEquals,
     Result Function(List<SubState> subStates) projector, {
