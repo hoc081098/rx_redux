@@ -526,13 +526,10 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
 // _select3Internal
 // _select4Internal
 // from select5 to select9, using `selectMany`.
-
-Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) {
-  if (T == dynamic) {
-    throw StateError('Missing generic type');
-  }
-  return f == null ? null : (Object? l, Object? r) => f(l as T, r as T);
-}
+@pragma('vm:prefer-inline')
+@pragma('dart2js:tryInline')
+Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) =>
+    f == null ? null : (Object? l, Object? r) => f(l as T, r as T);
 
 DistinctValueStream<Result>
     _select2Internal<State, SubState1, SubState2, Result>(
