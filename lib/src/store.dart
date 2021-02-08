@@ -33,6 +33,8 @@ SideEffect<A, S> _onEachActionSideEffect<A, S>(StreamSink<A> outputSink) {
 }
 
 extension _StreamExtension<S> on Stream<S> {
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
   Stream<S> handleErrorIfNeeded(ErrorHandler? errorHandler) =>
       errorHandler == null ? this : handleError(errorHandler);
 }
