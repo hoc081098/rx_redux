@@ -518,6 +518,8 @@ void main() {
             ++projectorCount;
             return items.where((i) => i.contains(term ?? '')).toBuiltList();
           },
+          equals2: (BuiltList<String> prev, BuiltList<String> next) =>
+              prev == next,
         );
 
         expect(filtered.requireValue, <String>[].build());
@@ -617,6 +619,7 @@ void main() {
                 .take(otherState)
                 .toBuiltList();
           },
+          equals3: (int prev, int next) => prev == next,
         );
 
         expect(filtered.requireValue, <String>[].build());
@@ -695,6 +698,7 @@ void main() {
                 Tuple4(subState1, subState2, subState3, subState4),
             count: 4 + 1, // inc. calling to produce seed value
           ),
+          equals3: (String prev, String next) => prev == next,
         );
 
         final tuple4 = Tuple4<int, double, String, bool>(0, 1.0, '', true);
@@ -780,6 +784,7 @@ void main() {
                 Tuple5(subState1, subState2, subState3, subState4, subState5),
             count: 5 + 1, // inc. calling to produce seed value
           ),
+          equals3: (String prev, String next) => prev == next,
         );
 
         expect(tuple$.value, Tuple5(0, 1.0, '', true, <String>[].build()));
