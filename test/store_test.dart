@@ -14,6 +14,33 @@ enum Action {
   actionNoOp
 }
 
+class _State {
+  final bool isLoading;
+  final String? term;
+  final BuiltList<String> items;
+  final double otherState;
+
+  _State(this.isLoading, this.term, this.items, this.otherState);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _State &&
+          runtimeType == other.runtimeType &&
+          isLoading == other.isLoading &&
+          term == other.term &&
+          items == other.items &&
+          otherState == other.otherState;
+
+  @override
+  int get hashCode =>
+      isLoading.hashCode ^ term.hashCode ^ items.hashCode ^ otherState.hashCode;
+
+  @override
+  String toString() =>
+      '_State{isLoading: $isLoading, term: $term, items: $items, otherState: $otherState}';
+}
+
 Future<void> delay(int millis) =>
     Future.delayed(Duration(milliseconds: millis));
 
@@ -1403,31 +1430,4 @@ void main() {
       });
     });
   });
-}
-
-class _State {
-  final bool isLoading;
-  final String? term;
-  final BuiltList<String> items;
-  final double otherState;
-
-  _State(this.isLoading, this.term, this.items, this.otherState);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is _State &&
-          runtimeType == other.runtimeType &&
-          isLoading == other.isLoading &&
-          term == other.term &&
-          items == other.items &&
-          otherState == other.otherState;
-
-  @override
-  int get hashCode =>
-      isLoading.hashCode ^ term.hashCode ^ items.hashCode ^ otherState.hashCode;
-
-  @override
-  String toString() =>
-      '_State{isLoading: $isLoading, term: $term, items: $items, otherState: $otherState}';
 }
