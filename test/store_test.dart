@@ -808,6 +808,113 @@ void main() {
         await future;
       });
 
+      test('select6', () async {
+        final initial = Tuple7(
+          0,
+          1.0,
+          '',
+          true,
+          <String>[].build(),
+          <String, int>{}.build(),
+          <String>{}.build(),
+        );
+
+        final store = RxReduxStore<
+            int,
+            Tuple7<int, double, String, bool, BuiltList<String>,
+                BuiltMap<String, int>, BuiltSet<String>>>(
+          initialState: initial,
+          sideEffects: [],
+          reducer: (s, a) {
+            switch (a) {
+              case 0:
+                return s;
+              case 1:
+                return s.withItem1(s.item1 + a); // [item 1]
+              case 2:
+                return s.withItem2(s.item2 + a); // [item 2]
+              case 3:
+                return s.withItem7(s.item7
+                    .rebuild((b) => b.add(a.toString()))); // ------------
+              case 4:
+                return s.withItem3(s.item3 + a.toString()); // [item 3]
+              case 5:
+                return s.withItem4(!s.item4); // [item 4]
+              case 6:
+                return s.withItem7(s.item7
+                    .rebuild((b) => b.add(a.toString()))); // ------------
+              case 7:
+                return s.withItem5(
+                    s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
+              case 8:
+                return s
+                    .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
+              case 9:
+                return s;
+              default:
+                throw a;
+            }
+          },
+        );
+
+        final tuple$ = store.select6(
+          expectAsync1((state) => state.item1, count: 8 + 1),
+          // 8 action causes state changed
+          expectAsync1((state) => state.item2, count: 8 + 1),
+          // 8 action causes state changed
+          expectAsync1((state) => state.item3, count: 8 + 1),
+          // 8 action causes state changed
+          expectAsync1((state) => state.item4, count: 8 + 1),
+          // 8 action causes state changed
+          expectAsync1((state) => state.item5, count: 8 + 1),
+          // 8 action causes state changed
+          expectAsync1((state) => state.item6, count: 8 + 1),
+          // 8 action causes state changed
+          expectAsync6(
+            (int subState1,
+                    double subState2,
+                    String subState3,
+                    bool subState4,
+                    BuiltList<String> subState5,
+                    BuiltMap<String, int> subState6) =>
+                Tuple6(subState1, subState2, subState3, subState4, subState5,
+                    subState6),
+            count: 6 + 1, // inc. calling to produce seed value
+          ),
+          equals3: (String prev, String next) => prev == next,
+        );
+
+        expect(
+            tuple$.value,
+            Tuple6(
+                0, 1.0, '', true, <String>[].build(), <String, int>{}.build()));
+        final future = expectLater(
+          tuple$,
+          emitsInOrder(<Object>[
+            Tuple6(
+                1, 1.0, '', true, <String>[].build(), <String, int>{}.build()),
+            Tuple6(
+                1, 3.0, '', true, <String>[].build(), <String, int>{}.build()),
+            Tuple6(
+                1, 3.0, '4', true, <String>[].build(), <String, int>{}.build()),
+            Tuple6(1, 3.0, '4', false, <String>[].build(),
+                <String, int>{}.build()),
+            Tuple6(1, 3.0, '4', false, <String>['7'].build(),
+                <String, int>{}.build()),
+            Tuple6(1, 3.0, '4', false, <String>['7'].build(),
+                <String, int>{'@': 8}.build()),
+            emitsDone,
+          ]),
+        );
+
+        for (var i = 0; i <= 9; i++) {
+          i.dispatchTo(store);
+        }
+        await pumpEventQueue(times: 100);
+        await store.dispose();
+        await future;
+      });
+
       group('selectMany', () {
         test('~= select2', () async {
           final store = RxReduxStore<int, _State>(
@@ -1178,6 +1285,115 @@ void main() {
           );
 
           for (var i = 0; i <= 8; i++) {
+            i.dispatchTo(store);
+          }
+          await pumpEventQueue(times: 100);
+          await store.dispose();
+          await future;
+        });
+
+        test('~= select6', () async {
+          final initial = Tuple7(
+            0,
+            1.0,
+            '',
+            true,
+            <String>[].build(),
+            <String, int>{}.build(),
+            <String>{}.build(),
+          );
+
+          final store = RxReduxStore<
+              int,
+              Tuple7<int, double, String, bool, BuiltList<String>,
+                  BuiltMap<String, int>, BuiltSet<String>>>(
+            initialState: initial,
+            sideEffects: [],
+            reducer: (s, a) {
+              switch (a) {
+                case 0:
+                  return s;
+                case 1:
+                  return s.withItem1(s.item1 + a); // [item 1]
+                case 2:
+                  return s.withItem2(s.item2 + a); // [item 2]
+                case 3:
+                  return s.withItem7(s.item7
+                      .rebuild((b) => b.add(a.toString()))); // ------------
+                case 4:
+                  return s.withItem3(s.item3 + a.toString()); // [item 3]
+                case 5:
+                  return s.withItem4(!s.item4); // [item 4]
+                case 6:
+                  return s.withItem7(s.item7
+                      .rebuild((b) => b.add(a.toString()))); // ------------
+                case 7:
+                  return s.withItem5(
+                      s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
+                case 8:
+                  return s.withItem6(
+                      s.item6.rebuild((b) => b['@'] = a)); // [item 6]
+                case 9:
+                  return s;
+                default:
+                  throw a;
+              }
+            },
+          );
+
+          final tuple$ = store.selectMany(
+            [
+              expectAsync1((state) => state.item1, count: 8 + 1),
+              // 8 action causes state changed
+              expectAsync1((state) => state.item2, count: 8 + 1),
+              // 8 action causes state changed
+              expectAsync1((state) => state.item3, count: 8 + 1),
+              // 8 action causes state changed
+              expectAsync1((state) => state.item4, count: 8 + 1),
+              // 8 action causes state changed
+              expectAsync1((state) => state.item5, count: 8 + 1),
+              // 8 action causes state changed
+              expectAsync1((state) => state.item6, count: 8 + 1),
+              // 8 action causes state changed
+            ],
+            [null, null, null, null, null, null],
+            expectAsync1(
+              (subStates) => Tuple6(
+                subStates[0] as int,
+                subStates[1] as double,
+                subStates[2] as String,
+                subStates[3] as bool,
+                subStates[4] as BuiltList<String>,
+                subStates[5] as BuiltMap<String, int>,
+              ),
+              count: 6 + 1, // inc. calling to produce seed value
+            ),
+          );
+
+          expect(
+              tuple$.value,
+              Tuple6(0, 1.0, '', true, <String>[].build(),
+                  <String, int>{}.build()));
+          final future = expectLater(
+            tuple$,
+            emitsInOrder(<Object>[
+              Tuple6(1, 1.0, '', true, <String>[].build(),
+                  <String, int>{}.build()),
+              Tuple6(1, 3.0, '', true, <String>[].build(),
+                  <String, int>{}.build()),
+              Tuple6(1, 3.0, '4', true, <String>[].build(),
+                  <String, int>{}.build()),
+              Tuple6(1, 3.0, '4', false, <String>[].build(),
+                  <String, int>{}.build()),
+              Tuple6(1, 3.0, '4', false, <String>['7'].build(),
+                  <String, int>{}.build()),
+              Tuple6(1, 3.0, '4', false, <String>['7'].build(),
+                  <String, int>{'@': 8}.build()),
+              emitsDone,
+            ]),
+          );
+
+          for (var i = 0; i <= 9; i++) {
             i.dispatchTo(store);
           }
           await pumpEventQueue(times: 100);
