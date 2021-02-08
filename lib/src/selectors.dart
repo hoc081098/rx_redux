@@ -526,6 +526,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
 // _select3Internal
 // _select4Internal
 // from select5 to select9, using `selectMany`.
+
 @pragma('vm:prefer-inline')
 @pragma('dart2js:tryInline')
 Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) =>
