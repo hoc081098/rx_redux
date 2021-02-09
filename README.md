@@ -78,6 +78,10 @@ The mantra an Action is a command to do something is still true: in that case it
 Whenever a `SideEffect` needs to know the current State it can use `GetState` to grab the latest state from Redux Store.
 `GetState` is basically just a function `() -> State` to grab the latest State anytime you need it.
 
+### Selector
+
+TODO
+
 ## Usage
 
 ### Version 2.x: Prefer to use `RxReduxStore` over `ReduxStoreStreamTransformer`, but have same concept as version 1.x
