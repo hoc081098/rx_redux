@@ -499,7 +499,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
       );
     }
 
-    final selectSubStats =
+    final selectSubStates =
         (State state) => selectors.map((s) => s(state)).toList(growable: false);
 
     final eqs = subStateEquals
@@ -510,10 +510,10 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
     final subStatesEquals = (List<SubState> previous, List<SubState> next) =>
         indices.every((i) => eqs[i](previous[i], next[i]));
 
-    final currentSubStates = selectSubStats(state);
+    final currentSubStates = selectSubStates(state);
 
     return stateStream
-        .map(selectSubStats)
+        .map(selectSubStates)
         .distinctValue(currentSubStates, equals: subStatesEquals)
         .map(projector)
         .distinctValue(projector(currentSubStates), equals: equals);
