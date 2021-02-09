@@ -1,7 +1,7 @@
 language: dart
 dart:
-  - stable
   - dev
+  - beta
 script:
   - dartanalyzer --fatal-infos --fatal-warnings ./lib ./test
   - dartfmt -n ./lib --set-exit-if-changed

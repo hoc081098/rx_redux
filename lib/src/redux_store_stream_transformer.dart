@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
-
 import 'logger.dart';
 import 'reducer.dart';
 import 'reducer_exception.dart';
@@ -34,10 +32,10 @@ extension ReduxStoreExt<Action> on Stream<Action> {
   /// * Param [State] The type of the State
   /// * Param [Action] The type of the Actions
   Stream<State> reduxStore<State>({
-    @required State Function() initialStateSupplier,
-    @required Iterable<SideEffect<Action, State>> sideEffects,
-    @required Reducer<Action, State> reducer,
-    RxReduxLogger logger,
+    required State Function() initialStateSupplier,
+    required Iterable<SideEffect<Action, State>> sideEffects,
+    required Reducer<Action, State> reducer,
+    RxReduxLogger? logger,
   }) =>
       transform(
         ReduxStoreStreamTransformer(
@@ -66,7 +64,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
   final S Function() _initialStateSupplier;
   final Iterable<SideEffect<A, S>> _sideEffects;
   final Reducer<A, S> _reducer;
-  final RxReduxLogger _logger;
+  final RxReduxLogger? _logger;
 
   /// * Param [initialStateSupplier]  A function that computes the initial state. The computation is
   /// * done lazily once an observer subscribes. The computed initial state will be emitted directly
@@ -77,26 +75,20 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
   /// * Param [S] The type of the State
   /// * Param [A] The type of the Actions
   ReduxStoreStreamTransformer({
-    @required S Function() initialStateSupplier,
-    @required Iterable<SideEffect<A, S>> sideEffects,
-    @required Reducer<A, S> reducer,
-    RxReduxLogger logger,
-  })  : assert(initialStateSupplier != null,
-            'initialStateSupplier cannot be null'),
-        assert(sideEffects != null, 'sideEffects cannot be null'),
-        assert(sideEffects.every((sideEffect) => sideEffect != null),
-            'All sideEffects must be not null'),
-        assert(reducer != null, 'reducer cannot be null'),
-        _initialStateSupplier = initialStateSupplier,
+    required S Function() initialStateSupplier,
+    required Iterable<SideEffect<A, S>> sideEffects,
+    required Reducer<A, S> reducer,
+    RxReduxLogger? logger,
+  })  : _initialStateSupplier = initialStateSupplier,
         _sideEffects = sideEffects,
         _reducer = reducer,
         _logger = logger;
 
   @override
   Stream<S> bind(Stream<A> stream) {
-    StreamController<S> controller;
-    List<StreamSubscription<dynamic>> subscriptions;
-    StreamController<WrapperAction<A>> actionController;
+    late StreamController<S> controller;
+    List<StreamSubscription<Object?>>? subscriptions;
+    StreamController<WrapperAction>? _actionController;
 
     void onListen() {
       S state;
@@ -109,13 +101,12 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         return;
       }
 
-      void onDataActually(WrapperAction<A> wrapper) {
-        final action = wrapper.action;
+      void onDataActually(WrapperAction wrapper) {
         final type = wrapper.type;
         final currentState = state;
 
         // add initial state
-        if (identical(type, ActionType.initial)) {
+        if (identical(wrapper, WrapperAction.initial)) {
           final message = '\n'
               '  ⟶ Action       : $type\n'
               '  ⟹ Current state: $currentState';
@@ -123,6 +114,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
           return controller.add(currentState);
         }
 
+        final action = wrapper.action<A>();
         try {
           final newState = _reducer(currentState, action);
           controller.add(newState);
@@ -151,35 +143,39 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
         }
       }
 
-      actionController = StreamController<WrapperAction<A>>.broadcast();
+      final actionController =
+          _actionController = StreamController<WrapperAction>.broadcast();
 
       // Call reducer on each action.
       final subscriptionActionController =
           actionController.stream.listen(onDataActually);
 
       // Add initial action
-      actionController.add(WrapperAction(null, ActionType.initial));
+      actionController.add(WrapperAction.initial);
 
       // Listening to upstream actions
-      final subscriptionUpstream = stream
-          .map((action) => WrapperAction(action, ActionType.external))
-          .listen(
-            actionController.add,
-            onError: controller.addError,
-            onDone: controller.close,
-          );
+      final subscriptionUpstream =
+          stream.map((action) => WrapperAction.external(action)).listen(
+                actionController.add,
+                onError: controller.addError,
+                onDone: controller.close,
+              );
 
       final getState = () => state;
+      final actionStream = actionController.stream
+          .map((wrapper) => wrapper.action<A>())
+          .asBroadcastStream(onCancel: (s) => s.cancel());
 
       subscriptions = [
-        ..._listenSideEffects(actionController, getState, controller),
+        ..._listenSideEffects(
+            actionController, getState, controller, actionStream),
         subscriptionUpstream,
-        subscriptionActionController
+        subscriptionActionController,
       ];
     }
 
     Future<void> onCancel() async {
-      final future = actionController?.close();
+      final future = _actionController?.close();
       final cancelFutures = subscriptions?.map((s) => s.cancel());
       final futures = [...?cancelFutures, if (future != null) future];
 
@@ -199,8 +195,8 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
       controller = StreamController<S>(
         sync: true,
         onListen: onListen,
-        onPause: () => subscriptions.forEach((s) => s.pause()),
-        onResume: () => subscriptions.forEach((s) => s.resume()),
+        onPause: () => subscriptions?.forEach((s) => s.pause()),
+        onResume: () => subscriptions?.forEach((s) => s.resume()),
         onCancel: onCancel,
       );
     }
@@ -208,29 +204,26 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
     return controller.stream;
   }
 
-  Iterable<StreamSubscription<dynamic>> _listenSideEffects(
-    StreamController<WrapperAction<A>> actionController,
+  Iterable<StreamSubscription<Object?>> _listenSideEffects(
+    StreamController<WrapperAction> actionController,
     GetState<S> getState,
-    StreamController<S> controller,
+    StreamController<S> stateController,
+    Stream<A> actionStream,
   ) {
     return _sideEffects.mapIndexed(
       (index, sideEffect) {
         Stream<A> actions;
         try {
-          actions = sideEffect(
-            actionController.stream.map((wrapper) => wrapper.action),
-            getState,
-          );
+          actions = sideEffect(actionStream, getState);
         } catch (e, s) {
           actions = Stream.error(e, s);
         }
 
         return actions
-            .map(
-                (action) => WrapperAction(action, ActionType.sideEffect(index)))
+            .map((action) => WrapperAction.sideEffect(action, index))
             .listen(
               actionController.add,
-              onError: controller.addError,
+              onError: stateController.addError,
               // Swallow onDone because just if one SideEffect reaches onDone
               // we don't want to make everything incl. ReduxStore and other SideEffects reach onDone
             );

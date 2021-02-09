@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs
 
 extension MapIndexedIterableExtensison<T> on Iterable<T> {
-  Iterable<R> mapIndexed<R>(R Function(int, T) mapper) {
+  Iterable<R> mapIndexed<R>(R Function(int, T) mapper) sync* {
     var index = 0;
-    return map((t) => mapper(index++, t));
+    for (final t in this) {
+      yield mapper(index++, t);
+    }
   }
 }

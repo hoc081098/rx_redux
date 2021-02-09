@@ -1,47 +1,68 @@
 import 'package:meta/meta.dart';
 
-// ignore_for_file: public_member_api_docs, missing_return
+// ignore_for_file: public_member_api_docs
 
 @sealed
 abstract class ActionType {
-  const ActionType.empty();
+  const ActionType._empty();
 
-  static final initial = _Initial();
-  static final external = _External();
+  static const _initial = _Initial();
+  static const _external = _External();
 
-  factory ActionType.sideEffect(int index) = _SideEffect;
+  static final _sideEffects = <int, _SideEffect>{};
+
+  factory ActionType._sideEffect(int index) {
+    final sideEffect = _sideEffects[index];
+    if (sideEffect != null) {
+      return sideEffect;
+    }
+    return _sideEffects[index] = _SideEffect(index);
+  }
 
   @override
   String toString() {
     if (this is _Initial) {
-      return '⭍';
+      return '↯';
     }
     if (this is _External) {
       return '↓';
     }
-    if (this is _SideEffect) {
-      return '⟳${(this as _SideEffect).index}';
-    }
+    return '⟳${(this as _SideEffect).index}';
   }
 }
 
 class _Initial extends ActionType {
-  _Initial() : super.empty();
+  const _Initial() : super._empty();
 }
 
 class _External extends ActionType {
-  _External() : super.empty();
+  const _External() : super._empty();
 }
 
 class _SideEffect extends ActionType {
   final int index;
 
-  _SideEffect(this.index) : super.empty();
+  _SideEffect(this.index) : super._empty();
 }
 
-class WrapperAction<A> {
-  final A action;
+class WrapperAction {
+  final Object? _action;
   final ActionType type;
 
-  WrapperAction(this.action, this.type);
+  const WrapperAction._(this._action, this.type);
+
+  factory WrapperAction.external(Object? action) =>
+      WrapperAction._(action, ActionType._external);
+
+  factory WrapperAction.sideEffect(Object? action, int index) =>
+      WrapperAction._(action, ActionType._sideEffect(index));
+
+  static const initial = WrapperAction._(null, ActionType._initial);
+
+  A action<A>() {
+    if (identical(this, initial)) {
+      throw StateError('Cannot get action from WrapperAction.initial');
+    }
+    return _action as A;
+  }
 }
