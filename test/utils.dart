@@ -1,4 +1,20 @@
-import 'package:quiver/core.dart';
+/// Generates a hash code for multiple [objects].
+int hashObjects(Iterable<int> objects) =>
+    _finish(objects.fold(0, (h, i) => _combine(h, i.hashCode)));
+
+// Jenkins hash functions
+
+int _combine(int hash, int value) {
+  hash = 0x1fffffff & (hash + value);
+  hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+  return hash ^ (hash >> 6);
+}
+
+int _finish(int hash) {
+  hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+  hash = hash ^ (hash >> 11);
+  return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+}
 
 /// Represents a 8-tuple.
 class Tuple8<T1, T2, T3, T4, T5, T6, T7, T8> {

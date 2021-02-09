@@ -1,6 +1,6 @@
 name: rx_redux
 description: Redux implementation based on Dart Stream, with the power of RxDart. Reactive redux store for Dart & Flutter.
-version: 2.2.0-nullsafety.1
+version: 2.2.0-nullsafety.2
 author: Petrus Nguyen Thai Hoc <hoc081098@gmail.com>
 homepage: https://github.com/hoc081098/rx_redux.git
 repository: https://github.com/hoc081098/rx_redux.git
