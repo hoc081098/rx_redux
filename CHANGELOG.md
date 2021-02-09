@@ -2,7 +2,7 @@
 -   Add `Selector`s: `select`, `select2`, ..., `select9` and `selectMany`.
     -   Selectors can compute derived data, allowing Redux to store the minimal possible state.
     -   Selectors are efficient. A selector is not recomputed unless one of its arguments changes.
-    -   When using the [select], [select2] to [select9], [selectMany] functions, 
+    -   When using the `select`, `select2` to `select9`, `selectMany` functions, 
         keeps track of the latest arguments in which your selector function was invoked. 
         Because selectors are pure functions, the last result can be returned 
         when the arguments match without reinvoking your selector function. 
