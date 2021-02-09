@@ -1650,6 +1650,38 @@ void main() {
       });
 
       group('selectMany', () {
+        test('assert', () {
+          final store = RxReduxStore<int, String>(
+            initialState: 'initialState',
+            sideEffects: [],
+            reducer: (s, a) => s,
+          );
+          expect(
+            () => store.selectMany(
+              [(s) => s.length, (s) => s.isEmpty ? null : s[0]],
+              [null, null, null],
+              (subStates) => subStates,
+            ),
+            throwsArgumentError,
+          );
+          expect(
+            () => store.selectMany<Object, Object>(
+              [],
+              [],
+              (subStates) => subStates,
+            ),
+            throwsArgumentError,
+          );
+          expect(
+            () => store.selectMany(
+              [(s) => s.length],
+              [null],
+              (subStates) => subStates,
+            ),
+            throwsArgumentError,
+          );
+        });
+
         test('~= select2', () async {
           final store = RxReduxStore<int, _State>(
             initialState: _State(true, null, <String>[].build(), 1),
