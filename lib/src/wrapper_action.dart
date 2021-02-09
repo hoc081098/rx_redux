@@ -46,15 +46,15 @@ class _SideEffect extends ActionType {
 }
 
 class WrapperAction {
-  final dynamic _action;
+  final Object? _action;
   final ActionType type;
 
   const WrapperAction._(this._action, this.type);
 
-  factory WrapperAction.external(dynamic action) =>
+  factory WrapperAction.external(Object? action) =>
       WrapperAction._(action, ActionType._external);
 
-  factory WrapperAction.sideEffect(dynamic action, int index) =>
+  factory WrapperAction.sideEffect(Object? action, int index) =>
       WrapperAction._(action, ActionType._sideEffect(index));
 
   static const initial = WrapperAction._(null, ActionType._initial);

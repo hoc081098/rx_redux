@@ -87,7 +87,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
   @override
   Stream<S> bind(Stream<A> stream) {
     late StreamController<S> controller;
-    List<StreamSubscription<dynamic>>? subscriptions;
+    List<StreamSubscription<Object?>>? subscriptions;
     StreamController<WrapperAction>? _actionController;
 
     void onListen() {
@@ -204,7 +204,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
     return controller.stream;
   }
 
-  Iterable<StreamSubscription<dynamic>> _listenSideEffects(
+  Iterable<StreamSubscription<Object?>> _listenSideEffects(
     StreamController<WrapperAction> actionController,
     GetState<S> getState,
     StreamController<S> stateController,

@@ -1,9 +1,18 @@
 import 'dart:async';
 
+import 'package:disposebag/disposebag.dart';
+import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
+
 import 'logger.dart';
 import 'reducer.dart';
 import 'redux_store_stream_transformer.dart';
 import 'side_effect.dart';
+
+/// Determine equality.
+typedef Equals<T> = bool Function(T previous, T next);
+
+/// Handle an error and the corresponding stack trace.
+typedef ErrorHandler = void Function(Object error, StackTrace stackTrace);
 
 /// A [SideEffect] that returns a never-completed Stream and on each action received,
 /// adding it to [outputSink].
@@ -23,25 +32,28 @@ SideEffect<A, S> _onEachActionSideEffect<A, S>(StreamSink<A> outputSink) {
   };
 }
 
+extension _StreamExtension<S> on Stream<S> {
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  Stream<S> handleErrorIfNeeded(ErrorHandler? errorHandler) =>
+      errorHandler == null ? this : handleError(errorHandler);
+}
+
 /// Rx Redux Store.
 /// Redux store based on [Stream].
 class RxReduxStore<A, S> {
   final void Function(A) _dispatch;
-  final void Function(Stream<A>) _dispatchMany;
 
-  final GetState<S> _getState;
-  final Stream<S> _stateStream;
+  final DistinctValueStream<S> _stateStream;
   final Stream<A> _actionStream;
 
-  final Future<void> Function() _dispose;
+  final DisposeBag _bag;
 
   const RxReduxStore._(
     this._dispatch,
-    this._dispatchMany,
-    this._getState,
     this._stateStream,
     this._actionStream,
-    this._dispose,
+    this._bag,
   );
 
   /// Construct a [RxReduxStore]
@@ -54,12 +66,13 @@ class RxReduxStore<A, S> {
   /// The [equals] used to determine equality between old and new states.
   /// If calling it returns true, the new state will not be emitted.
   /// If [equals] is omitted, the '==' operator is used.
+  /// If [equals] is provided, calling it must not throw any errors.
   factory RxReduxStore({
     required S initialState,
     required List<SideEffect<A, S>> sideEffects,
     required Reducer<A, S> reducer,
-    void Function(Object, StackTrace)? errorHandler,
-    bool Function(S previous, S next)? equals,
+    ErrorHandler? errorHandler,
+    Equals<S>? equals,
     RxReduxLogger? logger,
   }) {
     final actionController = StreamController<A>(sync: true);
@@ -75,32 +88,16 @@ class RxReduxStore<A, S> {
           reducer: reducer,
           logger: logger,
         )
-        .distinct(equals)
-        .skip(1)
-        .asBroadcastStream(onCancel: (subscription) => subscription.cancel());
+        .handleErrorIfNeeded(errorHandler)
+        .publishValueDistinct(initialState, equals: equals);
 
-    var currentState = initialState;
-    final subscriptions = <StreamSubscription<dynamic>>[
-      stateStream.listen(
-        (newState) => currentState = newState,
-        onError: errorHandler,
-      ),
-    ];
+    final bag = DisposeBag(<Object>[stateStream.connect(), actionController]);
 
     return RxReduxStore._(
       actionController.add,
-      (actions) => subscriptions.add(actions.listen(actionController.add)),
-      () => currentState,
       stateStream,
       actionOutputController.stream,
-      () async {
-        if (subscriptions.length == 1) {
-          await subscriptions[0].cancel();
-        } else {
-          await Future.wait(subscriptions.map((s) => s.cancel()));
-        }
-        await actionController.close();
-      },
+      bag,
     );
   }
 
@@ -122,22 +119,7 @@ class RxReduxStore<A, S> {
   ///         return LoginWidget(state); // build widget based on state.
   ///       },
   ///     );
-  Stream<S> get stateStream => _stateStream;
-
-  /// Get current state synchronously.
-  /// This is useful for filling `initialData` when using `StreamBuilder` in Flutter.
-  ///
-  /// ### Example:
-  ///
-  ///     StreamBuilder<LoginState>(
-  ///       initialData: store.state,
-  ///       stream: store.stateStream,
-  ///       builder: (context, snapshot) {
-  ///         final state = snapshot.data;
-  ///         return LoginWidget(state); // build widget based on state.
-  ///       },
-  ///     );
-  S get state => _getState();
+  DistinctValueStream<S> get stateStream => _stateStream;
 
   /// Get streams of actions.
   ///
@@ -189,7 +171,8 @@ class RxReduxStore<A, S> {
   ///
   ///     Stream<LoadNextPageAction> loadNextPageActionStream;
   ///     store.dispatchMany(loadNextPageActionStream);
-  void dispatchMany(Stream<A> actionStream) => _dispatchMany(actionStream);
+  void dispatchMany(Stream<A> actionStream) =>
+      _bag.add(actionStream.listen(_dispatch));
 
   /// Dispose all resources.
   /// This method is typically called in `dispose` method of Flutter `State` object.
@@ -203,7 +186,37 @@ class RxReduxStore<A, S> {
   ///         super.dispose();
   ///       }
   ///     }
-  Future<void> dispose() => _dispose();
+  Future<void> dispose() => _bag.dispose();
+}
+
+/// Get current state synchronously.
+/// This is useful for filling `initialData` when using `StreamBuilder` in Flutter.
+///
+/// ### Example:
+///
+///     StreamBuilder<LoginState>(
+///       initialData: store.state,
+///       stream: store.stateStream,
+///       builder: (context, snapshot) {
+///         final state = snapshot.data;
+///         return LoginWidget(state); // build widget based on state.
+///       },
+///     );
+extension GetStateExtension<A, S> on RxReduxStore<A, S> {
+  /// Get current state synchronously.
+  /// This is useful for filling `initialData` when using `StreamBuilder` in Flutter.
+  ///
+  /// ### Example:
+  ///
+  ///     StreamBuilder<LoginState>(
+  ///       initialData: store.state,
+  ///       stream: store.stateStream,
+  ///       builder: (context, snapshot) {
+  ///         final state = snapshot.data;
+  ///         return LoginWidget(state); // build widget based on state.
+  ///       },
+  ///     );
+  S get state => stateStream.requireValue;
 }
 
 /// Dispatch this action to [store].
