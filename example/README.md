@@ -6,6 +6,8 @@ An example of how to load more data when scroll to end of list view using [rx_re
 
 ## [Flutter github search using rx_redux](https://github.com/hoc081098/flutter_github_search_rx_redux)
 
+An example of how to make a instant search and load more data when scroll to end of list view using rx_redux.
+
 ## [Simple todo](https://github.com/hoc081098/rx_redux/blob/master/example/rx_redux_example.dart)
 
 <details>
