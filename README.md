@@ -80,7 +80,17 @@ Whenever a `SideEffect` needs to know the current State it can use `GetState` to
 
 ### Selector
 
-TODO
+Inspirited by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
+-   Selectors can compute derived data, allowing Redux to store the minimal possible state.
+    
+-   Selectors are efficient. A selector is not recomputed unless one of its arguments changes.
+
+-   When using the `select`, `select2` to `select9`, `selectMany` functions, 
+    keeps track of the latest arguments in which your selector function was invoked. 
+    Because selectors are pure functions, the last result can be returned 
+    when the arguments match without re-invoking your selector function. 
+    This can provide performance benefits, particularly with selectors that perform expensive computation. 
+    This practice is known as memoization.
 
 ## Usage
 
@@ -304,6 +314,12 @@ This system allows you to create a plugin in system of `SideEffects` that are hi
 Also `SideEffects` can be invoked by `Actions` from other `SideEffects`.
 
 **For a complete example check [the sample application incl. README](example/README.md)**
+
+## Examples
+
+| [Pagination list (load more) (endless scrolling)](https://github.com/hoc081098/load_more_flutter_BLoC_pattern_RxDart_and_RxRedux/tree/master/lib/pages/rx_redux) | [Flutter github search using rx_redux](https://github.com/hoc081098/flutter_github_search_rx_redux) |  
+| ------------- | ------------- |
+| <img src="https://github.com/hoc081098/hoc081098.github.io/blob/master/load_more/rx_redux_screen.gif?raw=true" height="480">                                     | <img src="https://github.com/hoc081098/hoc081098.github.io/blob/master/flutter_github_search_rx_redux/demo.gif?raw=true" height="480"> |
 
 ## FAQ
 
