@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
 
-import '../rx_redux.dart';
+import 'store.dart';
 
 /// Inspirited by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
 /// - Selectors can compute derived data, allowing Redux to store the minimal possible state.

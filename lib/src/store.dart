@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:disposebag/disposebag.dart';
 import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
-import 'package:rx_redux/src/utils.dart';
 
 import 'logger.dart';
 import 'reducer.dart';
 import 'redux_store_stream_transformer.dart';
 import 'side_effect.dart';
+import 'utils.dart';
 
 /// Determine equality.
 typedef Equals<T> = bool Function(T previous, T next);
