@@ -1,5 +1,7 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:disposebag/disposebag.dart';
 import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:rx_redux/rx_redux.dart';
 
 //
@@ -138,6 +140,7 @@ State reducer(State state, Action action) {
 }
 
 void main() async {
+  final bag = DisposeBag();
   final store = RxReduxStore<Action, State>(
       initialState: State(null, <Book>[].build(), null),
       sideEffects: [],
@@ -148,18 +151,23 @@ void main() async {
     (s) => s.selectedUser?.id,
     (s) => s.allBooks,
     (String? userId, BuiltList<Book> books) {
-      print(
-          '<> Call projector with userId=${userId} and books=${books.length}');
+      print('<> Call projector with userId=$userId and books=${books.length}');
 
       return userId != null && books.isNotEmpty
           ? books.where((b) => b.userId == userId).toBuiltList()
           : books;
     },
-  );
+  ).asBroadcastDistinctValueStream();
 
   // logging state.
   print('~> ${visibleBooks$.value}');
-  visibleBooks$.listen((s) => print('~> $s'));
+  unawaited(
+    visibleBooks$.listen((s) => print('1 ~> $s')).disposedBy(bag),
+  );
+  Future<void>.delayed(
+    const Duration(milliseconds: 500),
+    () => visibleBooks$.listen((s) => print('2 ~> $s')).disposedBy(bag),
+  );
 
   // dispatch actions.
   [
@@ -190,6 +198,7 @@ void main() async {
   print('---------------------------------------------------');
 
   // end by disposing store.
+  await bag.dispose();
   await store.dispose();
 }
 

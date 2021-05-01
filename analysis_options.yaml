@@ -1,4 +1,4 @@
-include: package:pedantic/analysis_options.1.9.0.yaml
+include: package:pedantic/analysis_options.1.11.0.yaml
 
 analyzer:
   strong-mode:
@@ -8,3 +8,4 @@ linter:
   rules:
     - prefer_final_locals
     - public_member_api_docs
+    - prefer_relative_imports
