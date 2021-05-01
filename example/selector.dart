@@ -151,8 +151,7 @@ void main() async {
     (s) => s.selectedUser?.id,
     (s) => s.allBooks,
     (String? userId, BuiltList<Book> books) {
-      print(
-          '<> Call projector with userId=${userId} and books=${books.length}');
+      print('<> Call projector with userId=$userId and books=${books.length}');
 
       return userId != null && books.isNotEmpty
           ? books.where((b) => b.userId == userId).toBuiltList()
