@@ -11,13 +11,8 @@ abstract class ActionType {
 
   static final _sideEffects = <int, _SideEffect>{};
 
-  factory ActionType._sideEffect(int index) {
-    final sideEffect = _sideEffects[index];
-    if (sideEffect != null) {
-      return sideEffect;
-    }
-    return _sideEffects[index] = _SideEffect(index);
-  }
+  factory ActionType._sideEffect(int index) =>
+      _sideEffects.putIfAbsent(index, () => _SideEffect(index));
 
   @override
   String toString() {
