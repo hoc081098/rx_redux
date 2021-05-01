@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:disposebag/disposebag.dart';
 import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
+import 'package:rx_redux/src/utils.dart';
 
 import 'logger.dart';
 import 'reducer.dart';
@@ -47,7 +48,7 @@ class RxReduxStore<A, S> {
   final DistinctValueStream<S> _stateStream;
   final Stream<A> _actionStream;
 
-  final DisposeBag _bag;
+  final DisposeBag Function() _bag;
 
   const RxReduxStore._(
     this._dispatch,
@@ -91,14 +92,21 @@ class RxReduxStore<A, S> {
         .handleErrorIfNeeded(errorHandler)
         .publishValueDistinct(initialState, equals: equals);
 
-    final bag = DisposeBag(<Object>[stateStream.connect(), actionController]);
+    late final RxReduxStore<A, S> store;
+    late final bag = DisposeBag(
+        const <Object>[], '( RxReduxStore<$A, $S> ~ ${shortHash(store)} )');
 
-    return RxReduxStore._(
+    store = RxReduxStore._(
       actionController.add,
       stateStream,
       actionOutputController.stream,
-      bag,
+      () => bag,
     );
+
+    stateStream.connect().disposedBy(bag);
+    actionController.disposedBy(bag);
+
+    return store;
   }
 
   /// Get stream of states.
@@ -172,7 +180,7 @@ class RxReduxStore<A, S> {
   ///     Stream<LoadNextPageAction> loadNextPageActionStream;
   ///     store.dispatchMany(loadNextPageActionStream);
   void dispatchMany(Stream<A> actionStream) =>
-      _bag.add(actionStream.listen(_dispatch));
+      _bag().add(actionStream.listen(_dispatch));
 
   /// Dispose all resources.
   /// This method is typically called in `dispose` method of Flutter `State` object.
@@ -186,7 +194,7 @@ class RxReduxStore<A, S> {
   ///         super.dispose();
   ///       }
   ///     }
-  Future<void> dispose() => _bag.dispose();
+  Future<void> dispose() => _bag().dispose();
 }
 
 /// Get current state synchronously.
