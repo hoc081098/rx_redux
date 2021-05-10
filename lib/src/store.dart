@@ -224,7 +224,7 @@ extension GetStateExtension<A, S> on RxReduxStore<A, S> {
   ///         return LoginWidget(state); // build widget based on state.
   ///       },
   ///     );
-  S get state => stateStream.requireValue;
+  S get state => stateStream.value;
 }
 
 /// Dispatch this action to [store].

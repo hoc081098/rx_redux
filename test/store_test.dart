@@ -551,7 +551,7 @@ void main() {
               prev == next,
         );
 
-        expect(filtered.requireValue, <String>[].build());
+        expect(filtered.value, <String>[].build());
         final future = expectLater(
           filtered,
           emitsInOrder(<Object>[
@@ -651,7 +651,7 @@ void main() {
           equals3: (int prev, int next) => prev == next,
         );
 
-        expect(filtered.requireValue, <String>[].build());
+        expect(filtered.value, <String>[].build());
         final future = expectLater(
           filtered,
           emitsInOrder(<Object>[
@@ -1752,7 +1752,7 @@ void main() {
             },
           );
 
-          expect(filtered.requireValue, <String>[].build());
+          expect(filtered.value, <String>[].build());
           final future = expectLater(
             filtered,
             emitsInOrder(<Object>[
@@ -1859,7 +1859,7 @@ void main() {
             },
           );
 
-          expect(filtered.requireValue, <String>[].build());
+          expect(filtered.value, <String>[].build());
           final future = expectLater(
             filtered,
             emitsInOrder(<Object>[

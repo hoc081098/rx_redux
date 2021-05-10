@@ -1,3 +1,8 @@
+## 2.3.0 - May 10, 2021
+
+-   Update `distinct_value_connectable_stream` to `1.3.0`.
+-   Update `rxdart` to `0.27.0`.
+
 ## 2.2.0 - May 1, 2021
 
 -   Stable release for null safety.
