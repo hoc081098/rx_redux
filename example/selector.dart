@@ -1,8 +1,8 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:disposebag/disposebag.dart';
-import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:rx_redux/rx_redux.dart';
+import 'package:rxdart_ext/state_stream.dart';
 
 //
 // [BEGIN] STATE
@@ -147,7 +147,7 @@ void main() async {
       reducer: reducer);
 
   // select 2 pieces of state and combine them.
-  final visibleBooks$ = store.select2(
+  final select2$ = store.select2(
     (s) => s.selectedUser?.id,
     (s) => s.allBooks,
     (String? userId, BuiltList<Book> books) {
@@ -157,7 +157,9 @@ void main() async {
           ? books.where((b) => b.userId == userId).toBuiltList()
           : books;
     },
-  ).asBroadcastDistinctValueStream();
+  );
+  final visibleBooks$ = select2$
+      .shareState(select2$.value); // TODO: remove select2$ and shareState
 
   // logging state.
   print('~> ${visibleBooks$.value}');

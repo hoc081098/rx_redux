@@ -73,6 +73,7 @@ ViewState reducer(ViewState vs, Action action) {
 
 /// Side effects
 
+// ignore: prefer_function_declarations_over_variables
 final SideEffect<Action, ViewState> addTodoEffect = (action$, state) => action$
     .where((event) => event.type == ActionType.add)
     .map((event) => event.todo)
@@ -87,28 +88,31 @@ Stream<Action> removeTodoEffect(
   Stream<Action> action$,
   GetState<ViewState> state,
 ) {
-  final executeRemove = (Todo todo) async* {
+  Stream<Action> executeRemove(Todo todo) async* {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     yield Action(todo, ActionType.removed);
-  };
+  }
+
   return action$
       .where((event) => event.type == ActionType.remove)
       .map((action) => action.todo)
       .flatMap(executeRemove);
 }
 
+// ignore: prefer_function_declarations_over_variables
 final SideEffect<Action, ViewState> toggleTodoEffect = (action$, state) {
-  final executeToggle = (Todo todo) async* {
+  Stream<Action> executeToggle(Todo todo) async* {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     yield Action(todo, ActionType.toggled);
-  };
+  }
+
   return action$
       .where((event) => event.type == ActionType.toggle)
       .map((action) => action.todo)
       .flatMap(executeToggle);
 };
 
-final delay = () => Future<void>.delayed(const Duration(seconds: 1));
+Future<void> delay() => Future<void>.delayed(const Duration(seconds: 1));
 
 void main() async {
   final store = RxReduxStore(

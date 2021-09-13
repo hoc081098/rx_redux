@@ -1,11 +1,17 @@
-include: package:pedantic/analysis_options.1.11.0.yaml
+include: package:lints/recommended.yaml
 
 analyzer:
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
+
 linter:
   rules:
     - prefer_final_locals
     - public_member_api_docs
     - prefer_relative_imports
+    # https://github.com/dart-lang/lints#migrating-from-packagepedantic
+    - always_declare_return_types
+    - prefer_single_quotes
+    - unawaited_futures
+    - unsafe_html

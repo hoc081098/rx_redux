@@ -161,7 +161,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
                 onDone: controller.close,
               );
 
-      final getState = () => state;
+      S getState() => state;
       final actionStream = actionController.stream
           .map((wrapper) => wrapper.action<A>())
           .asBroadcastStream(onCancel: (s) => s.cancel());
@@ -195,7 +195,9 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
       controller = StreamController<S>(
         sync: true,
         onListen: onListen,
+        // ignore: avoid_function_literals_in_foreach_calls
         onPause: () => subscriptions?.forEach((s) => s.pause()),
+        // ignore: avoid_function_literals_in_foreach_calls
         onResume: () => subscriptions?.forEach((s) => s.resume()),
         onCancel: onCancel,
       );

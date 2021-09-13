@@ -12,16 +12,19 @@ void main() {
       final inputActions = Stream.fromIterable(inputs)
           .asyncMap((action) => Future.delayed(Duration.zero, () => action));
 
-      final sideEffect1 = (Stream<String> actions, GetState<String> state) {
+      Stream<String> sideEffect1(
+          Stream<String> actions, GetState<String> state) {
         return actions
             .where((action) => inputs.contains(action))
             .map((action) => '${action}SideEffect1');
-      };
-      final sideEffect2 = (Stream<String> actions, GetState<String> state) {
+      }
+
+      Stream<String> sideEffect2(
+          Stream<String> actions, GetState<String> state) {
         return actions
             .where((action) => inputs.contains(action))
             .map((action) => '${action}SideEffect2');
-      };
+      }
 
       await expectLater(
         inputActions.transform(
@@ -210,19 +213,21 @@ void main() {
         final upstream = PublishSubject<String>();
         final outputedStates = <String>[];
 
-        final sideEffect1 = (Stream<String> actions, GetState<String> state) {
+        Stream<String> sideEffect1(
+            Stream<String> actions, GetState<String> state) {
           return actions
               .where((a) => a == dummyAction)
               .mapTo('SideEffectAction1')
               .doOnCancel(() => disposedSideffectsCount++);
-        };
+        }
 
-        final sideEffect2 = (Stream<String> actions, GetState<String> state) {
+        Stream<String> sideEffect2(
+            Stream<String> actions, GetState<String> state) {
           return actions
               .where((a) => a == dummyAction)
               .mapTo('SideEffectAction2')
               .doOnCancel(() => disposedSideffectsCount++);
-        };
+        }
 
         final subscription = upstream
             .transform(

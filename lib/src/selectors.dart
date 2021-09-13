@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
+import 'package:rxdart_ext/state_stream.dart';
 
 import 'store.dart';
 
@@ -30,16 +30,16 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Observe a value of type [Result] exposed from a state stream, and listen only partially to changes.
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result> select<Result>(
+  StateStream<Result> select<Result>(
     Selector<State, Result> selector, {
     Equals<Result>? equals,
   }) =>
-      stateStream.map(selector).distinctValue(selector(state), equals: equals);
+      stateStream.map(selector).toStateStream(selector(state), equals: equals);
 
   /// Select two sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result> select2<SubState1, SubState2, Result>(
+  StateStream<Result> select2<SubState1, SubState2, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
     Result Function(SubState1 subState1, SubState2 subState2) projector, {
@@ -60,7 +60,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select three sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result> select3<SubState1, SubState2, SubState3, Result>(
+  StateStream<Result> select3<SubState1, SubState2, SubState3, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
     Selector<State, SubState3> selector3,
@@ -87,7 +87,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select four sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result>
+  StateStream<Result>
       select4<SubState1, SubState2, SubState3, SubState4, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
@@ -123,7 +123,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select five sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result>
+  StateStream<Result>
       select5<SubState1, SubState2, SubState3, SubState4, SubState5, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
@@ -173,8 +173,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select five sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result> select6<SubState1, SubState2, SubState3,
-      SubState4, SubState5, SubState6, Result>(
+  StateStream<Result> select6<SubState1, SubState2, SubState3, SubState4,
+      SubState5, SubState6, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
     Selector<State, SubState3> selector3,
@@ -229,8 +229,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select seven sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result> select7<SubState1, SubState2, SubState3,
-      SubState4, SubState5, SubState6, SubState7, Result>(
+  StateStream<Result> select7<SubState1, SubState2, SubState3, SubState4,
+      SubState5, SubState6, SubState7, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
     Selector<State, SubState3> selector3,
@@ -291,8 +291,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select eight sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result> select8<SubState1, SubState2, SubState3,
-      SubState4, SubState5, SubState6, SubState7, SubState8, Result>(
+  StateStream<Result> select8<SubState1, SubState2, SubState3, SubState4,
+      SubState5, SubState6, SubState7, SubState8, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
     Selector<State, SubState3> selector3,
@@ -359,8 +359,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select nine sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result> select9<SubState1, SubState2, SubState3,
-      SubState4, SubState5, SubState6, SubState7, SubState8, SubState9, Result>(
+  StateStream<Result> select9<SubState1, SubState2, SubState3, SubState4,
+      SubState5, SubState6, SubState7, SubState8, SubState9, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
     Selector<State, SubState3> selector3,
@@ -433,7 +433,7 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select many sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  DistinctValueStream<Result> selectMany<SubState, Result>(
+  StateStream<Result> selectMany<SubState, Result>(
     List<Selector<State, SubState>> selectors,
     List<Equals<SubState>?> subStateEquals,
     Result Function(List<SubState> subStates) projector, {
@@ -499,24 +499,24 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
       );
     }
 
-    final selectSubStates =
-        (State state) => selectors.map((s) => s(state)).toList(growable: false);
+    List<SubState> selectSubStates(State state) =>
+        selectors.map((s) => s(state)).toList(growable: false);
 
     final eqs = subStateEquals
-        .map((e) => e ?? DistinctValueStream.defaultEquals)
+        .map((e) => e ?? StateStream.defaultEquals)
         .toList(growable: false);
 
     late final indices = Iterable<int>.generate(length);
-    final subStatesEquals = (List<SubState> previous, List<SubState> next) =>
+    bool subStatesEquals(List<SubState> previous, List<SubState> next) =>
         indices.every((i) => eqs[i](previous[i], next[i]));
 
     final currentSubStates = selectSubStates(state);
 
     return stateStream
         .map(selectSubStates)
-        .distinctValue(currentSubStates, equals: subStatesEquals)
+        .toStateStream(currentSubStates, equals: subStatesEquals)
         .map(projector)
-        .distinctValue(projector(currentSubStates), equals: equals);
+        .toStateStream(projector(currentSubStates), equals: equals);
   }
 }
 
@@ -532,9 +532,8 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
 Equals<Object?>? _castToDynamicParams<T>(Equals<T>? f) =>
     f == null ? null : (Object? l, Object? r) => f(l as T, r as T);
 
-DistinctValueStream<Result>
-    _select2Internal<State, SubState1, SubState2, Result>(
-  DistinctValueStream<State> stateStream,
+StateStream<Result> _select2Internal<State, SubState1, SubState2, Result>(
+  StateStream<State> stateStream,
   Selector<State, SubState1> selector1,
   Selector<State, SubState2> selector2,
   Result Function(SubState1 subState1, SubState2 subState2) projector,
@@ -542,8 +541,8 @@ DistinctValueStream<Result>
   Equals<SubState2>? equals2,
   Equals<Result>? equals,
 ) {
-  final eq1 = equals1 ?? DistinctValueStream.defaultEquals;
-  final eq2 = equals2 ?? DistinctValueStream.defaultEquals;
+  final eq1 = equals1 ?? StateStream.defaultEquals;
+  final eq2 = equals2 ?? StateStream.defaultEquals;
 
   final controller = StreamController<Result>(sync: true);
   StreamSubscription<State>? subscription;
@@ -577,12 +576,12 @@ DistinctValueStream<Result>
     return toCancel?.cancel();
   };
 
-  return controller.stream.distinctValue(initialResult, equals: equals);
+  return controller.stream.toStateStream(initialResult, equals: equals);
 }
 
-DistinctValueStream<Result>
+StateStream<Result>
     _select3Internal<State, SubState1, SubState2, SubState3, Result>(
-  DistinctValueStream<State> stateStream,
+  StateStream<State> stateStream,
   Selector<State, SubState1> selector1,
   Selector<State, SubState2> selector2,
   Selector<State, SubState3> selector3,
@@ -593,9 +592,9 @@ DistinctValueStream<Result>
   Equals<SubState3>? equals3,
   Equals<Result>? equals,
 ) {
-  final eq1 = equals1 ?? DistinctValueStream.defaultEquals;
-  final eq2 = equals2 ?? DistinctValueStream.defaultEquals;
-  final eq3 = equals3 ?? DistinctValueStream.defaultEquals;
+  final eq1 = equals1 ?? StateStream.defaultEquals;
+  final eq2 = equals2 ?? StateStream.defaultEquals;
+  final eq3 = equals3 ?? StateStream.defaultEquals;
 
   final controller = StreamController<Result>(sync: true);
   StreamSubscription<State>? subscription;
@@ -634,12 +633,12 @@ DistinctValueStream<Result>
     return toCancel?.cancel();
   };
 
-  return controller.stream.distinctValue(initialResult, equals: equals);
+  return controller.stream.toStateStream(initialResult, equals: equals);
 }
 
-DistinctValueStream<Result>
+StateStream<Result>
     _select4Internal<State, SubState1, SubState2, SubState3, SubState4, Result>(
-  DistinctValueStream<State> stateStream,
+  StateStream<State> stateStream,
   Selector<State, SubState1> selector1,
   Selector<State, SubState2> selector2,
   Selector<State, SubState3> selector3,
@@ -657,10 +656,10 @@ DistinctValueStream<Result>
   Equals<SubState4>? equals4,
   Equals<Result>? equals,
 ) {
-  final eq1 = equals1 ?? DistinctValueStream.defaultEquals;
-  final eq2 = equals2 ?? DistinctValueStream.defaultEquals;
-  final eq3 = equals3 ?? DistinctValueStream.defaultEquals;
-  final eq4 = equals4 ?? DistinctValueStream.defaultEquals;
+  final eq1 = equals1 ?? StateStream.defaultEquals;
+  final eq2 = equals2 ?? StateStream.defaultEquals;
+  final eq3 = equals3 ?? StateStream.defaultEquals;
+  final eq4 = equals4 ?? StateStream.defaultEquals;
 
   final controller = StreamController<Result>(sync: true);
   StreamSubscription<State>? subscription;
@@ -703,5 +702,5 @@ DistinctValueStream<Result>
     return toCancel?.cancel();
   };
 
-  return controller.stream.distinctValue(initialResult, equals: equals);
+  return controller.stream.toStateStream(initialResult, equals: equals);
 }

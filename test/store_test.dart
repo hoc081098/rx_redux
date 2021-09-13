@@ -953,8 +953,9 @@ void main() {
           <String>[].build(),
           <String, int>{}.build(),
           <String>{}.build(),
-          BuiltListMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
+          BuiltListMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
         );
 
         final store = RxReduxStore<
@@ -1140,10 +1141,12 @@ void main() {
           <String>[].build(),
           <String, int>{}.build(),
           <String>{}.build(),
-          BuiltListMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
-          BuiltSetMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
+          BuiltListMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
+          BuiltSetMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
         );
 
         final store = RxReduxStore<
@@ -1373,10 +1376,12 @@ void main() {
           <String>[].build(),
           <String, int>{}.build(),
           <String>{}.build(),
-          BuiltListMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
-          BuiltSetMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
+          BuiltListMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
+          BuiltSetMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
           DateTime(1998, DateTime.october, 8),
         );
 
@@ -2176,8 +2181,9 @@ void main() {
             <String>[].build(),
             <String, int>{}.build(),
             <String>{}.build(),
-            BuiltListMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
+            BuiltListMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
           );
 
           final store = RxReduxStore<
@@ -2367,10 +2373,12 @@ void main() {
             <String>[].build(),
             <String, int>{}.build(),
             <String>{}.build(),
-            BuiltListMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
-            BuiltSetMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
+            BuiltListMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
+            BuiltSetMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
           );
 
           final store = RxReduxStore<
@@ -2603,10 +2611,12 @@ void main() {
             <String>[].build(),
             <String, int>{}.build(),
             <String>{}.build(),
-            BuiltListMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
-            BuiltSetMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
+            BuiltListMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
+            BuiltSetMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
             DateTime(1998, DateTime.october, 8),
           );
 

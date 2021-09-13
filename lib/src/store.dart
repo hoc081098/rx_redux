@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:disposebag/disposebag.dart';
-import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
+import 'package:rxdart_ext/state_stream.dart';
 
 import 'logger.dart';
 import 'reducer.dart';
@@ -45,7 +45,7 @@ extension _StreamExtension<S> on Stream<S> {
 class RxReduxStore<A, S> {
   final void Function(A) _dispatch;
 
-  final DistinctValueStream<S> _stateStream;
+  final StateStream<S> _stateStream;
   final Stream<A> _actionStream;
 
   final DisposeBag Function() _bag;
@@ -90,7 +90,7 @@ class RxReduxStore<A, S> {
           logger: logger,
         )
         .handleErrorIfNeeded(errorHandler)
-        .publishValueDistinct(initialState, equals: equals);
+        .publishState(initialState, equals: equals);
 
     late final RxReduxStore<A, S> store;
     late final bag = DisposeBag(
@@ -127,7 +127,7 @@ class RxReduxStore<A, S> {
   ///         return LoginWidget(state); // build widget based on state.
   ///       },
   ///     );
-  DistinctValueStream<S> get stateStream => _stateStream;
+  StateStream<S> get stateStream => _stateStream;
 
   /// Get streams of actions.
   ///
