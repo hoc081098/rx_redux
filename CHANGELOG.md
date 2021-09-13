@@ -1,3 +1,10 @@
+## 2.4.0 - Sep 13, 2021
+
+-   Remove `distinct_value_connectable_stream` dependency.
+-   Depend on `rxdart_ext: ^0.1.2`.
+-   Update meta to `1.7.0`.
+-   Migrated from `pedantic` to `lints`.
+
 ## 2.3.0 - May 10, 2021
 
 -   Update `distinct_value_connectable_stream` to `1.3.0`.
