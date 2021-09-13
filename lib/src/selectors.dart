@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
 import 'package:rxdart_ext/state_stream.dart';
 
 import 'store.dart';
@@ -31,7 +30,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Observe a value of type [Result] exposed from a state stream, and listen only partially to changes.
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result> select<Result>(
     Selector<State, Result> selector, {
     Equals<Result>? equals,
@@ -41,7 +39,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select two sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result> select2<SubState1, SubState2, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
@@ -63,7 +60,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select three sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result> select3<SubState1, SubState2, SubState3, Result>(
     Selector<State, SubState1> selector1,
     Selector<State, SubState2> selector2,
@@ -91,7 +87,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select four sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result>
       select4<SubState1, SubState2, SubState3, SubState4, Result>(
     Selector<State, SubState1> selector1,
@@ -128,7 +123,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select five sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result>
       select5<SubState1, SubState2, SubState3, SubState4, SubState5, Result>(
     Selector<State, SubState1> selector1,
@@ -179,7 +173,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select five sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result> select6<SubState1, SubState2, SubState3, SubState4,
       SubState5, SubState6, Result>(
     Selector<State, SubState1> selector1,
@@ -236,7 +229,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select seven sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result> select7<SubState1, SubState2, SubState3, SubState4,
       SubState5, SubState6, SubState7, Result>(
     Selector<State, SubState1> selector1,
@@ -299,7 +291,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select eight sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result> select8<SubState1, SubState2, SubState3, SubState4,
       SubState5, SubState6, SubState7, SubState8, Result>(
     Selector<State, SubState1> selector1,
@@ -368,7 +359,6 @@ extension SelectorsExtension<Action, State> on RxReduxStore<Action, State> {
   /// Select nine sub states and combine them by [projector].
   ///
   /// The returned Stream is a single-subscription Stream.
-  @useResult
   StateStream<Result> select9<SubState1, SubState2, SubState3, SubState4,
       SubState5, SubState6, SubState7, SubState8, SubState9, Result>(
     Selector<State, SubState1> selector1,
