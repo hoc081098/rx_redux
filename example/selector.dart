@@ -1,6 +1,5 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:disposebag/disposebag.dart';
-import 'package:distinct_value_connectable_stream/distinct_value_connectable_stream.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:rx_redux/rx_redux.dart';
 
@@ -157,7 +156,7 @@ void main() async {
           ? books.where((b) => b.userId == userId).toBuiltList()
           : books;
     },
-  ).asBroadcastDistinctValueStream();
+  ).asBroadcastStream();
 
   // logging state.
   print('~> ${visibleBooks$.value}');

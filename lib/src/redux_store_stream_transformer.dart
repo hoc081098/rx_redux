@@ -161,7 +161,7 @@ class ReduxStoreStreamTransformer<A, S> extends StreamTransformerBase<A, S> {
                 onDone: controller.close,
               );
 
-      final getState = () => state;
+      S getState() => state;
       final actionStream = actionController.stream
           .map((wrapper) => wrapper.action<A>())
           .asBroadcastStream(onCancel: (s) => s.cancel());

@@ -551,7 +551,7 @@ void main() {
               prev == next,
         );
 
-        expect(filtered.requireValue, <String>[].build());
+        expect(filtered.value, <String>[].build());
         final future = expectLater(
           filtered,
           emitsInOrder(<Object>[
@@ -651,7 +651,7 @@ void main() {
           equals3: (int prev, int next) => prev == next,
         );
 
-        expect(filtered.requireValue, <String>[].build());
+        expect(filtered.value, <String>[].build());
         final future = expectLater(
           filtered,
           emitsInOrder(<Object>[
@@ -953,8 +953,9 @@ void main() {
           <String>[].build(),
           <String, int>{}.build(),
           <String>{}.build(),
-          BuiltListMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
+          BuiltListMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
         );
 
         final store = RxReduxStore<
@@ -1140,10 +1141,12 @@ void main() {
           <String>[].build(),
           <String, int>{}.build(),
           <String>{}.build(),
-          BuiltListMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
-          BuiltSetMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
+          BuiltListMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
+          BuiltSetMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
         );
 
         final store = RxReduxStore<
@@ -1373,10 +1376,12 @@ void main() {
           <String>[].build(),
           <String, int>{}.build(),
           <String>{}.build(),
-          BuiltListMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
-          BuiltSetMultimap<String, int>.build(
-              (b) => b..add('@', 1)..add('@', 2)),
+          BuiltListMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
+          BuiltSetMultimap<String, int>.build((b) => b
+            ..add('@', 1)
+            ..add('@', 2)),
           DateTime(1998, DateTime.october, 8),
         );
 
@@ -1752,7 +1757,7 @@ void main() {
             },
           );
 
-          expect(filtered.requireValue, <String>[].build());
+          expect(filtered.value, <String>[].build());
           final future = expectLater(
             filtered,
             emitsInOrder(<Object>[
@@ -1859,7 +1864,7 @@ void main() {
             },
           );
 
-          expect(filtered.requireValue, <String>[].build());
+          expect(filtered.value, <String>[].build());
           final future = expectLater(
             filtered,
             emitsInOrder(<Object>[
@@ -2176,8 +2181,9 @@ void main() {
             <String>[].build(),
             <String, int>{}.build(),
             <String>{}.build(),
-            BuiltListMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
+            BuiltListMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
           );
 
           final store = RxReduxStore<
@@ -2367,10 +2373,12 @@ void main() {
             <String>[].build(),
             <String, int>{}.build(),
             <String>{}.build(),
-            BuiltListMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
-            BuiltSetMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
+            BuiltListMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
+            BuiltSetMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
           );
 
           final store = RxReduxStore<
@@ -2603,10 +2611,12 @@ void main() {
             <String>[].build(),
             <String, int>{}.build(),
             <String>{}.build(),
-            BuiltListMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
-            BuiltSetMultimap<String, int>.build(
-                (b) => b..add('@', 1)..add('@', 2)),
+            BuiltListMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
+            BuiltSetMultimap<String, int>.build((b) => b
+              ..add('@', 1)
+              ..add('@', 2)),
             DateTime(1998, DateTime.october, 8),
           );
 
