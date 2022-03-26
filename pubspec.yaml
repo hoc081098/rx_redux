@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   meta: ^1.7.0
-  rxdart_ext: ^0.1.2
+  rxdart_ext: ^0.2.0
   disposebag: ^1.5.0
 
 dev_dependencies:
