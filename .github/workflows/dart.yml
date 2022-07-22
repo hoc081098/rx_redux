@@ -3,42 +3,59 @@ name: Dart CI
 on:
   push:
     branches: [ master ]
+    paths-ignore: [ '**.md' ]
   pull_request:
     branches: [ master ]
+    paths-ignore: [ '**.md' ]
+  schedule:
+    # Runs at 02:00 UTC on the 1, 4, 7, 10, 13, 16, 19, 22, 25, 28 and 31st of every month.
+    - cron: "0 2 */3 * *"
+  workflow_dispatch:
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
-    container:
-      image: google/dart:latest
+    strategy:
+      matrix:
+        sdk: [ beta, stable, 2.15.0, 2.12.0 ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: ${{ matrix.sdk }}
+
+      - name: Print Dart version
+        run: dart --version
 
       - name: Install dependencies
-        run: pub get
+        run: dart pub get
 
       - name: Analyze
+        if: ${{ matrix.sdk == 'stable' }}
         run: dart analyze --fatal-infos --fatal-warnings
 
       - name: Format code
+        if: ${{ matrix.sdk == 'stable' }}
         run: dart format . --set-exit-if-changed
 
       - name: Active coverage
-        run: pub global activate coverage
+        run: dart pub global activate coverage
 
       - name: Run tests
-        run: pub run test test/rx_redux_test.dart
+        run: dart pub run test test/rx_redux_test.dart --chain-stack-traces
 
       - name: Start Observatory
-        run: dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit test/rx_redux_test.dart &
+        run: dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit --enable-asserts test/rx_redux_test.dart &
 
       - name: Collect coverage
-        run: nohup pub global run coverage:collect_coverage --port=8111 --out=coverage.json --wait-paused --resume-isolates
+        run: nohup dart pub global run coverage:collect_coverage --port=8111 --out=coverage.json --wait-paused --resume-isolates
 
       - name: Format coverage
-        run: pub global run coverage:format_coverage --lcov --in=coverage.json --out=lcov.info --packages=.packages --report-on=lib
+        run: dart pub global run coverage:format_coverage --lcov --in=coverage.json --out=lcov.info --report-on=lib
 
-      - uses: codecov/codecov-action@v2.1.0
+      - uses: codecov/codecov-action@v3.1.0
