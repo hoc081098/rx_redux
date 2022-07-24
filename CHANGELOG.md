@@ -1,3 +1,9 @@
+## 2.5.0 - Jul 24, 2022
+
+-   Update dependencies
+    - `disposebag: ^1.5.1`
+    - `rxdart_ext: ^0.2.3` (`~ rxdart: ^0.27.5`)
+
 ## 2.4.0 - Sep 13, 2021
 
 -   Remove `distinct_value_connectable_stream` dependency.
