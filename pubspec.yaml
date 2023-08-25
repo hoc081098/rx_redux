@@ -6,7 +6,7 @@ repository: https://github.com/hoc081098/rx_redux.git
 issue_tracker: https://github.com/hoc081098/rx_redux/issues
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '<4.0.0'
 
 dependencies:
   meta: ^1.7.0
